@@ -39,6 +39,19 @@
                 <input type="number" id="horas_uso_promedio" name="horas_uso_promedio" min="0" class="form-control" required="">
             </div>
         </div>
+
+        <div class="row">
+            <label for="evidencia" class="col-sm-2 col-form-label">Imagen:<br>(Max. 2 MB)</label>
+            <div class="col-sm-10">
+                <div class="row">
+                    <div class="col-lg-4 col-sm-12">
+                        <input type="file" class="dropify" id='foto' name="foto"  required data-height="180"  />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </section>
 
     <h3>Financiero</h3>
@@ -65,6 +78,7 @@
                 <input type="number" id="valor_residual" name="valor_residual" min="0" max="100" class="form-control" required="">
             </div>
         </div>
+
     </section>
 
 
@@ -74,6 +88,18 @@
 
 
 @section('scripts')
+
+
+    <script src="{{ asset('dropify/js/dropify.js' )}}"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('.dropify').dropify();
+    });
+    </script>
+
+    <!-- INTERNAL File Uploads css-->
+    <link href="{{asset('assets/plugins/fileupload/css/fileupload.css')}}" rel="stylesheet" type="text/css" />
+
 
     <script>
         window.onload = function() {
