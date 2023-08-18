@@ -62,14 +62,15 @@ class ActivoController extends Controller
             "valor_residual" => $input['valor_residual'],
         ]);
 
+        //Creamos la ruta pública primero
+        File::makeDirectory(public_path('storage/activos/'.$activo->id));
+
         // Guardamos la imagen
         if($request->hasFile('foto'))
         {
             $type = $file->guessExtension();
             $nombre = 'activo_'.$activo->id.time().'.'.$type;
 
-            //Creamos la ruta pública primero
-            File::makeDirectory(public_path('storage/activos/'.$activo->id));
             $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
             copy($file,$ruta);
 

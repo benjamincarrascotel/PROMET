@@ -41,16 +41,25 @@
         </div>
 
         <div class="row">
-            <label for="evidencia" class="col-sm-2 col-form-label">Imagen:<br>(Max. 2 MB)</label>
-            <div class="col-sm-10">
-                <div class="row">
+            <label for="foto" class="col-sm-2 col-form-label">Imagen:<br>(Max. 2 MB)</label>
+            
                     <div class="col-lg-4 col-sm-12">
-                        <input type="file" class="dropify" id='foto' name="foto"  required data-height="180"  />
+                        <input type="file" class="dropify" id='foto' name="foto" data-height="180"  />
                     </div>
-                </div>
-            </div>
+                
         </div>
 
+        <!-- Debo colocar el script dentro de la "section" para que logre acceder al input "foto" -->
+        <script>
+            var uploadField = document.getElementById("foto");
+                uploadField.onchange = function() {
+                    console.log("entra");
+                    if(this.files[0].size > 2097152){
+                        alert("Ingresa un archivo de máximo 2 [Mb]");
+                        this.value = "";
+                    };
+                };
+        </script>
 
     </section>
 
@@ -89,13 +98,13 @@
 
 @section('scripts')
 
-
     <script src="{{ asset('dropify/js/dropify.js' )}}"></script>
     <script type="text/javascript">
-    $(document).ready(function(){
-        $('.dropify').dropify();
-    });
+        $(document).ready(function(){
+            $('.dropify').dropify();
+        });
     </script>
+    
 
     <!-- INTERNAL File Uploads css-->
     <link href="{{asset('assets/plugins/fileupload/css/fileupload.css')}}" rel="stylesheet" type="text/css" />
