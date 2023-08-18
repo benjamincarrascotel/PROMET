@@ -30,6 +30,9 @@ class Activo extends Model
         'orden_compra',
         'vida_util',
         'valor_residual',
+        'foto',
+        'codigo_qr',
+        'estado',
 
     ];
 

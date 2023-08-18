@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Activo;
+use Illuminate\Support\Facades\File;
 
 
 class ActivoController extends Controller
@@ -39,6 +40,13 @@ class ActivoController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+
+        // Manejo de imagen
+        $file = null;
+        if($request->hasFile('foto')){
+            $file = $request->file('foto');
+        }
+
         //dd($request->all());
         $activo = Activo::create([
             "marca" => $input['marca'],
@@ -53,6 +61,21 @@ class ActivoController extends Controller
             "vida_util" => $input['vida_util'],
             "valor_residual" => $input['valor_residual'],
         ]);
+
+        // Guardamos la imagen
+        if($request->hasFile('foto'))
+        {
+            $type = $file->guessExtension();
+            $nombre = 'activo_'.$activo->id.time().'.'.$type;
+
+            //Creamos la ruta pública primero
+            File::makeDirectory(public_path('storage/activos/'.$activo->id));
+            $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
+            copy($file,$ruta);
+
+            $activo->foto = $ruta;
+            $activo->save();
+        }
 
         $activos = Activo::get();
 

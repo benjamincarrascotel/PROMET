@@ -7,7 +7,7 @@
     @overwrite
 
     @section('card_content')
-        <form id="store" class="container-fluid" action="{!! route('activo.store') !!}" method="post">
+        <form id="store" class="container-fluid" action="{!! route('activo.store') !!}" method="post" enctype="multipart/form-data">
             @csrf
             @include('activo.fields')
             <div class="btn-list flex-end">
