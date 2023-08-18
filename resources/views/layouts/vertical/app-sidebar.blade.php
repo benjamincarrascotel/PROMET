@@ -7,7 +7,7 @@
 			<a class="header-brand" href="{{route('admin.index')}}">
 		@endif
 			<img src="{{asset('assets/images/brand/logoCEMIN.png')}}" class="header-brand-img desktop-lgo" alt="CEMIN logo">
-			<img src="{{asset('assets/images/brand/logoCEMIN1.png')}}" class="header-brand-img dark-logo" alt="Azea logo">
+			<img src="{{asset('assets/images/brand/LogoMOS.png')}}" class="header-brand-img dark-logo" alt="Azea logo">
 			<img src="{{asset('assets/images/brand/faviconCEMIN.png')}}" class="header-brand-img mobile-logo" alt="CEMIN logo">
 			<img src="{{asset('assets/images/brand/favicon1.png')}}" class="header-brand-img darkmobile-logo" alt="Azea logo">
 		</a>
@@ -16,6 +16,25 @@
 	<ul class="side-menu app-sidebar3">
 
 		@if(auth()->user()->superadmin)
+
+		<li class="side-item side-item-category">Activos</li>
+
+			<!-- CATÁLOGO -->
+			<li class="slide">
+				<a class="side-menu__item"  href="{{route('activo.index')}}">
+				<svg height="24" width="24" class="side-menu__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"><path d="M12 23.3 0 20V3l4 1V1l8 2.3L20 1v3l4-1v17l-12 3.3zM2 18.5l10 2.8 10-2.7v-13l-2 .5v11l-8 2.2L4 17V6l-2-.5v13zM13 5.1V17l5-1.4v-12l-5 1.5zM6 15.5l5 1.4V5.1L6 3.7v11.8z"/></svg>				
+				<span class="side-menu__label">Catálogo</span></a>
+			</li>
+
+			<!-- TRAZABILIDAD DE ARRIENDOS -->
+			<li class="slide">
+				<a class="side-menu__item"  href="{{route('activo.index')}}">
+					<svg height="24" width="24" class="side-menu__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300.109 300.109" style="enable-background:new 0 0 300.109 300.109" xml:space="preserve"><path d="M87.073 97.222H66.475a7.5 7.5 0 0 0 0 15h20.598a7.5 7.5 0 0 0 0-15zm32.197 15h67.53a7.5 7.5 0 0 0 7.5-7.5 7.5 7.5 0 0 0-7.5-7.5h-67.53a7.5 7.5 0 0 0 0 15zm-32.197 30.333H66.475a7.5 7.5 0 0 0 0 15h20.598a7.5 7.5 0 0 0 0-15zm32.197 15h67.53a7.5 7.5 0 0 0 7.5-7.5 7.5 7.5 0 0 0-7.5-7.5h-67.53a7.5 7.5 0 0 0 0 15zm-32.197 30.333H66.475a7.5 7.5 0 0 0 0 15h20.598a7.5 7.5 0 0 0 0-15zm107.227 7.5a7.5 7.5 0 0 0-7.5-7.5h-67.53a7.5 7.5 0 0 0 0 15h67.53a7.5 7.5 0 0 0 7.5-7.5z"/><path d="M253.275 174.418V25.055a7.5 7.5 0 0 0-7.5-7.5H7.5a7.5 7.5 0 0 0-7.5 7.5v250a7.5 7.5 0 0 0 7.5 7.5h238.275c29.96 0 54.334-24.374 54.334-54.334 0-27.414-20.412-50.137-46.834-53.803zM15 267.554v-235h223.275v141.849c-44.209 6.138-63.373 61.329-29.946 93.151H15zm230.775 0c-21.688 0-39.333-17.645-39.333-39.334 0-21.689 17.645-39.333 39.333-39.333s39.334 17.645 39.334 39.333c0 21.689-17.646 39.334-39.334 39.334z"/><path d="M269.02 209.137a7.502 7.502 0 0 0-10.3 2.534l-14.715 24.32-11.406-10.062a7.5 7.5 0 0 0-9.924 11.249l18.138 16c3.491 3.078 8.949 2.275 11.379-1.742l19.362-32a7.5 7.5 0 0 0-2.534-10.299z"/></svg>					
+					<span class="side-menu__label">Trazabilidad de Arriendos</span>
+				</a>
+			</li>
+
+
 		<li class="side-item side-item-category">Dashboard</li>
 
 			<!-- DETALLES -->

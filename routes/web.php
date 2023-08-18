@@ -62,6 +62,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/usuarios/{id}', 'UserController@create')->name('usuarios.create');
         Route::post('/usuarios/store', 'UserController@store')->name('usuarios.store');
 
+        //ACTIVOS
+        Route::get('/activo/index', 'ActivoController@index')->name('activo.index');
+        Route::get('/activo/create', 'ActivoController@create')->name('activo.create');
+        Route::post('/activo/store', 'ActivoController@store')->name('activo.store');
+
+
 
 
         Route::resource('usuarios', 'UserController')->only([

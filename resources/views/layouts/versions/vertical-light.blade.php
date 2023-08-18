@@ -11,7 +11,7 @@
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 		
 		<!-- Title -->
-		<title>CEMIN</title>
+		<title>MOS</title>
 
         @include('layouts.vertical.styles')
 
