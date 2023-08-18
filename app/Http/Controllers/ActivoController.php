@@ -74,7 +74,7 @@ class ActivoController extends Controller
             $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
             copy($file,$ruta);
 
-            $activo->foto = $ruta;
+            $activo->foto = $nombre;
             $activo->save();
         }
 
