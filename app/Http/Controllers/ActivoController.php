@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Activo;
 use Illuminate\Support\Facades\File;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
 class ActivoController extends Controller
@@ -65,6 +66,9 @@ class ActivoController extends Controller
         //Creamos la ruta pública primero
         File::makeDirectory(public_path('storage/activos/'.$activo->id));
 
+        //Generamos QR
+        QrCode::generate('http://217.61.97.143/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE.svg'));
+
         // Guardamos la imagen
         if($request->hasFile('foto'))
         {
@@ -93,7 +97,8 @@ class ActivoController extends Controller
      */
     public function show($id)
     {
-        //
+        $activo = Activo::when('id', $id)->first();
+        return $activo;
     }
 
     /**
