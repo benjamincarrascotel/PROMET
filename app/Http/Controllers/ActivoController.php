@@ -97,8 +97,7 @@ class ActivoController extends Controller
      */
     public function show($id)
     {
-        dd($id);
-        $activo = Activo::when('id', $id)->first();
+        $activo = Activo::when('id', (int)$id)->get();
         return $activo;
     }
 
