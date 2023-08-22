@@ -97,7 +97,7 @@ class ActivoController extends Controller
      */
     public function show($id)
     {
-        $activo = Activo::when('id', (int)$id)->get();
+        $activo = Activo::where('id', $id)->first();
         return $activo;
     }
 
