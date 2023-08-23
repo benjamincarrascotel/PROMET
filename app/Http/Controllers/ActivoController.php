@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Activo;
+use App\Models\ArriendoActivo;
+
+
+
 use Illuminate\Support\Facades\File;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -61,6 +65,7 @@ class ActivoController extends Controller
             "orden_compra" => $input['orden_compra'],
             "vida_util" => $input['vida_util'],
             "valor_residual" => $input['valor_residual'],
+            "estado" => "DISPONIBLE",
         ]);
 
         //Creamos la ruta pública primero
@@ -133,5 +138,50 @@ class ActivoController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function trazabilidad()
+    {
+        $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
+        return view('activo.trazabilidad')
+            ->with('arriendos', $arriendos);
+    }
+
+    public function ingresar_arriendo_create()
+    {
+        $selectedID = 0;
+        $activos = Activo::where('estado', "DISPONIBLE")->get();
+
+        return view('arriendo.create')
+            ->with('activos', $activos)
+            ->with('selectedID', $selectedID);
+    }
+
+    public function ingresar_arriendo_store(Request $request)
+    {
+        $input = $request->all();
+
+        //dd($request->all());
+        $arriendo = ArriendoActivo::create([
+            "activo_id" => $input['activo_id'],
+            "monto" => $input['monto'],
+            "fecha_inicio" => $input['fecha_inicio'],
+            "fecha_termino" => $input['fecha_termino'],
+            "cliente_area" => $input['cliente_area'],
+            "encargado" => $input['encargado'],
+            "estado" => 'BODEGA',
+        ]);
+
+        // Actualizamos estado del activo arrendado
+        $activo = Activo::where('id', $input['activo_id'])->first();
+        $activo->estado = 'PARA RETIRO';
+        $activo->save();
+
+        flash('Arriendo registrado correctamente.', 'success');
+
+        $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
+
+        return redirect()->route('activo.trazabilidad')
+            ->with('arriendos', $arriendos);
     }
 }
