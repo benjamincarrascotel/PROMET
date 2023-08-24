@@ -83,7 +83,6 @@
 
                                                                 
                                                                 <form method="GET" action="{{ route('arriendo.cambio_fase_create', [$arriendo->activo->id]) }}">
-                                                                    <input hidden type="integer" id="arriendo_id" name="arriendo_id" value="{{$arriendo->id}}">
                                                                     <td class="align-middle">
                                                                         <!-- State 1 -->
                                                                         @if($arriendo->estado == "BODEGA")
