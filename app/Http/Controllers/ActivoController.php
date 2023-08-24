@@ -294,7 +294,9 @@ class ActivoController extends Controller
             //Casos en que se pueda cambiar directamente de fase (REDIRECT A OTRA RUTA POST)
             return redirect()->route('arriendo.cambio_fase');
         }
+    }
 
-        
+    public function qr_reader(){
+        return view('arriendo.qr_reader');
     }
 }

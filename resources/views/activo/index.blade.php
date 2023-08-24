@@ -60,6 +60,8 @@
                                                             <th class="border-bottom-0 w-20" >Número De Serie</th>
                                                             <th class="border-bottom-0 w-20">Horas De Uso Promedio</th>
                                                             <th class="border-bottom-0 w-20">Acciones</th>
+                                                            <th class="border-bottom-0 w-20">Código QR</th>
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -83,8 +85,14 @@
                                                                 <td class="text-nowrap align-middle"><span>{{$activo->numero_serie}}</span></td>
                                                                 <td class="text-nowrap align-middle"><span>{{$activo->horas_uso_promedio." [horas]"}}</span></td>
                                                                 <td class="align-middle">
-                                                                        <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="" data-bs-target="#user-form-modal">Ver</button>
-                                                                        <button class="btn btn-sm btn-danger" type="button"><i class="fe fe-trash-2"></i></button>
+                                                                    <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="" data-bs-target="#user-form-modal">Ver</button>
+                                                                    <button class="btn btn-sm btn-danger" type="button"><i class="fe fe-trash-2"></i></button>
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <a  href="{{ Storage::url('activos/'.$activo->id."/QR_CODE.svg") }}">
+                                                                        <button class="btn btn-sm btn-success" type="button" data-bs-toggle="" data-bs-target="#user-form-modal">
+                                                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-labelledby="qrIconTitle" stroke="#000" stroke-linecap="square" color="#000"><path d="M10 3v7H3V3z"/><path d="M7 6H6v1h1zm3 8v7H3v-7z"/><path d="M6 17h1v1H6zm8 3h1v1h-1zm3-3h1v1h-1zm-3-3h1v1h-1zm6 3h1v1h-1zm0-3h1v1h-1zm0 6h1v1h-1zm1-17v7h-7V3z"/><path d="M17 6h1v1h-1z"/></svg>                                                                   
+                                                                    </a>
                                                                 </td>
                                                             </tr>
                                                         @endforeach                                                            

@@ -92,7 +92,7 @@
                                                                 <p class="mt-2 text-muted ">{{$arriendo->activo->clasificacion}}</p>
                                                             </div>
                                                             <div class="text-white text-center">
-                                                                <form method="GET" action="{{ route('arriendo.cambio_fase_create', [$arriendo->activo->id]) }}">
+                                                                <form method="GET" action="{{ route('arriendo.qr_reader', [$arriendo->activo->id]) }}">
                                                                     <td class="align-middle">
                                                                         <!-- State 1 -->
                                                                         @if($arriendo->estado == "BODEGA")
