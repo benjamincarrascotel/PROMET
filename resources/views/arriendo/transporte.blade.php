@@ -96,18 +96,18 @@
                                                                     <td class="align-middle">
                                                                         <!-- State 1 -->
                                                                         @if($arriendo->estado == "BODEGA")
-                                                                        <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
+                                                                            <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
                                                                         <!-- State 2 -->
                                                                         @elseif($arriendo->estado == "EN CAMINO IDA")
-                                                                        <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
+                                                                            <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
                                                                         <!-- State 3 -->
                                                                         @elseif($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "PARA RETIRO")
-                                                                        <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
+                                                                            <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
                                                                         <!-- State 4 -->
                                                                         @elseif($arriendo->estado == "EN CAMINO VUELTA")
-                                                                        <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
+                                                                            <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
                                                                         @else
-                                                                        <h6 class="mb-0 font-weight-bold">(ESPERANDO CONFIRMACIÓN)</h6>
+                                                                            <button disabled class="btn btn-xl btn-warning me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">(ESPERANDO CONFIRMACIÓN)</button>
                                                                         @endif
 
                                                                     </td>
