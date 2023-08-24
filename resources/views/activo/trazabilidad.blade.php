@@ -89,7 +89,7 @@
                                                                     <!-- State 1 -->
                                                                     @if($arriendo->estado == "BODEGA")
                                                                     <img src="{{ asset('assets/images/arriendo/state1.svg') }}" alt="State 1">
-                                                                    @elseif($arriendo->estado == "EN CAMINO  IDA")
+                                                                    @elseif($arriendo->estado == "EN CAMINO IDA")
                                                                     <!-- State 2 -->
                                                                     <img src="{{ asset('assets/images/arriendo/state2.svg') }}" alt="State 2">
                                                                     @elseif($arriendo->estado == "EN CLIENTE")
@@ -108,7 +108,7 @@
                                                                 </td>
                                                                 <td class="align-middle">
                                                                     <div class="d-flex"> <!-- Adjusted here -->
-                                                                        <form method="POST" action="{{ route('arriendo.cambio_fase', [$arriendo->activo->id]) }}">
+                                                                        <form method="POST" action="{{ route('arriendo.cambio_fase') }}">
                                                                             <button class="btn btn-sm btn-primary me-2" type="button" data-bs-toggle="" data-bs-target="#user-form-modal">Ver</button>
                                                                             @csrf
                                                                             <input hidden type="integer" id="arriendo_id" name="arriendo_id" value="{{$arriendo->id}}">

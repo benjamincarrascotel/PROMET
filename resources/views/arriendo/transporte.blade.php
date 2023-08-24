@@ -60,9 +60,9 @@
                                                                     <!-- State 1 -->
                                                                     @if($arriendo->estado == "BODEGA")
                                                                     <h6 class="mb-0 font-weight-bold">BODEGA</h6>
-                                                                    @elseif($arriendo->estado == "EN CAMINO  IDA")
+                                                                    @elseif($arriendo->estado == "EN CAMINO IDA")
                                                                     <!-- State 2 -->
-                                                                    <h6 class="mb-0 font-weight-bold">EN CAMINO  IDA</h6>
+                                                                    <h6 class="mb-0 font-weight-bold">EN CAMINO IDA</h6>
                                                                     @elseif($arriendo->estado == "EN CLIENTE")
                                                                     <!-- State 3 -->
                                                                     <h6 class="mb-0 font-weight-bold">
@@ -81,15 +81,15 @@
 
                                                                 </td>
 
-                                                                <form method="POST" action="{{ route('arriendo.cambio_fase', [$arriendo->activo->id]) }}">
-                                                                    @csrf
+                                                                
+                                                                <form method="GET" action="{{ route('arriendo.cambio_fase_create', [$arriendo->activo->id]) }}">
                                                                     <input hidden type="integer" id="arriendo_id" name="arriendo_id" value="{{$arriendo->id}}">
                                                                     <td class="align-middle">
                                                                         <!-- State 1 -->
                                                                         @if($arriendo->estado == "BODEGA")
                                                                         <button class="btn btn-sm btn-primary me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
                                                                         <!-- State 2 -->
-                                                                        @elseif($arriendo->estado == "EN CAMINO  IDA")
+                                                                        @elseif($arriendo->estado == "EN CAMINO IDA")
                                                                         <button class="btn btn-sm btn-primary me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
                                                                         <!-- State 3 -->
                                                                         @elseif($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "PARA RETIRO")

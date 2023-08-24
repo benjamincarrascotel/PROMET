@@ -25,10 +25,10 @@ Route::post('/proveedor/store2', 'ProveedorController@store2')->name('proveedor.
 
 //TRANSPORTE
 Route::get('/transporte', 'ActivoController@transporte')->name('arriendo.transporte');
-Route::post('/transporte/cambio_fase/{id}', 'ActivoController@cambio_fase')->name('arriendo.cambio_fase');
+Route::post('/transporte/cambio_fase', 'ActivoController@cambio_fase')->name('arriendo.cambio_fase');
 
 //INVENTARIO
-Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('inventario.cambio_fase_create');
+Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('arriendo.cambio_fase_create');
 
 
 
