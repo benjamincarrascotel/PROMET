@@ -23,6 +23,14 @@ Route::get('/proveedor/create', 'ProveedorController@create')->name('proveedor.c
 Route::post('/proveedor/store', 'ProveedorController@store')->name('proveedor.store');
 Route::post('/proveedor/store2', 'ProveedorController@store2')->name('proveedor.store2');
 
+//TRANSPORTE
+Route::get('/transporte', 'ActivoController@transporte')->name('arriendo.transporte');
+Route::post('/transporte/cambio_fase/{id}', 'ActivoController@cambio_fase')->name('arriendo.cambio_fase');
+
+//INVENTARIO
+Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('inventario.cambio_fase_create');
+
+
 
 Route::group(['middleware' => ['auth']], function () {
 
@@ -70,12 +78,6 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/arriendo/create', 'ActivoController@ingresar_arriendo_create')->name('arriendo.create');
         Route::post('/arriendo/store', 'ActivoController@ingresar_arriendo_store')->name('arriendo.store');
-
-        //INVENTARIO
-        Route::get('/inventario/{id}', 'ActivoController@show')->name('inventario.show');
-
-
-
 
         Route::resource('usuarios', 'UserController')->only([
             'create', 'store', 'edit','update','index',

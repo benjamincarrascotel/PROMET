@@ -61,8 +61,8 @@
                                                 <table class="table table-bordered border-top text-nowrap">
                                                     <thead>
                                                         <tr>
-                                                            <th class="align-top border-bottom-0">ID</th>
-                                                            <th class="border-bottom-0">Elemento</th>
+                                                            <th class="align-top border-bottom-0">ID Arriendo</th>
+                                                            <th class="border-bottom-0">Activo</th>
                                                             <th class="border-bottom-0">Código Interno</th>
                                                             <th class="border-bottom-0">Estado Arriendo</th>
                                                             <th class="border-bottom-0">Acciones</th>
@@ -71,10 +71,14 @@
                                                     <tbody>
                                                         @foreach ($arriendos as $arriendo)
                                                             <tr>
-                                                                <td class="align-middle"><span>{{$arriendo->activo->id}}</span></td>
+                                                                <td class="align-middle"><span>{{$arriendo->id}}</span></td>
                                                                 <td class="align-middle">
                                                                     <div class="d-flex align-items-center"> <!-- Adjusted here -->
-                                                                        <span class="avatar brround avatar-xxl d-block" style="background-image: url({{Storage::url('activos/'.$arriendo->activo->id."/".$arriendo->activo->foto)}})"></span>
+                                                                        @if($arriendo->activo->foto)
+                                                                            <span class="avatar brround avatar-xxl d-block" style="background-image: url({{Storage::url('activos/'.$arriendo->activo->id."/".$arriendo->activo->foto)}})"></span>
+                                                                        @else
+                                                                            <span class="avatar brround avatar-xxl d-block" style="background-image: url({{asset('assets/images/brand/favicon1.png')}})"></span>
+                                                                        @endif                                                                        
                                                                         <div class="ms-3"> <!-- Adjusted here -->
                                                                             <h6 class="mb-0 font-weight-bold">{{$arriendo->activo->marca." - ".$arriendo->activo->modelo." - ".$arriendo->activo->año}}</h6>
                                                                         </div>
@@ -82,8 +86,6 @@
                                                                 </td>
                                                                 <td class="align-middle"><span>{{$arriendo->activo->codigo_interno}}</span></td>
                                                                 <td class="align-middle">
-
-
                                                                     <!-- State 1 -->
                                                                     @if($arriendo->estado == "BODEGA")
                                                                     <img src="{{ asset('assets/images/arriendo/state1.svg') }}" alt="State 1">
@@ -99,13 +101,25 @@
                                                                     @elseif($arriendo->estado == "BODEGA DE VUELTA")
                                                                     <!-- State 5 -->
                                                                     <img src="{{ asset('assets/images/arriendo/state5.svg') }}" alt="State 5">
+                                                                    @else
+                                                                    <h6 class="mb-0 font-weight-bold">TERMINADO</h6>
                                                                     @endif
 
                                                                 </td>
                                                                 <td class="align-middle">
                                                                     <div class="d-flex"> <!-- Adjusted here -->
-                                                                        <button class="btn btn-sm btn-primary me-2" type="button" data-bs-toggle="" data-bs-target="#user-form-modal">Ver</button>
-                                                                        <button class="btn btn-sm btn-danger" type="button"><i class="fe fe-trash-2"></i></button>
+                                                                        <form method="POST" action="{{ route('arriendo.cambio_fase', [$arriendo->activo->id]) }}">
+                                                                            <button class="btn btn-sm btn-primary me-2" type="button" data-bs-toggle="" data-bs-target="#user-form-modal">Ver</button>
+                                                                            @csrf
+                                                                            <input hidden type="integer" id="arriendo_id" name="arriendo_id" value="{{$arriendo->id}}">
+                                                                            @if($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "ARRENDADO")
+                                                                                <button class="btn btn-sm btn-success me-2" type="submit"><i class="fe fe-check-square"></i> Disponibilizar para retiro </button>
+                                                                            @elseif($arriendo->estado == "BODEGA DE VUELTA")
+                                                                                <button class="btn btn-sm btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Confirmación FINAL</button>
+                                                                            @endif
+                                                                            
+                                                                            <button class="btn btn-sm btn-danger" type="button"><i class="fe fe-trash-2"></i></button>
+                                                                        </form>
                                                                     </div>
                                                                 </td>
                                                             </tr>

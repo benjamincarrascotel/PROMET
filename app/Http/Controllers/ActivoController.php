@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Activo;
 use App\Models\ArriendoActivo;
 
+use Illuminate\Support\Facades\Auth;
+
+
 
 
 use Illuminate\Support\Facades\File;
@@ -73,6 +76,8 @@ class ActivoController extends Controller
 
         //Generamos QR
         QrCode::generate('http://217.61.97.143/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE.svg'));
+        $activo->codigo_qr = 'QR_CODE.svg';
+        $activo->save();
 
         // Guardamos la imagen
         if($request->hasFile('foto'))
@@ -142,7 +147,7 @@ class ActivoController extends Controller
 
     public function trazabilidad()
     {
-        $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
+        $arriendos = ArriendoActivo::get();
         return view('activo.trazabilidad')
             ->with('arriendos', $arriendos);
     }
@@ -159,6 +164,8 @@ class ActivoController extends Controller
 
     public function ingresar_arriendo_store(Request $request)
     {
+
+        //TODO verificar que no exista otro arriendo en curso de este activo
         $input = $request->all();
 
         //dd($request->all());
@@ -182,6 +189,102 @@ class ActivoController extends Controller
         $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
 
         return redirect()->route('activo.trazabilidad')
+            ->with('arriendos', $arriendos);
+    }
+
+    public function transporte()
+    {
+        $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
+        return view('arriendo.transporte')
+            ->with('arriendos', $arriendos);
+    }
+
+
+    public function cambio_fase(Request $request, $id)
+    {
+        //dd($request->all());
+        $input = $request->all();
+        $arriendo = ArriendoActivo::where('id', $input['arriendo_id'])->first();
+        $activo = Activo::where('id', $id)->first();
+        //dd($activo);
+        switch ($arriendo->estado) {
+            case 'BODEGA':
+                if($activo->estado == "PARA RETIRO"){
+                    $arriendo->estado = "EN CAMINO  IDA";
+                    $arriendo->save();
+                    $activo->estado = "EN RUTA IDA";
+                    $activo->save();
+                }
+                break;
+            case 'EN CAMINO  IDA':
+                if($activo->estado == "EN RUTA IDA"){
+                    $arriendo->estado = "EN CLIENTE";
+                    $arriendo->save();
+                    $activo->estado = "ARRENDADO";
+                    $activo->save();
+                }
+                break;
+            case 'EN CLIENTE':
+                if($activo->estado == "ARRENDADO"){
+                    $activo->estado = "PARA RETIRO";
+                    $activo->save();
+                }elseif($activo->estado == "PARA RETIRO"){
+                    $arriendo->estado = "EN CAMINO VUELTA";
+                    $arriendo->save();
+                    $activo->estado = "EN RUTA VUELTA";
+                    $activo->save();
+                }
+                break;
+            case 'EN CAMINO VUELTA':
+                if($activo->estado == "EN RUTA VUELTA"){
+                    $arriendo->estado = "BODEGA DE VUELTA";
+                    $arriendo->save();
+                    $activo->estado = "RECIBIDO";
+                    $activo->save();
+                }
+                break;
+            case 'BODEGA DE VUELTA':
+                if($activo->estado == "RECIBIDO"){
+                    $arriendo->estado = "TERMINADO";
+                    $arriendo->save();
+                    $activo->estado = "DISPONIBLE";
+                    $activo->save();
+                }
+                break;
+            default:    //CASO AÚN NO DEFINIDO
+                # code...
+                break;
+        }
+
+        $redirected = 'Cambio de fase registrado correctamente.';
+
+        //CASO SUPERADMIN
+        $user = Auth::user();
+        if ($user->superadmin) {
+            flash('Cambio de fase registrado correctamente.', 'success');
+            $arriendos = ArriendoActivo::get();
+            return view('activo.trazabilidad')
+                ->with('arriendos', $arriendos);   
+        }
+
+        //CASO TRANSPORTE
+        $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
+        return view('arriendo.transporte')
+            ->with('arriendos', $arriendos)
+            ->with('redirected', $redirected);
+
+    }
+
+    public function cambio_fase_create($id){
+
+        //TODO implementar casos según el estado en el que se encuentre el ARRIENDO
+
+        //Casos en que se deba devolver un formulario para pasar de fase
+        return view('arriendo.cambio_fase');
+
+        //Casos en que se pueda cambiar directamente de fase (REDIRECT A OTRA RUTA POST)
+        $arriendo = ArriendoActivo::where('activo_id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
+        return redirect()->route('arriendo.cambio_fase')
             ->with('arriendos', $arriendos);
     }
 }

@@ -68,7 +68,11 @@
                                                                 <td class="text-nowrap align-middle"><span>{{$activo->id}}</span></td>
                                                                 <td class="align-middle">
                                                                     <div class="d-flex">
-                                                                        <span class="avatar brround avatar-xxl d-block" style="background-image: url({{Storage::url('activos/'.$activo->id."/".$activo->foto)}})"></span>
+                                                                        @if($activo->foto)
+                                                                            <span class="avatar brround avatar-xxl d-block" style="background-image: url({{Storage::url('activos/'.$activo->id."/".$activo->foto)}})"></span>
+                                                                        @else
+                                                                            <span class="avatar brround avatar-xxl d-block" style="background-image: url({{asset('assets/images/brand/favicon1.png')}})"></span>
+                                                                        @endif
                                                                         <div class="ms-3 mt-5">
                                                                             <h6 class="mb-0 font-weight-bold mt-2">{{$activo->marca." - ".$activo->modelo." - ".$activo->año}}</h6>
                                                                         </div>
