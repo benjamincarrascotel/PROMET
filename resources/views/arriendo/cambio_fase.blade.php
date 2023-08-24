@@ -3,6 +3,21 @@
 @section('content')
     <div class="page" style="max-width:90%; margin-right:2%; padding: 1em;">
         <div class="page-content">
+            <!-- LOGO -->
+            <div class="container">
+                <div class="row">
+                    <div class="col mx-auto">
+                        <div class="row justify-content-center">
+                            <div class="col-sm-12 col-xs-12 ">
+                                <div class="text-center mb-5 mt-0">
+                                    <img src="{{asset('assets/images/brand/LogoMOS.png')}}" alt="MOS logo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- LOGO -->
             @section('card_title')
                 <h1 class="card-title" style="width: 100%">
                     @if($arriendo->estado == "BODEGA" || $arriendo->estado == "EN CAMINO VUELTA")
@@ -11,8 +26,6 @@
                     Ingresar datos de <b class="mb-0 font-weight-bold">CLIENTE</b>
                     @endif
                 </h1>
-                <img src="{{asset('assets/images/brand/LogoMOS.png')}}" class="header-brand-img desktop-lgo" style="margin-left:60%; width:30%; " alt="CEMIN logo">
-
             @overwrite
                 
             @section('card_content')
