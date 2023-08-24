@@ -5,7 +5,7 @@
         <div class="page-content">
             @section('card_title')
                 <h1 class="card-title" style="width: 100%">
-                    @if($arriendo->estado == "BODEGA" || $arriendo->estado == "PARA RETIRO")
+                    @if($arriendo->estado == "BODEGA" || $arriendo->estado == "EN CAMINO VUELTA")
                     Ingresar datos de <b class="mb-0 font-weight-bold">BODEGA</b>
                     @else
                     Ingresar datos de <b class="mb-0 font-weight-bold">CLIENTE</b>
