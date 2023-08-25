@@ -147,7 +147,7 @@ class ActivoController extends Controller
 
     public function trazabilidad()
     {
-        $arriendos = ArriendoActivo::get();
+        $arriendos = ArriendoActivo::get()->reverse();
         return view('activo.trazabilidad')
             ->with('arriendos', $arriendos);
     }
@@ -194,7 +194,7 @@ class ActivoController extends Controller
 
     public function transporte()
     {
-        $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
+        $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get()->reverse();
         return view('arriendo.transporte')
             ->with('arriendos', $arriendos);
     }

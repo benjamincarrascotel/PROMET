@@ -65,6 +65,8 @@
                                                             <th class="border-bottom-0">Activo</th>
                                                             <th class="border-bottom-0">Código Interno</th>
                                                             <th class="border-bottom-0">Estado Arriendo</th>
+                                                            <th class="border-bottom-0">Fecha Inicio</th>
+                                                            <th class="border-bottom-0">Fecha Término</th>
                                                             <th class="border-bottom-0">Acciones</th>
                                                         </tr>
                                                     </thead>
@@ -105,6 +107,16 @@
                                                                     <h6 class="mb-0 font-weight-bold">TERMINADO</h6>
                                                                     @endif
 
+                                                                </td>
+                                                                <td>
+                                                                    <div class="wrapper">
+                                                                        <p class="mt-2 text-muted ">{{Carbon\Carbon::parse($arriendo->fecha_termino)->format('d-m-Y')}}</p>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="wrapper">
+                                                                        <p class="mt-2 text-muted ">{{Carbon\Carbon::parse($arriendo->fecha_termino)->format('d-m-Y')}}</p>
+                                                                    </div>
                                                                 </td>
                                                                 <td class="align-middle">
                                                                     <div class="d-flex"> <!-- Adjusted here -->

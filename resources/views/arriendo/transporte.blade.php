@@ -88,8 +88,12 @@
                                                             </div>
 
                                                             <div class="wrapper">
-                                                                <p class="fs-14 font-weight-bold">Clasificación :</p>
-                                                                <p class="mt-2 text-muted ">{{$arriendo->activo->clasificacion}}</p>
+                                                                <p class="fs-14 font-weight-bold">Fecha Inicio :</p>
+                                                                <p class="mt-2 text-muted ">{{Carbon\Carbon::parse($arriendo->fecha_inicio)->format('d-m-Y')}}</p>
+                                                            </div>
+                                                            <div class="wrapper">
+                                                                <p class="fs-14 font-weight-bold">Fecha Término :</p>
+                                                                <p class="mt-2 text-muted ">{{Carbon\Carbon::parse($arriendo->fecha_termino)->format('d-m-Y')}}</p>
                                                             </div>
                                                             <div class="text-white text-center">
                                                                 <form method="GET" action="{{ route('arriendo.qr_reader', [$arriendo->activo->id]) }}">

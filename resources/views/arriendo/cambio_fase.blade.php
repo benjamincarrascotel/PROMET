@@ -41,9 +41,14 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label class="form-label">Firma: <span class="tx-danger">*</span></label>
+                        <label for="firma" class="col-sm-2 col-form-label">Firma:</label>
                         <div class="col-sm-10">
-                            <input type="text" id="firma" name="firma"  class="form-control" required="">
+                            <div class="row">
+                                <div class="col">
+                                    <canvas width=200 height=200></canvas>
+                                </div>
+                            </div>
+                            <input class="form-control" id='firma' name="firma" type="hidden" required>
                         </div>
                     </div>
         
@@ -53,6 +58,53 @@
                 </form>
                 
             @overwrite
+
+            <script>
+                var canvas = document.querySelector("canvas");
+                var img = new Image;
+                img.onload = setup;
+                img.setAttribute('crossorigin', 'anonymous');
+
+                img.src = '{{asset("/storage/background-white.jpeg")}}'
+                //img.src = "http://127.0.0.1/storage/aaaa.jpg"; // SE CAMBIA POR AHORA, PARA MAKINA DEBERIA VENIR DE BD
+                //img.src = "http://94.177.238.182/storage/aaaa.jpg"; // SE CAMBIA POR AHORA, PARA MAKINA DEBERIA VENIR DE BD
+
+                function setup() {
+                    var canvas = document.querySelector("canvas"),
+                        ctx = canvas.getContext("2d"),
+                        lastPos, isDown = false;
+
+                    ctx.drawImage(this, 0, 0, canvas.width, canvas.height);  // draw duck        
+                    ctx.lineCap = "round";                                   // make lines prettier
+                    ctx.lineWidth = 5;
+                    ctx.globalCompositeOperation = "multiply";               // KEY MODE HERE
+                    
+                    canvas.onmousedown = function(e) {
+                        isDown = true;
+                        lastPos = getPos(e);
+                        ctx.strokeStyle = 'red';
+                    };
+                    window.onmousemove = function(e) {
+                        if (!isDown) return;
+                        var pos = getPos(e);
+                        ctx.beginPath();
+                        ctx.moveTo(lastPos.x, lastPos.y);
+                        ctx.lineTo(pos.x, pos.y);
+                        ctx.stroke();
+                        lastPos = pos;
+                    };
+                    window.onmouseup = function(e) {
+                        isDown = false;
+                        var canvasURL = canvas.toDataURL();
+                        console.log(canvasURL);
+                        document.getElementById('firma').value = canvasURL;
+                    };
+                    function getPos(e) {
+                        var rect = canvas.getBoundingClientRect();
+                        return {x: e.clientX - rect.left, y: e.clientY - rect.top}
+                    }    
+                }
+            </script>
         
             @include('layouts.card')
 
