@@ -48,7 +48,7 @@
                                     <canvas width=200 height=200></canvas>
                                 </div>
                             </div>
-                            <input class="form-control" id='firma' name="firma" type="hidden" required>
+                            <input class="form-control" id='firma' name="firma" type="hidden">
                         </div>
                     </div>
         
