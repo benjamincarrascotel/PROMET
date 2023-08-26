@@ -70,6 +70,7 @@
                 //img.src = "http://94.177.238.182/storage/aaaa.jpg"; // SE CAMBIA POR AHORA, PARA MAKINA DEBERIA VENIR DE BD
 
                 function setup() {
+    // ... [El resto del código no cambia]
                     var canvas = document.querySelector("canvas"),
                         ctx = canvas.getContext("2d"),
                         lastPos, isDown = false;
@@ -99,11 +100,57 @@
                         console.log(canvasURL);
                         document.getElementById('firma').value = canvasURL;
                     };
+                    canvas.onmousedown = startDrawing;
+                    canvas.ontouchstart = function(e) {
+                        e.preventDefault();  // previene el comportamiento predeterminado de los eventos táctiles
+                        startDrawing(e.touches[0]);  // toma el primer dedo que toca
+                    };
+
+                    window.onmousemove = draw;
+                    window.ontouchmove = function(e) {
+                        e.preventDefault();
+                        draw(e.touches[0]);
+                    };
+
+                    window.onmouseup = stopDrawing;
+                    window.ontouchend = function() {
+                        stopDrawing();
+                    };
+
+                    function startDrawing(e) {
+                        isDown = true;
+                        lastPos = getPos(e);
+                        ctx.strokeStyle = 'red';
+                    }
+
+                    function draw(e) {
+                        if (!isDown) return;
+                        var pos = getPos(e);
+                        ctx.beginPath();
+                        ctx.moveTo(lastPos.x, lastPos.y);
+                        ctx.lineTo(pos.x, pos.y);
+                        ctx.stroke();
+                        lastPos = pos;
+                    }
+
+                    function stopDrawing() {
+                        isDown = false;
+                        var canvasURL = canvas.toDataURL();
+                        console.log(canvasURL);
+                        document.getElementById('firma').value = canvasURL;
+                    }
+
                     function getPos(e) {
                         var rect = canvas.getBoundingClientRect();
-                        return {x: e.clientX - rect.left, y: e.clientY - rect.top}
+                        // Verifica si es un evento táctil
+                        if (e.clientX) {
+                            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+                        } else {
+                            return { x: e.pageX - rect.left, y: e.pageY - rect.top };
+                        }
                     }    
                 }
+
             </script>
         
             @include('layouts.card')
