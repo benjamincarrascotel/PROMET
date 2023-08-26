@@ -148,6 +148,7 @@ class ActivoController extends Controller
     public function trazabilidad()
     {
         $arriendos = ArriendoActivo::get()->reverse();
+        dd($arriendos);
         return view('activo.trazabilidad')
             ->with('arriendos', $arriendos);
     }
