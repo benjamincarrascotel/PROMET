@@ -71,7 +71,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @if(!empty($arriendos))
+                                                        @if(sizeof($arriendos))
                                                             @foreach ($arriendos as $arriendo)
                                                                 <tr>
                                                                     <td class="align-middle"><span>{{$arriendo->id}}</span></td>
