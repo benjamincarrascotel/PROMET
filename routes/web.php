@@ -76,6 +76,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/activo/index', 'ActivoController@index')->name('activo.index');
         Route::get('/activo/create', 'ActivoController@create')->name('activo.create');
         Route::post('/activo/store', 'ActivoController@store')->name('activo.store');
+        Route::get('/activo/show/{id}', 'ActivoController@show')->name('activo.show');
+        Route::post('/activo/update/{id}', 'ActivoController@update')->name('activo.update');
+
         Route::get('/activo/trazabilidad', 'ActivoController@trazabilidad')->name('activo.trazabilidad');
 
         Route::get('/arriendo/create', 'ActivoController@ingresar_arriendo_create')->name('arriendo.create');

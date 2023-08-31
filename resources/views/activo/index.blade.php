@@ -85,7 +85,7 @@
                                                                 <td class="text-nowrap align-middle"><span>{{$activo->numero_serie}}</span></td>
                                                                 <td class="text-nowrap align-middle"><span>{{$activo->horas_uso_promedio." [horas]"}}</span></td>
                                                                 <td class="align-middle">
-                                                                    <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="" data-bs-target="#user-form-modal">Ver</button>
+                                                                    <a class="btn btn-sm btn-primary" type="button" href="{{route('activo.show', [$activo->id])}}">Ver</a>
                                                                     <button class="btn btn-sm btn-danger" type="button"><i class="fe fe-trash-2"></i></button>
                                                                 </td>
                                                                 <td class="align-middle">

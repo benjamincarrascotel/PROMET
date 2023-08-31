@@ -108,7 +108,11 @@ class ActivoController extends Controller
     public function show($id)
     {
         $activo = Activo::where('id', $id)->first();
-        return $activo;
+
+        $n_arriendos = ArriendoActivo::where('activo_id', $id)->get()->count();
+        return view('activo.show')
+                ->with('n_arriendos', $n_arriendos)
+                ->with('activo', $activo);
     }
 
     /**
@@ -131,7 +135,37 @@ class ActivoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->request->remove('_token');
+        $input = $request->all();
+        $activo = Activo::where('id', $id)->update($request->all());
+        $activo = Activo::where('id', $id)->first();
+
+        //dd($activo);
+
+        // Manejo de imagen
+        $file = null;
+        if($request->hasFile('foto')){
+            $file = $request->file('foto');
+        }
+
+        // Guardamos la imagen
+        if($request->hasFile('foto'))
+        {
+            $type = $file->guessExtension();
+            $nombre = 'activo_'.$activo->id.time().'.'.$type;
+
+            $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
+            copy($file,$ruta);
+
+            $activo->foto = $nombre;
+            $activo->save();
+        }
+
+        flash("Los datos se han actualizado correctamente", "success");
+
+        return redirect()->back();
+        
+
     }
 
     /**

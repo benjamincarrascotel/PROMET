@@ -65,12 +65,9 @@
                 img.onload = setup;
                 img.setAttribute('crossorigin', 'anonymous');
 
-                img.src = '{{asset("/storage/background-white.jpeg")}}'
-                //img.src = "http://127.0.0.1/storage/aaaa.jpg"; // SE CAMBIA POR AHORA, PARA MAKINA DEBERIA VENIR DE BD
-                //img.src = "http://94.177.238.182/storage/aaaa.jpg"; // SE CAMBIA POR AHORA, PARA MAKINA DEBERIA VENIR DE BD
+                img.src = '{{asset("/storage/background-white.jpeg")}}';
 
                 function setup() {
-    // ... [El resto del código no cambia]
                     var canvas = document.querySelector("canvas"),
                         ctx = canvas.getContext("2d"),
                         lastPos, isDown = false;
