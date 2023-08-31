@@ -122,7 +122,7 @@
                                                                     <td class="align-middle">
                                                                         <div class="d-flex"> <!-- Adjusted here -->
                                                                             <form method="POST" action="{{ route('arriendo.cambio_fase') }}">
-                                                                                <button class="btn btn-sm btn-primary me-2" type="button" data-bs-toggle="" data-bs-target="#user-form-modal">Ver</button>
+                                                                                <a class="btn btn-sm btn-primary" type="button" href="{{route('arriendo.show', [$arriendo->id])}}">Ver</a>
                                                                                 @csrf
                                                                                 <input hidden type="integer" id="arriendo_id" name="arriendo_id" value="{{$arriendo->id}}">
                                                                                 @if($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "ARRENDADO")

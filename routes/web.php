@@ -83,6 +83,8 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/arriendo/create', 'ActivoController@ingresar_arriendo_create')->name('arriendo.create');
         Route::post('/arriendo/store', 'ActivoController@ingresar_arriendo_store')->name('arriendo.store');
+        Route::get('/arriendo/show/{id}', 'ActivoController@show_arriendo')->name('arriendo.show');
+        Route::post('/arriendo/update/{id}', 'ActivoController@update_arriendo')->name('arriendo.update');
 
         Route::resource('usuarios', 'UserController')->only([
             'create', 'store', 'edit','update','index',

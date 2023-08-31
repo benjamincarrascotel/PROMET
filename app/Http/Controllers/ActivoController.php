@@ -333,4 +333,26 @@ class ActivoController extends Controller
     public function qr_reader(){
         return view('arriendo.qr_reader');
     }
+
+
+    public function show_arriendo($id)
+    {
+        $arriendo = ArriendoActivo::where('id', $id)->first();
+        return view('arriendo.show')
+                ->with('arriendo', $arriendo);
+    }
+
+    public function update_arriendo(Request $request, $id)
+    {
+        $request->request->remove('_token');
+        $input = $request->all();
+        $arriendo = ArriendoActivo::where('id', $id)->update($request->all());
+        $arriendo = ArriendoActivo::where('id', $id)->first();
+
+        flash("Los datos se han actualizado correctamente", "success");
+
+        return redirect()->back();
+        
+
+    }
 }
