@@ -145,31 +145,33 @@
         </div>
 
 
-        <!-- Agrega este código al final de tu vista Blade para crear el modal -->
-        <div class="modal fade" id="terminarMantencionModal" tabindex="-1" aria-labelledby="terminarMantencionModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form action="{{ route('mantencion.finish') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <input hidden name="activo_id" id="activo_id" type="text" value="{{$activo->id}}">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="terminarMantencionModalLabel">Terminar Mantención</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="documento" class="form-label">Documento</label>
-                                <input type="file" class="dropify" id="documento" name="documento">
+        @if($activos)
+            <!-- Agrega este código al final de tu vista Blade para crear el modal -->
+            <div class="modal fade" id="terminarMantencionModal" tabindex="-1" aria-labelledby="terminarMantencionModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="{{ route('mantencion.finish') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input hidden name="activo_id" id="activo_id" type="text" value="{{$activo->id}}">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="terminarMantencionModalLabel">Terminar Mantención</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Terminar Mantención</button>
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
-                    </form>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="documento" class="form-label">Documento</label>
+                                    <input type="file" class="dropify" id="documento" name="documento">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Terminar Mantención</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
         <!-- Debo colocar el script dentro de la "section" para que logre acceder al input "foto" -->
         <script>
