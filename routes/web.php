@@ -86,6 +86,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/arriendo/show/{id}', 'ActivoController@show_arriendo')->name('arriendo.show');
         Route::post('/arriendo/update/{id}', 'ActivoController@update_arriendo')->name('arriendo.update');
 
+        Route::get('/mantencion/create/{id}', 'MantencionController@create')->name('mantencion.create');
+        Route::post('/mantencion/store', 'MantencionController@store')->name('mantencion.store');
+        Route::post('/mantencion/finish', 'MantencionController@finish')->name('mantencion.finish');
+
+
+
+
         Route::resource('usuarios', 'UserController')->only([
             'create', 'store', 'edit','update','index',
         ]);

@@ -71,8 +71,10 @@ class ActivoController extends Controller
             "estado" => "DISPONIBLE",
         ]);
 
-        //Creamos la ruta pública primero
+        //Creamos la ruta pública del activo
         File::makeDirectory(public_path('storage/activos/'.$activo->id));
+        //Creamos la ruta pública para mantenciones
+        File::makeDirectory(public_path('storage/mantenciones/'.$activo->id));
 
         //Generamos QR
         QrCode::generate('https://mos-demo.ingetelma.cl/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE.svg'));
