@@ -72,6 +72,7 @@
                                         <th class="border-bottom-0 ">Acciones</th>
                                         <th class="border-bottom-0 ">Código QR</th>
                                         <th class="border-bottom-0 ">Mantención</th>
+                                        <th class="border-bottom-0 ">Venta</th>
 
                                     </tr>
                                 </thead>
@@ -117,6 +118,16 @@
                                                         <h6 class="mb-0 font-weight-bold mt-2">Iniciar</h6>
                                                     </a>
                                                 </td>
+
+                                                <td class="align-middle text-center">
+                                                    <a href="{{ route('venta.create', [$activo->id]) }}">
+                                                        <button id="iniciar_venta" class="btn btn-sm btn-danger" type="button" data-bs-toggle="" data-bs-target="#user-form-modal">
+                                                        <svg width="24" height="24" viewBox="-10 -5 1034 1034" xmlns="http://www.w3.org/2000/svg"><path d="M500 228q-78 0-151 29-74 30-131.5 87.5T129 477q-29 72-29 150.5T129 778q31 75 88.5 132.5T349 998q73 30 151 30t151-30q74-30 131.5-87.5T871 778q29-72 29-150.5T871 477q-31-75-88.5-132.5T651 257q-73-29-151-29zm0 75q65 0 124.5 24.5T730 398t70.5 105.5T825 628t-24.5 124T730 857t-105.5 71T500 953t-124.5-24.5T270 858q-62-62-84-147-22-83 0-166 22-85 84-147 46-46 105.5-70.5T500 303zm-31 103v73q-30 5-47 21-26 24-26 67 0 34 19 55 17 19 54 29l3 2 26 6q24 6 32 13l1 2q7 7 7 18.5t-7 19.5l-4 5q-12 7-34 7-11 0-24-2h-2q-13-3-19-5-24-7-50-22v63q25 10 51 16 7 1 20 3v72h62v-73q30-5 46-20 26-24 26-72 0-37-18-56-16-18-54-28l-37-9q-16-4-25-10l-3-1q-8-7-8-18 0-15 11-23l1-1q11-7 35-7 14 0 26 3l13 3q23 6 42 16v-62q-25-8-47-11l-8-1v-73h-62zm-132 43q-16 47-24 91.5t-8 86.5 8 86 24 92h31q-14-49-20-91-7-47-7-87.5t7-87.5q6-42 20-90h-31zm297 0q14 49 20.5 90.5t6.5 87-6 87-21 91.5h31q16-48 23.5-92t7.5-86-7.5-86-23.5-92h-31z"/></svg>                                                        
+                                                        <h6 class="mb-0 font-weight-bold mt-2">Iniciar</h6>
+                                                    </a>
+                                                </td>
+
+
                                             @elseif($activo->estado == "EN MANTENCION")
                                                 <td class="align-middle text-center">
                                                     <button id="terminar_mantencion" data-activo-id="{{ $activo->id }}" class="btn btn-sm btn-warning terminar-mantencion-btn" data-bs-toggle="modal" data-bs-target="#terminarMantencionModal" type="button">
@@ -124,6 +135,14 @@
                                                     <h6 class="mb-0 font-weight-bold mt-2">Terminar</h6>
                                     
                                                 </td>
+
+                                                <td class="align-middle text-center">
+                                                    <button disabled id="iniciar_venta" data-activo-id="{{ $activo->id }}" class="btn btn-sm btn-danger" data-bs-toggle="modal" type="button">
+                                                    <svg width="24" height="24" viewBox="-10 -5 1034 1034" xmlns="http://www.w3.org/2000/svg"><path d="M500 228q-78 0-151 29-74 30-131.5 87.5T129 477q-29 72-29 150.5T129 778q31 75 88.5 132.5T349 998q73 30 151 30t151-30q74-30 131.5-87.5T871 778q29-72 29-150.5T871 477q-31-75-88.5-132.5T651 257q-73-29-151-29zm0 75q65 0 124.5 24.5T730 398t70.5 105.5T825 628t-24.5 124T730 857t-105.5 71T500 953t-124.5-24.5T270 858q-62-62-84-147-22-83 0-166 22-85 84-147 46-46 105.5-70.5T500 303zm-31 103v73q-30 5-47 21-26 24-26 67 0 34 19 55 17 19 54 29l3 2 26 6q24 6 32 13l1 2q7 7 7 18.5t-7 19.5l-4 5q-12 7-34 7-11 0-24-2h-2q-13-3-19-5-24-7-50-22v63q25 10 51 16 7 1 20 3v72h62v-73q30-5 46-20 26-24 26-72 0-37-18-56-16-18-54-28l-37-9q-16-4-25-10l-3-1q-8-7-8-18 0-15 11-23l1-1q11-7 35-7 14 0 26 3l13 3q23 6 42 16v-62q-25-8-47-11l-8-1v-73h-62zm-132 43q-16 47-24 91.5t-8 86.5 8 86 24 92h31q-14-49-20-91-7-47-7-87.5t7-87.5q6-42 20-90h-31zm297 0q14 49 20.5 90.5t6.5 87-6 87-21 91.5h31q16-48 23.5-92t7.5-86-7.5-86-23.5-92h-31z"/></svg>                                                        
+                                                    <h6 class="mb-0 font-weight-bold mt-2">Iniciar</h6>
+                                    
+                                                </td>
+
                                             @else
                                                 <td class="align-middle text-center">
                                                     <a href="#">
@@ -132,6 +151,13 @@
                                                         <h6 class="mb-0 font-weight-bold mt-2">Iniciar</h6>
 
                                                     </a>
+                                                </td>
+
+                                                <td class="align-middle text-center">
+                                                    <button disabled id="iniciar_venta" data-activo-id="{{ $activo->id }}" class="btn btn-sm btn-danger" data-bs-toggle="modal" type="button">
+                                                    <svg width="24" height="24" viewBox="-10 -5 1034 1034" xmlns="http://www.w3.org/2000/svg"><path d="M500 228q-78 0-151 29-74 30-131.5 87.5T129 477q-29 72-29 150.5T129 778q31 75 88.5 132.5T349 998q73 30 151 30t151-30q74-30 131.5-87.5T871 778q29-72 29-150.5T871 477q-31-75-88.5-132.5T651 257q-73-29-151-29zm0 75q65 0 124.5 24.5T730 398t70.5 105.5T825 628t-24.5 124T730 857t-105.5 71T500 953t-124.5-24.5T270 858q-62-62-84-147-22-83 0-166 22-85 84-147 46-46 105.5-70.5T500 303zm-31 103v73q-30 5-47 21-26 24-26 67 0 34 19 55 17 19 54 29l3 2 26 6q24 6 32 13l1 2q7 7 7 18.5t-7 19.5l-4 5q-12 7-34 7-11 0-24-2h-2q-13-3-19-5-24-7-50-22v63q25 10 51 16 7 1 20 3v72h62v-73q30-5 46-20 26-24 26-72 0-37-18-56-16-18-54-28l-37-9q-16-4-25-10l-3-1q-8-7-8-18 0-15 11-23l1-1q11-7 35-7 14 0 26 3l13 3q23 6 42 16v-62q-25-8-47-11l-8-1v-73h-62zm-132 43q-16 47-24 91.5t-8 86.5 8 86 24 92h31q-14-49-20-91-7-47-7-87.5t7-87.5q6-42 20-90h-31zm297 0q14 49 20.5 90.5t6.5 87-6 87-21 91.5h31q16-48 23.5-92t7.5-86-7.5-86-23.5-92h-31z"/></svg>                                                        
+                                                    <h6 class="mb-0 font-weight-bold mt-2">Iniciar</h6>
+                                    
                                                 </td>
                                             @endif
                                         </tr>

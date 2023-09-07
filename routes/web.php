@@ -90,6 +90,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/mantencion/store', 'MantencionController@store')->name('mantencion.store');
         Route::post('/mantencion/finish', 'MantencionController@finish')->name('mantencion.finish');
 
+        Route::get('/venta/create/{id}', 'ActivoController@venta_create')->name('venta.create');
+        Route::post('/venta/store', 'ActivoController@venta_store')->name('venta.store');
+
 
 
 

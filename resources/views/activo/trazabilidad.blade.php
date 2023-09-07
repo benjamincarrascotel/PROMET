@@ -21,7 +21,7 @@
     @section('title')
     &nbsp;
     <h3>
-        Trazabilidad de Arriendos
+        Trazabilidad
     </h3>
     &nbsp;
     @endsection

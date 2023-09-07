@@ -357,4 +357,61 @@ class ActivoController extends Controller
         
 
     }
+
+    public function venta_create($id)
+    {
+        $activo = Activo::where('id', $id)->first();
+        return view('venta.create')
+                ->with('activo', $activo);
+    }
+
+    public function venta_store(Request $request)
+    {
+        $input = $request->all();
+        dd($input);
+
+        // Manejo de imagen
+        $file = null;
+        if($request->hasFile('cotizacion_mantencion')){
+            $file = $request->file('cotizacion_mantencion');
+        }
+
+        //dd($request->all());
+        $mantencion = Mantencion::create([
+            "activo_id" => $input['activo_id'],
+            "costo_mantencion" => $input['costo_mantencion'],
+            "fecha_inicio" => $input['fecha_inicio'],
+            "fecha_termino" => $input['fecha_termino'],
+            "rut_proveedor" => $input['rut_proveedor'],
+            "nombre_proveedor" => $input['nombre_proveedor'],
+            "contacto_proveedor" => $input['contacto_proveedor'],
+            "estado" => "EN PROCESO",
+        ]);
+
+        // Guardamos la imagen
+        if($request->hasFile('cotizacion_mantencion'))
+        {
+            $type = $file->guessExtension();
+            $nombre = 'activo_'.$input['activo_id']."_".time().'.'.$type;
+
+            $ruta = public_path("storage/mantenciones/".$input['activo_id'].'/'.$nombre);
+            copy($file,$ruta);
+
+            $mantencion->cotizacion_mantencion = $nombre;
+            $mantencion->save();
+        }
+
+        // Actualizamos estado del activo
+        $activo = Activo::where('id', $input['activo_id'])->first();
+        $activo->estado = "EN MANTENCION";
+        $activo->save();
+
+        $activos = Activo::get();
+
+        flash("La mantención ha sido registrada correctamente", 'success');
+
+        return redirect()->route('activo.index')
+            ->with('activos', $activos);
+    }
+
 }
