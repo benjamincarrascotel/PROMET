@@ -368,7 +368,16 @@ class ActivoController extends Controller
     public function venta_store(Request $request)
     {
         $input = $request->all();
-        dd($input);
+
+        $activo = Activo::where('id', $input['activo_id'])->first();
+        $activo->estado = "VENDIDO";
+        $activo->save();
+
+        flash("La venta del activo se ha sido realizado correctamente", 'success');
+        $activos = Activo::get();
+
+        return redirect()->route('activo.index')
+            ->with('activos', $activos);
 
         // Manejo de imagen
         $file = null;
