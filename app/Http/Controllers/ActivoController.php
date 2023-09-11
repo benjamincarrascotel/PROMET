@@ -180,7 +180,7 @@ class ActivoController extends Controller
         $activo = Activo::where('id', $id)->update($request->all());
         $activo = Activo::where('id', $id)->first();
 
-        //dd($activo);
+        //dd($input);
 
         // Manejo de imagen
         $file = null;
@@ -198,8 +198,47 @@ class ActivoController extends Controller
             copy($file,$ruta);
 
             $activo->foto = $nombre;
-            $activo->save();
+            
         }
+
+        // Guardamos los archivos
+        if($request->hasFile('archivo'))
+        {
+            $archivo = $request->file('archivo');
+            $type = $archivo->guessExtension();
+            $nombre = 'archivo_'.$activo->id.time().'.'.$type;
+
+            $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
+            copy($archivo,$ruta);
+
+            $activo->archivo = $nombre;
+        }
+
+        if($request->hasFile('archivo2'))
+        {
+            $archivo2 = $request->file('archivo2');
+            $type = $archivo2->guessExtension();
+            $nombre = 'archivo2_'.$activo->id.time().'.'.$type;
+
+            $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
+            copy($archivo2,$ruta);
+
+            $activo->archivo2 = $nombre;
+        }
+
+        if($request->hasFile('archivo3'))
+        {
+            $archivo3 = $request->file('archivo3');
+            $type = $archivo3->guessExtension();
+            $nombre = 'archivo3_'.$activo->id.time().'.'.$type;
+
+            $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
+            copy($archivo3,$ruta);
+
+            $activo->archivo3 = $nombre;
+        }
+
+        $activo->save();
 
         flash("Los datos se han actualizado correctamente", "success");
 

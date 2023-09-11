@@ -177,13 +177,40 @@
                                     <input type="number" id="horas_uso_promedio" name="horas_uso_promedio" min="0" class="form-control" required="" value="{{$activo->horas_uso_promedio}}">
                                 </div>
                             </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label class="form-label">Tiempo de uso (Meses)</label>
+                                    <input type="number" id="tiempo_uso_meses" name="tiempo_uso_meses" min="0" class="form-control" required="" value="{{$activo->tiempo_uso_meses}}">
+                                </div>
+                            </div>
                         </div>
+                        <div class="card-title font-weight-bold mt-5">Imagen del activo:</div>
+                        <div class="row">
+                            @if($activo->foto)
+                                <input type="file" class="dropify" id='foto' name="foto" data-height="180" data-default-file="{{asset('storage/activos/'.$activo->id.'/'.$activo->foto)}}"  />
+                            @else
+                                <input type="file" class="dropify" id='foto' name="foto" data-height="180" />
+                            @endif
+                        </div>
+
+
                         <div class="card-title font-weight-bold mt-5">DATOS FINANCIEROS:</div>
                         <div class="row">
                             <div class="col-sm-6 col-md-6">
-                                <div class="form-group">
+                                <div class="row">
                                     <label class="form-label">Precio de compra</label>
-                                    <input type="number" id="precio_compra" name="precio_compra" min="0" class="form-control" required="" value="{{$activo->precio_compra}}">
+                                    <div class="col form-group">
+                                        <input type="number" id="precio_compra" name="precio_compra" min="0" class="form-control" required="" value="{{$activo->precio_compra}}">
+                                    </div>
+                                    <div class="col form-group">
+                                        <div class="dropdown">
+                                            <select class="form-control " id="tipo_moneda" name="tipo_moneda" required>
+                                                <option @if($activo->tipo_moneda == "CLP") selected @endif value="CLP">CLP</option>
+                                                <option @if($activo->tipo_moneda == "UF")  selected @endif value="UF">UF</option>
+                                                <option @if($activo->tipo_moneda == "USD") selected @endif value="USD">USD</option>
+                                            </select>
+                                        </div>                                
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
@@ -204,14 +231,37 @@
                                     <input type="number" id="valor_residual" name="valor_residual" min="0" max="100" class="form-control" required="" value="{{$activo->valor_residual}}">
                                 </div>
                             </div>
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Centro de costos</label>
+                                    <input class="form-control" id="centro_costos" name="centro_costos" type="text" value="{{$activo->centro_costos}}">
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-title font-weight-bold mt-5">Imagen del activo:</div>
+
+                        <div class="card-title font-weight-bold mt-5">Archivos (OC, Guía de Despacho u otros): </div>
                         <div class="row">
-                            @if($activo->foto)
-                                <input type="file" class="dropify" id='foto' name="foto" data-height="180" data-default-file="{{asset('storage/activos/'.$activo->id.'/'.$activo->foto)}}"  />
-                            @else
-                                <input type="file" class="dropify" id='foto' name="foto" data-height="180" />
-                            @endif
+                            <div class="col">
+                                @if($activo->archivo)
+                                    <input type="file" class="dropify" id='archivo' name="archivo" data-height="180" data-default-file="{{asset('storage/activos/'.$activo->id.'/'.$activo->archivo)}}"  />
+                                @else
+                                    <input type="file" class="dropify" id='archivo' name="archivo" data-height="180" />
+                                @endif
+                            </div>
+                            <div class="col">
+                                @if($activo->archivo2)
+                                    <input type="file" class="dropify" id='archivo2' name="archivo2" data-height="180" data-default-file="{{asset('storage/activos/'.$activo->id.'/'.$activo->archivo2)}}"  />
+                                @else
+                                    <input type="file" class="dropify" id='archivo2' name="archivo2" data-height="180" />
+                                @endif
+                            </div>
+                            <div class="col">
+                                @if($activo->archivo3)
+                                    <input type="file" class="dropify" id='archivo3' name="archivo3" data-height="180" data-default-file="{{asset('storage/activos/'.$activo->id.'/'.$activo->archivo3)}}"  />
+                                @else
+                                    <input type="file" class="dropify" id='archivo3' name="archivo3" data-height="180" />
+                                @endif
+                            </div>
                         </div>
                     </form>
                 </div>

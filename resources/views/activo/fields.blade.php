@@ -100,7 +100,7 @@
                 <input type="number" id="vida_util" name="vida_util" min="0" class="form-control" required="">
             </div>
             <div class="col-md-6 col-lg-6 mb-4">
-                <label class="form-control-label">Valor residual (%): <span class="tx-danger">*</span></label>
+                <label class="form-control-label">Valor residual (%): </label>
                 <input type="number" id="valor_residual" name="valor_residual" min="0" max="100" class="form-control">
             </div>
         </div>
