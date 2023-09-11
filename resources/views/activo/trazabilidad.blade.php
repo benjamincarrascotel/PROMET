@@ -109,12 +109,12 @@
                                                                         @endif
 
                                                                     </td>
-                                                                    <td>
+                                                                    <td class="align-middle">
                                                                         <div class="wrapper">
                                                                             <p class="mt-2 text-muted ">{{Carbon\Carbon::parse($arriendo->fecha_termino)->format('d-m-Y')}}</p>
                                                                         </div>
                                                                     </td>
-                                                                    <td>
+                                                                    <td class="align-middle">
                                                                         <div class="wrapper">
                                                                             <p class="mt-2 text-muted ">{{Carbon\Carbon::parse($arriendo->fecha_termino)->format('d-m-Y')}}</p>
                                                                         </div>

@@ -138,43 +138,43 @@
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Marca</label>
-                                    <input class="form-control" id="marca" name="marca" placeholder="Ingrese la marca del activo" required="" type="text" value={{$activo->marca}}>
+                                    <input class="form-control" id="marca" name="marca" placeholder="Ingrese la marca del activo" required="" type="text" value="{{$activo->marca}}">
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Modelo</label>
-                                    <input class="form-control" id="modelo" name="modelo" placeholder="Ingrese el modelo del activo" required="" type="text" value={{$activo->modelo}}>
+                                    <input class="form-control" id="modelo" name="modelo" placeholder="Ingrese el modelo del activo" required="" type="text" value="{{$activo->modelo}}">
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Año</label>
-                                    <input type="number" id="año" name="año" min="1950" max="2023" class="form-control" required="" value={{$activo->año}}>
+                                    <input type="number" id="año" name="año" min="1950" max="2023" class="form-control" required="" value="{{$activo->año}}">
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Clasificación</label>
-                                    <input class="form-control" id="clasificacion" name="clasificacion" placeholder="Ingrese el modelo del activo" required="" type="text" value={{$activo->clasificacion}}>
+                                    <input class="form-control" id="clasificacion" name="clasificacion" placeholder="Ingrese el modelo del activo" required="" type="text" value="{{$activo->clasificacion}}">
                                 </div>
                             </div>											
                             <div class="col-sm-6 col-md-4">
                                 <div class="form-group">
                                     <label class="form-label">Código Interno</label>
-                                    <input type="text" id="codigo_interno" name="codigo_interno" placeholder="Ingrese el código interno del activo" class="form-control" required="" value={{$activo->codigo_interno}}>
+                                    <input type="text" id="codigo_interno" name="codigo_interno" placeholder="Ingrese el código interno del activo" class="form-control" required="" value="{{$activo->codigo_interno}}">
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-3">
                                 <div class="form-group">
                                     <label class="form-label">Número de serie</label>
-                                    <input class="form-control" id="numero_serie" name="numero_serie" placeholder="Ingrese el número de serie del activo" type="text" value={{$activo->numero_serie}}>
+                                    <input class="form-control" id="numero_serie" name="numero_serie" placeholder="Ingrese el número de serie del activo" type="text" value="{{$activo->numero_serie}}">
                                 </div>
                             </div>
                             <div class="col-md-5">
                                 <div class="form-group">
                                     <label class="form-label">Horas de uso promedio</label>
-                                    <input type="number" id="horas_uso_promedio" name="horas_uso_promedio" min="0" class="form-control" required="" value={{$activo->horas_uso_promedio}}>
+                                    <input type="number" id="horas_uso_promedio" name="horas_uso_promedio" min="0" class="form-control" required="" value="{{$activo->horas_uso_promedio}}">
                                 </div>
                             </div>
                         </div>
@@ -183,25 +183,25 @@
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Precio de compra</label>
-                                    <input type="number" id="precio_compra" name="precio_compra" min="0" class="form-control" required="" value={{$activo->precio_compra}}>
+                                    <input type="number" id="precio_compra" name="precio_compra" min="0" class="form-control" required="" value="{{$activo->precio_compra}}">
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Orden de compra</label>
-                                    <input class="form-control" id="orden_de_compra" name="orden_compra" placeholder="Ingrese la orden de compra del activo" required="" type="text" value={{$activo->orden_compra}}>
+                                    <input class="form-control" id="orden_de_compra" name="orden_compra" placeholder="Ingrese la orden de compra del activo" required="" type="text" value="{{$activo->orden_compra}}">
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Vida útil (Meses)</label>
-                                    <input type="number" id="vida_util" name="vida_util" min="0" class="form-control" required="" value={{$activo->vida_util}}>
+                                    <input type="number" id="vida_util" name="vida_util" min="0" class="form-control" required="" value="{{$activo->vida_util}}">
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Valor residual (%)</label>
-                                    <input type="number" id="valor_residual" name="valor_residual" min="0" max="100" class="form-control" required="" value={{$activo->valor_residual}}>
+                                    <input type="number" id="valor_residual" name="valor_residual" min="0" max="100" class="form-control" required="" value="{{$activo->valor_residual}}">
                                 </div>
                             </div>
                         </div>
