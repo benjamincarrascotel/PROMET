@@ -49,12 +49,6 @@ class ActivoController extends Controller
     {
         $input = $request->all();
 
-        // Manejo de imagen
-        $file = null;
-        if($request->hasFile('foto')){
-            $file = $request->file('foto');
-        }
-
         //dd($request->all());
         $activo = Activo::create([
             "marca" => $input['marca'],
@@ -69,6 +63,10 @@ class ActivoController extends Controller
             "vida_util" => $input['vida_util'],
             "valor_residual" => $input['valor_residual'],
             "estado" => "DISPONIBLE",
+
+            "tiempo_uso_meses" => $input['tiempo_uso_meses'],
+            "centro_costos" => $input['centro_costos'],
+            "tipo_moneda" => $input['tipo_moneda'],
         ]);
 
         //Creamos la ruta pública del activo
@@ -79,11 +77,11 @@ class ActivoController extends Controller
         //Generamos QR
         QrCode::generate('https://mos-demo.ingetelma.cl/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE.svg'));
         $activo->codigo_qr = 'QR_CODE.svg';
-        $activo->save();
 
         // Guardamos la imagen
         if($request->hasFile('foto'))
         {
+            $file = $request->file('foto');
             $type = $file->guessExtension();
             $nombre = 'activo_'.$activo->id.time().'.'.$type;
 
@@ -91,10 +89,50 @@ class ActivoController extends Controller
             copy($file,$ruta);
 
             $activo->foto = $nombre;
-            $activo->save();
         }
 
+        // Guardamos los archivos
+        if($request->hasFile('archivo'))
+        {
+            $archivo = $request->file('archivo');
+            $type = $archivo->guessExtension();
+            $nombre = 'archivo_'.$activo->id.time().'.'.$type;
+
+            $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
+            copy($archivo,$ruta);
+
+            $activo->archivo = $nombre;
+        }
+
+        if($request->hasFile('archivo2'))
+        {
+            $archivo2 = $request->file('archivo2');
+            $type = $archivo2->guessExtension();
+            $nombre = 'archivo2_'.$activo->id.time().'.'.$type;
+
+            $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
+            copy($archivo2,$ruta);
+
+            $activo->archivo2 = $nombre;
+        }
+
+        if($request->hasFile('archivo3'))
+        {
+            $archivo3 = $request->file('archivo3');
+            $type = $archivo3->guessExtension();
+            $nombre = 'archivo3_'.$activo->id.time().'.'.$type;
+
+            $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
+            copy($archivo3,$ruta);
+
+            $activo->archivo3 = $nombre;
+        }
+
+        $activo->save();
+
         $activos = Activo::get();
+
+        flash("El activo se ha creado correctamente", "success");
 
         return redirect()->route('activo.index')
             ->with('activos', $activos);

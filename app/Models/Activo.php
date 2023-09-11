@@ -34,6 +34,13 @@ class Activo extends Model
         'codigo_qr',
         'estado',
 
+        'tiempo_uso_meses',
+        'centro_costos',
+        'tipo_moneda',
+        'archivo',
+        'archivo2',
+        'archivo3',
+
     ];
 
     /**
