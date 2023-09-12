@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+
 use App\Models\Activo;
 use App\Models\ArriendoActivo;
+use App\Models\Venta;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -13,6 +16,9 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\File;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
+
+use Validator;
 
 
 class ActivoController extends Controller
@@ -45,9 +51,13 @@ class ActivoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $input = $request->all();
+
+        $validated = $request->validate([
+            'codigo_interno' => 'required|string|unique:activos',
+        ]);
 
         //dd($request->all());
         $activo = Activo::create([
@@ -265,9 +275,9 @@ class ActivoController extends Controller
             ->with('arriendos', $arriendos);
     }
 
-    public function ingresar_arriendo_create()
+    public function ingresar_arriendo_create($id)
     {
-        $selectedID = 0;
+        $selectedID = $id;
         $activos = Activo::where('estado', "DISPONIBLE")->get();
 
         return view('arriendo.create')
@@ -450,51 +460,38 @@ class ActivoController extends Controller
         $activo->estado = "VENDIDO";
         $activo->save();
 
-        flash("La venta del activo se ha sido realizado correctamente", 'success');
-        $activos = Activo::get();
-
-        return redirect()->route('activo.index')
-            ->with('activos', $activos);
-
         // Manejo de imagen
         $file = null;
-        if($request->hasFile('cotizacion_mantencion')){
-            $file = $request->file('cotizacion_mantencion');
+        if($request->hasFile('cotizacion_venta')){
+            $file = $request->file('cotizacion_venta');
         }
 
         //dd($request->all());
-        $mantencion = Mantencion::create([
+        $venta = Venta::create([
             "activo_id" => $input['activo_id'],
-            "costo_mantencion" => $input['costo_mantencion'],
-            "fecha_inicio" => $input['fecha_inicio'],
-            "fecha_termino" => $input['fecha_termino'],
-            "rut_proveedor" => $input['rut_proveedor'],
-            "nombre_proveedor" => $input['nombre_proveedor'],
-            "contacto_proveedor" => $input['contacto_proveedor'],
+            "precio_venta" => $input['precio_venta'],
+            "fecha_venta" => $input['fecha_venta'],
+            "rut_cliente" => $input['rut_cliente'],
+            "nombre_cliente" => $input['nombre_cliente'],
+            "contacto_cliente" => $input['contacto_cliente'],
             "estado" => "EN PROCESO",
         ]);
 
         // Guardamos la imagen
-        if($request->hasFile('cotizacion_mantencion'))
+        if($request->hasFile('cotizacion_venta'))
         {
             $type = $file->guessExtension();
-            $nombre = 'activo_'.$input['activo_id']."_".time().'.'.$type;
+            $nombre = 'cotizacion_venta_'.$input['activo_id']."_".time().'.'.$type;
 
-            $ruta = public_path("storage/mantenciones/".$input['activo_id'].'/'.$nombre);
+            $ruta = public_path("storage/activos/".$input['activo_id'].'/'.$nombre);
             copy($file,$ruta);
 
-            $mantencion->cotizacion_mantencion = $nombre;
-            $mantencion->save();
+            $venta->cotizacion_venta = $nombre;
+            $venta->save();
         }
 
-        // Actualizamos estado del activo
-        $activo = Activo::where('id', $input['activo_id'])->first();
-        $activo->estado = "EN MANTENCION";
-        $activo->save();
-
+        flash("La venta del activo se ha sido realizado correctamente", 'success');
         $activos = Activo::get();
-
-        flash("La mantención ha sido registrada correctamente", 'success');
 
         return redirect()->route('activo.index')
             ->with('activos', $activos);

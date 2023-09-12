@@ -6,44 +6,44 @@
         <div class="row ">
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-control-label">Marca: <span class="tx-danger">*</span></label>
-                <input class="form-control" id="marca" name="marca" placeholder="Ingrese la marca del activo" required="" type="text">
+                <input class="form-control" id="marca" name="marca" placeholder="Ingrese la marca del activo" required="" type="text" value="{{ old('marca') }}">
             </div>
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-control-label">Modelo: <span class="tx-danger">*</span></label>
-                <input class="form-control" id="modelo" name="modelo" placeholder="Ingrese el modelo del activo" required="" type="text">
+                <input class="form-control" id="modelo" name="modelo" placeholder="Ingrese el modelo del activo" required="" type="text" value="{{ old('modelo') }}">
             </div>
         </div>
 
         <div class="row ">
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-label">Año: <span class="tx-danger">*</span></label>
-                <input type="number" id="año" name="año" min="1950" max="2023" class="form-control" required="">
+                <input type="number" id="año" name="año" min="1950" max="2023" class="form-control" required="" value="{{ old('año') }}">
             </div>
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-control-label">Clasificación: <span class="tx-danger">*</span></label>
-                <input class="form-control" id="clasificacion" name="clasificacion" placeholder="Ingrese el modelo del activo" required="" type="text">
+                <input class="form-control" id="clasificacion" name="clasificacion" placeholder="Ingrese el modelo del activo" required="" type="text" value="{{ old('clasificacion') }}">
             </div>
         </div>
 
         <div class="row ">
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-control-label">Código Interno: <span class="tx-danger">*</span></label>
-                <input type="text" id="codigo_interno" name="codigo_interno" placeholder="Ingrese el código interno del activo" class="form-control" required="">
+                <input type="text" id="codigo_interno" name="codigo_interno" placeholder="Ingrese el código interno del activo" class="form-control" required="" value="{{ old('codigo_interno') }}">
             </div>
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-control-label">Número de serie: <span class="tx-danger">*</span> </label>
-                <input required="" class="form-control" id="numero_serie" name="numero_serie" placeholder="Ingrese el número de serie del activo" type="text">
+                <input required="" class="form-control" id="numero_serie" name="numero_serie" placeholder="Ingrese el número de serie del activo" type="text" value="{{ old('numero_serie') }}">
             </div>
         </div>
 
         <div class="row ">
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-label">Horas de uso promedio: </label>
-                <input type="number" id="horas_uso_promedio" name="horas_uso_promedio" min="0" class="form-control" required="">
+                <input type="number" id="horas_uso_promedio" name="horas_uso_promedio" min="0" class="form-control" required="" value="{{ old('horas_uso_promedio') }}">
             </div>
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-control-label">Tiempo de uso (Meses): </label>
-                <input class="form-control" id="tiempo_uso_meses" name="tiempo_uso_meses" placeholder="Ingrese el modelo del activo" min="0" type="number">
+                <input class="form-control" id="tiempo_uso_meses" name="tiempo_uso_meses" placeholder="Ingrese el modelo del activo" min="0" type="number" value="{{ old('tiempo_uso_meses') }}">
             </div>
         </div>
 
@@ -51,7 +51,7 @@
             <label for="foto" class="col-sm-2 col-form-label">Imagen:<br>(Max. 2 MB)</label>
             
                 <div class="col-lg-4 col-sm-12">
-                    <input type="file" class="dropify" id='foto' name="foto" data-height="180"  />
+                    <input type="file" class="dropify" id='foto' name="foto" data-height="180" />
                 </div>
                 
         </div>
@@ -76,12 +76,12 @@
         <div class="row ">
             <div class="col">
                 <label class="form-control-label">Precio de compra: <span class="tx-danger">*</span></label>
-                <input type="number" id="precio_compra" name="precio_compra" min="0" class="form-control" required="">
+                <input type="number" id="precio_compra" name="precio_compra" min="0" class="form-control" required="" value="{{ old('precio_compra') }}">
             </div>
             <div class="col">
                 <label class="form-control-label">Tipo de moneda: </label>
                 <div class="dropdown">
-                    <select class="form-control " id="tipo_moneda" name="tipo_moneda" required>
+                    <select class="form-control " id="tipo_moneda" name="tipo_moneda" required value="{{ old('tipo_moneda') }}">
                         <option value="CLP">CLP</option>
                         <option value="UF">UF</option>
                         <option value="USD">USD</option>
@@ -90,25 +90,25 @@
             </div>
             <div class="col">
                 <label class="form-control-label">Orden de compra: <span class="tx-danger">*</span></label>
-                <input class="form-control" id="orden_de_compra" name="orden_compra" placeholder="Ingrese la orden de compra del activo" required="" type="text">
+                <input class="form-control" id="orden_de_compra" name="orden_compra" placeholder="Ingrese la orden de compra del activo" required="" type="text" value="{{ old('orden_compra') }}">
             </div>
         </div>
 
         <div class="row mt-3">
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-control-label">Vida útil (Meses): <span class="tx-danger">*</span></label>
-                <input type="number" id="vida_util" name="vida_util" min="0" class="form-control" required="">
+                <input type="number" id="vida_util" name="vida_util" min="0" class="form-control" required="" value="{{ old('vida_util') }}">
             </div>
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-control-label">Valor residual (%): </label>
-                <input type="number" id="valor_residual" name="valor_residual" min="0" max="100" class="form-control">
+                <input type="number" id="valor_residual" name="valor_residual" min="0" max="100" class="form-control" value="{{ old('valor_residual') }}">
             </div>
         </div>
 
         <div class="row ">
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-control-label">Centro de Costos: <span class="tx-danger">*</span></label>
-                <input type="text" id="centro_costos" name="centro_costos" placeholder="Ingrese el centro de costos" class="form-control" required="">
+                <input type="text" id="centro_costos" name="centro_costos" placeholder="Ingrese el centro de costos" class="form-control" required="" value="{{ old('centro_costos') }}">
             </div>
         </div>
         

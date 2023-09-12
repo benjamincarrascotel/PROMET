@@ -180,7 +180,7 @@
                             <div class="col-md-5">
                                 <div class="form-group">
                                     <label class="form-label">Tiempo de uso (Meses)</label>
-                                    <input type="number" id="tiempo_uso_meses" name="tiempo_uso_meses" min="0" class="form-control" required="" value="{{$activo->tiempo_uso_meses}}">
+                                    <input type="number" id="tiempo_uso_meses" name="tiempo_uso_meses" min="0" class="form-control" value="{{$activo->tiempo_uso_meses}}">
                                 </div>
                             </div>
                         </div>
@@ -228,7 +228,7 @@
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Valor residual (%)</label>
-                                    <input type="number" id="valor_residual" name="valor_residual" min="0" max="100" class="form-control" required="" value="{{$activo->valor_residual}}">
+                                    <input type="number" id="valor_residual" name="valor_residual" min="0" max="100" class="form-control" value="{{$activo->valor_residual}}">
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">

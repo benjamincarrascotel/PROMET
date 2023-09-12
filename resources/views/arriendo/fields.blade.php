@@ -8,17 +8,16 @@
             <label for="activo_id" class="col-sm-2 col-form-label">Activos disponibles: <br> (En Bodega)</label>
             <div class="col-sm-10">
                 <select id="activo_id" class="form-control block mt-1 w-full" name="activo_id" required>
-                    <option value={{null}} >                
-                        Seleccione alguna de las opciones                 
-                    </option> 
-                    @foreach ($activos as $key => $value)              
-                        <option value="{{ $value->id }}" {{ ( $key == $selectedID) }}>                
-                            {{ "ID: ".$value->id." - "."Código Interno: ".$value->codigo_interno." - "."Marca: ".$value->marca." - "."Modelo: ".$value->modelo." - Ubicación: BODEGA" }}             
+                    <option value={{null}}>Seleccione alguna de las opciones</option>
+                    @foreach ($activos as $value)
+                        <option value="{{ $value->id }}" {{ $value->id == $selectedID ? 'selected' : '' }}>
+                            {{ "ID: ".$value->id." - "."Código Interno: ".$value->codigo_interno." - "."Marca: ".$value->marca." - "."Modelo: ".$value->modelo." - Ubicación: BODEGA" }}
                         </option>
-                    @endforeach                   
+                    @endforeach
                 </select>
             </div>
         </div>
+        
 
     </section>
 
