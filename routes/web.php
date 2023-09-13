@@ -93,6 +93,16 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/venta/create/{id}', 'ActivoController@venta_create')->name('venta.create');
         Route::post('/venta/store', 'ActivoController@venta_store')->name('venta.store');
 
+        //PROYECTOS
+        Route::get('/proyecto/index', 'ProyectoController@index')->name('proyecto.index');
+        Route::get('/proyecto/create', 'ProyectoController@create')->name('proyecto.create');
+        Route::post('/proyecto/store', 'ProyectoController@store')->name('proyecto.store');
+
+        Route::get('/proyecto/destroy', 'ProyectoController@destroy')->name('proyecto.destroy');
+
+
+
+
 
 
 
