@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\SuperAdmin;
 
 
+
 class UserController extends Controller
 {
     public function index()
@@ -60,6 +61,8 @@ class UserController extends Controller
 
             if(isset($input['superadmin'])){
                 $usuario->superadmin = true;
+                $usuario->admin = true;
+                $usuario->bodega = true;
             } else {
                 $usuario->superadmin = false;
             }
@@ -70,9 +73,13 @@ class UserController extends Controller
                 $usuario->admin = false;
             }
 
-            
-            
+            if(isset($input['bodega'])){
+                $usuario->bodega = true;
+            } else {
+                $usuario->bodega = false;
+            }
             $usuario->save();
+
             if(isset($input['superadmin']) && intval($input['superadmin']))
             {
                 $superadmin = new SuperAdmin();
@@ -99,15 +106,15 @@ class UserController extends Controller
             }
             
 
-            // flash('Usuario guardado exitosamente')->success();
+            flash('Usuario guardado exitosamente')->success();
             // return view('usuarios.show', compact('usuarios'));
 
             $usuarios = User::get();   
-            return view('usuarios.index', compact('usuarios'));
+            return redirect()->route('usuarios.index');
         }
         else
         {
-            // flash('Las claves no coinciden, trate nuevamente')->error();
+            flash('Las claves no coinciden, trate nuevamente')->error();
             return redirect()->back();
         }
     }

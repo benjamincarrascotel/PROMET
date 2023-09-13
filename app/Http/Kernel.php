@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'superadmin' => \App\Http\Middleware\SuperAdmin::class,
+        'bodega' => \App\Http\Middleware\Bodega::class,
     ];
 }

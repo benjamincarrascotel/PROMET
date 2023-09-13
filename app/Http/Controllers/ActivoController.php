@@ -287,38 +287,41 @@ class ActivoController extends Controller
 
     public function ingresar_arriendo_store(Request $request)
     {
-
-        //TODO verificar que no exista otro arriendo en curso de este activo
         $input = $request->all();
-
-        //dd($request->all());
-        $arriendo = ArriendoActivo::create([
-            "activo_id" => $input['activo_id'],
-            "monto" => $input['monto'],
-            "fecha_inicio" => $input['fecha_inicio'],
-            "fecha_termino" => $input['fecha_termino'],
-            "cliente_area" => $input['cliente_area'],
-            "encargado" => $input['encargado'],
-            "estado" => 'BODEGA',
-        ]);
-
-        // Actualizamos estado del activo arrendado
         $activo = Activo::where('id', $input['activo_id'])->first();
-        $activo->estado = 'PARA RETIRO';
-        $activo->save();
+        if($activo->estado == "DISPONIBLE"){           
 
-        flash('Arriendo registrado correctamente.', 'success');
+            //dd($request->all());
+            $arriendo = ArriendoActivo::create([
+                "activo_id" => $input['activo_id'],
+                "monto" => $input['monto'],
+                "fecha_inicio" => $input['fecha_inicio'],
+                "fecha_termino" => $input['fecha_termino'],
+                "cliente_area" => $input['cliente_area'],
+                "encargado" => $input['encargado'],
+                "estado" => 'BODEGA',
+            ]);
 
-        $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
+            $activo->estado = 'PARA RETIRO';
+            $activo->save();
 
-        return redirect()->route('activo.trazabilidad')
-            ->with('arriendos', $arriendos);
+            flash('Arriendo registrado correctamente.', 'success');
+
+            $activos = Activo::get();
+
+            return redirect()->route('activo.index')
+                ->with('activos', $activos);
+        }else{
+
+            flash("El activo ya está en un proceso de arriendo.", "danger");
+            return redirect()->back();
+        }
     }
 
     public function transporte()
     {
         $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get()->reverse();
-        return view('arriendo.transporte')
+        return view('bodega.transporte')
             ->with('arriendos', $arriendos);
     }
 
@@ -420,7 +423,7 @@ class ActivoController extends Controller
     }
 
     public function qr_reader(){
-        return view('arriendo.qr_reader');
+        return view('bodega.qr_reader');
     }
 
 

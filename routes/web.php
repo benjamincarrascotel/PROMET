@@ -23,16 +23,6 @@ Route::get('/proveedor/create', 'ProveedorController@create')->name('proveedor.c
 Route::post('/proveedor/store', 'ProveedorController@store')->name('proveedor.store');
 Route::post('/proveedor/store2', 'ProveedorController@store2')->name('proveedor.store2');
 
-//TRANSPORTE
-Route::get('/transporte', 'ActivoController@transporte')->name('arriendo.transporte');
-Route::post('/transporte/cambio_fase', 'ActivoController@cambio_fase')->name('arriendo.cambio_fase');
-Route::get('/transporte/qr_reader', 'ActivoController@qr_reader')->name('arriendo.qr_reader');
-
-
-//INVENTARIO
-Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('arriendo.cambio_fase_create');
-
-
 
 Route::group(['middleware' => ['auth']], function () {
 
@@ -97,13 +87,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/proyecto/index', 'ProyectoController@index')->name('proyecto.index');
         Route::get('/proyecto/create', 'ProyectoController@create')->name('proyecto.create');
         Route::post('/proyecto/store', 'ProyectoController@store')->name('proyecto.store');
-
+        Route::get('/proyecto/cambio_estado', 'ProyectoController@cambio_estado')->name('proyecto.cambio_estado');
         Route::get('/proyecto/destroy', 'ProyectoController@destroy')->name('proyecto.destroy');
 
-
-
-
-
+        //ACTIVOS
+        Route::post('/activo/update/{id}', 'ActivoController@update')->name('activo.update');
+        Route::get('/activo/create', 'ActivoController@create')->name('activo.create');
+        Route::post('/activo/store', 'ActivoController@store')->name('activo.store');
 
 
         Route::resource('usuarios', 'UserController')->only([
@@ -113,8 +103,25 @@ Route::group(['middleware' => ['auth']], function () {
 
         
     });
+
     
-    // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+    Route::group(['middleware' => ['bodega']], function () {
+
+        //TRANSPORTE
+        Route::get('/transporte', 'ActivoController@transporte')->name('arriendo.transporte');
+        Route::post('/transporte/cambio_fase', 'ActivoController@cambio_fase')->name('arriendo.cambio_fase');
+        Route::get('/transporte/qr_reader', 'ActivoController@qr_reader')->name('arriendo.qr_reader');
+
+        //INVENTARIO
+        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('arriendo.cambio_fase_create');
+
+        //ACTIVOS
+        Route::get('/activo/index', 'ActivoController@index')->name('activo.index');
+        Route::get('/activo/show/{id}', 'ActivoController@show')->name('activo.show');
+
+
+    });
 
     
 });

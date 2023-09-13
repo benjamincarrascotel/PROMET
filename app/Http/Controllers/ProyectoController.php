@@ -53,6 +53,22 @@ class ProyectoController extends Controller
             ->with('proyectos', $proyectos);
     }
 
+    public function cambio_estado(Request $request)
+    {
+        $proyecto = Proyecto::where('id', $request->input("proyecto_id"))->first();
+        switch ($proyecto->estado) {
+            case 'ACTIVO':
+                $proyecto->estado="INACTIVO";
+                break;
+            default:
+                $proyecto->estado="ACTIVO";
+                break;
+        }
+        $proyecto->save();
+        
+        return $proyecto->estado;
+    }
+
     /**
      * Display the specified resource.
      *

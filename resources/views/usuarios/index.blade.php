@@ -26,8 +26,10 @@
                 @else
                     <td>
                         <div class="btn-group" role="group">
-                            <a class="btn btn-danger" id="delete" onClick="alert('El usuario ha sido eliminado.')" href="{!! route('usuarios.destroy', [$usuario->id]) !!}"><i class='fa fa-ban'></i>  Eliminar</a>
-                            
+                            <a class="btn btn-danger" onclick="confirmDelete('{{ route('usuarios.destroy', [$usuario->id]) }}')">
+                                <i class='fa fa-ban'></i>  
+                                Eliminar
+                            </a>                        
                         </div>
                     </td>
                 @endif
@@ -41,4 +43,18 @@
     @overwrite
     @include('layouts.card_no_title')
 @endpush
+
+@section('scripts')
+<script>
+    function confirmDelete(deleteUrl) {
+        var confirmResult = confirm("¿Estás seguro de que deseas eliminar este usuario?");
+        
+        if (confirmResult) {
+            // Si el usuario hace clic en "Aceptar", redirige para eliminar el usuario
+            window.location.href = deleteUrl;
+        }
+        // Si el usuario hace clic en "Cancelar", no se realiza ninguna acción
+    }
+</script>
+@endsection
 

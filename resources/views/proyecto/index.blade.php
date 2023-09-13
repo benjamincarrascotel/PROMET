@@ -82,7 +82,18 @@
                                             <td>{{$proyecto->id}}</td>
                                             <td>{{$proyecto->nombre}}</td>
                                             <td>{{$proyecto->centro_costo}}</td>
-                                            <td>{{$proyecto->estado}}</td>
+                                            <td>    
+                                                <div class="material-switch mt-4">
+                                                    @if($proyecto->estado == "ACTIVO")
+                                                        <input checked class="estado-checkbox" data-proyecto-id="{{$proyecto->id}}" name="someSwitchOption001" type="checkbox" id="someSwitchOptionSuccess"/>
+                                                        <label for="someSwitchOptionSuccess" class="label-danger"></label>
+                                                        
+                                                    @else
+                                                        <input class="estado-checkbox" data-proyecto-id="{{$proyecto->id}}" name="someSwitchOption001" type="checkbox" id="someSwitchOptionSuccess"/>
+                                                        <label for="someSwitchOptionSuccess" class="label-danger"></label>
+                                                    @endif
+                                                </div>
+                                            </td>
                                             
                                             <td>
                                                 <div class="btn-group" role="group">
@@ -110,12 +121,34 @@
 
 @section('scripts')
 
-    <script src="{{ asset('dropify/js/dropify.js' )}}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $('.dropify').dropify();
+
+            // Manejar el clic en los checkboxes de estado
+            $('.estado-checkbox').on('click', function () {
+                var proyectoId = $(this).data('proyecto-id');
+
+                // Realizar la consulta Ajax
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ route("proyecto.cambio_estado") }}?proyecto_id=' + proyectoId,                    
+                    
+                    success: function (response) {
+                        // Aquí puedes manejar la respuesta si es necesario
+                        console.log(response);
+                        window.location.href = "{{route('proyecto.index')}}";
+                    },
+                    error: function (error) {
+                        // Manejar errores aquí si es necesario
+                        console.error(error);
+                    },
+                });
+            });
+
+
         });
     </script>
+
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
     <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
