@@ -382,20 +382,21 @@ class ActivoController extends Controller
                 break;
         }
 
-        $redirected = 'Cambio de fase registrado correctamente.';
+        flash('Cambio de fase registrado correctamente.', 'success');
 
         //CASO SUPERADMIN
         $user = Auth::user();
-        if (isset($user)) {
-            flash('Cambio de fase registrado correctamente.', 'success');
+        if (isset($user) && $user->superadmin) {
             $arriendos = ArriendoActivo::get();
-
             return redirect()->route('activo.trazabilidad');
+
+        }else{
+            //CASO BODEGA O ADMIN
+            $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
+            return redirect()->route('arriendo.transporte');
         }
 
-        //CASO TRANSPORTE
-        $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
-        return redirect()->route('arriendo.transporte');
+        
 
     }
 
@@ -410,12 +411,12 @@ class ActivoController extends Controller
             ($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "PARA RETIRO") ||
              $arriendo->estado == "EN CAMINO VUELTA"){
             //dd($arriendo);
-            return view('arriendo.cambio_fase')
+            return view('bodega.cambio_fase')
                 ->with('arriendo',  $arriendo);
         }else{
             //dd("entra");
             $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
-            return view('arriendo.transporte')
+            return view('bodega.transporte')
                 ->with('arriendos', $arriendos);
             //Casos en que se pueda cambiar directamente de fase (REDIRECT A OTRA RUTA POST)
             return redirect()->route('arriendo.cambio_fase');
