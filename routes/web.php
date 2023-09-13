@@ -68,18 +68,18 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/activo/store', 'ActivoController@store')->name('activo.store');
         Route::get('/activo/show/{id}', 'ActivoController@show')->name('activo.show');
         Route::post('/activo/update/{id}', 'ActivoController@update')->name('activo.update');
-
         Route::get('/activo/trazabilidad', 'ActivoController@trazabilidad')->name('activo.trazabilidad');
 
+        //ARRIENDOS
         Route::get('/arriendo/create/{id}', 'ActivoController@ingresar_arriendo_create')->name('arriendo.create');
         Route::post('/arriendo/store', 'ActivoController@ingresar_arriendo_store')->name('arriendo.store');
         Route::get('/arriendo/show/{id}', 'ActivoController@show_arriendo')->name('arriendo.show');
         Route::post('/arriendo/update/{id}', 'ActivoController@update_arriendo')->name('arriendo.update');
 
-        Route::get('/mantencion/create/{id}', 'MantencionController@create')->name('mantencion.create');
-        Route::post('/mantencion/store', 'MantencionController@store')->name('mantencion.store');
+        //MANTENCIONES
         Route::post('/mantencion/finish', 'MantencionController@finish')->name('mantencion.finish');
 
+        //VENTAS
         Route::get('/venta/create/{id}', 'ActivoController@venta_create')->name('venta.create');
         Route::post('/venta/store', 'ActivoController@venta_store')->name('venta.store');
 
@@ -89,11 +89,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/proyecto/store', 'ProyectoController@store')->name('proyecto.store');
         Route::get('/proyecto/cambio_estado', 'ProyectoController@cambio_estado')->name('proyecto.cambio_estado');
         Route::get('/proyecto/destroy', 'ProyectoController@destroy')->name('proyecto.destroy');
-
-        //ACTIVOS
-        Route::post('/activo/update/{id}', 'ActivoController@update')->name('activo.update');
-        Route::get('/activo/create', 'ActivoController@create')->name('activo.create');
-        Route::post('/activo/store', 'ActivoController@store')->name('activo.store');
 
 
         Route::resource('usuarios', 'UserController')->only([
@@ -117,8 +112,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('arriendo.cambio_fase_create');
 
         //ACTIVOS
+        Route::get('/activo/create', 'ActivoController@create')->name('activo.create');
+        Route::post('/activo/store', 'ActivoController@store')->name('activo.store');
+        Route::post('/activo/update/{id}', 'ActivoController@update')->name('activo.update');
         Route::get('/activo/index', 'ActivoController@index')->name('activo.index');
         Route::get('/activo/show/{id}', 'ActivoController@show')->name('activo.show');
+
+        //MANTENCIONES
+        Route::get('/mantencion/create/{id}', 'MantencionController@create')->name('mantencion.create');
+        Route::post('/mantencion/store', 'MantencionController@store')->name('mantencion.store');
 
 
     });

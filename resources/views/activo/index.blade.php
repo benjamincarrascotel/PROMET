@@ -197,7 +197,7 @@
         </div>
 
 
-        @if($activos)
+        @if(count($activos))
             <!-- Agrega este código al final de tu vista Blade para crear el modal -->
             <div class="modal fade" id="terminarMantencionModal" tabindex="-1" aria-labelledby="terminarMantencionModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -232,6 +232,7 @@
                 $('.terminar-mantencion-btn').on('click', function () {
                     var activoId = $(this).data('activo-id'); // Obtiene el valor de data-activo-id
                     $('#activo_id').val(activoId); // Establece el valor en el campo activo_id del formulario
+                    $('#terminarMantencionModal').modal('show'); // Muestra el modal
                 });
             });
 
@@ -264,8 +265,9 @@
     @endpush
 
 
-
-    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    
     <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
     <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
 
