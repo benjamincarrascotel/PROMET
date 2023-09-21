@@ -388,7 +388,7 @@ class ActivoController extends Controller
         $user = Auth::user();
         if (isset($user) && $user->superadmin) {
             $arriendos = ArriendoActivo::get();
-            return redirect()->route('activo.trazabilidad');
+            return redirect()->back();
 
         }else{
             //CASO BODEGA O ADMIN

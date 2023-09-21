@@ -133,26 +133,44 @@
                                                                     <p class="mt-2 text-muted ">{{Carbon\Carbon::parse($arriendo->fecha_termino)->format('d-m-Y')}}</p>
                                                                 </div>
                                                                 <div class="text-white text-center">
-                                                                    <form method="GET" action="{{ route('arriendo.qr_reader', [$arriendo->activo->id]) }}">
-                                                                        <td class="align-middle">
-                                                                            <!-- State 1 -->
-                                                                            @if($arriendo->estado == "BODEGA")
-                                                                                <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
-                                                                            <!-- State 2 -->
-                                                                            @elseif($arriendo->estado == "EN CAMINO IDA")
-                                                                                <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
-                                                                            <!-- State 3 -->
-                                                                            @elseif($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "PARA RETIRO")
-                                                                                <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
-                                                                            <!-- State 4 -->
-                                                                            @elseif($arriendo->estado == "EN CAMINO VUELTA")
-                                                                                <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
-                                                                            @else
-                                                                                <button disabled class="btn btn-xl btn-warning me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">(ESPERANDO CONFIRMACIÓN)</button>
-                                                                            @endif
+                                                                    @if($arriendo->estado == "BODEGA" || $arriendo->estado == "EN CAMINO VUELTA")
+                                                                        <form method="GET" action="{{ route('arriendo.qr_reader', [$arriendo->activo->id]) }}">
+                                                                            <td class="align-middle">
+                                                                                <!-- State 1 -->
+                                                                                @if($arriendo->estado == "BODEGA")
+                                                                                    <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
+                                                                                <!-- State 4 -->
+                                                                                @elseif($arriendo->estado == "EN CAMINO VUELTA")
+                                                                                    <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
+                                                                                @endif
 
-                                                                        </td>
-                                                                    </form>
+                                                                            </td>
+                                                                        </form>
+                                                                    @elseif($arriendo->estado == "EN CAMINO IDA" || $arriendo->estado == "EN CLIENTE")
+                                                                        <form method="POST" action="{{ route('arriendo.cambio_fase') }}">
+                                                                            @csrf
+                                                                            <input hidden type="integer" id="arriendo_id" name="arriendo_id" value="{{$arriendo->id}}">
+                                                                            <td class="align-middle">
+                                                                                <!-- State 2 -->
+                                                                                @if($arriendo->estado == "EN CAMINO IDA")
+                                                                                    <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
+                                                                                <!-- State 3 -->
+                                                                                @elseif($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "ARRENDADO")
+                                                                                    <button class="btn btn-xl btn-danger me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Disponibilizar para retiro</button>
+                                                                                @elseif($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "PARA RETIRO")
+                                                                                    <button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>
+
+                                                                                @endif
+                                                                            </td>
+                                                                        </form>
+                                                                    @else
+                                                                        <form method="GET" action="{{ route('arriendo.qr_reader', [$arriendo->activo->id]) }}">
+                                                                            <td class="align-middle">
+                                                                                <!-- State 5 -->
+                                                                                <button disabled class="btn btn-xl btn-warning me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">(ESPERANDO CONFIRMACIÓN)</button>
+                                                                            </td>
+                                                                        </form>
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </div>

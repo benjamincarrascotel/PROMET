@@ -24,7 +24,9 @@
 
 	</style>
 
-	<!--TODO dark-menu -->
+	<!--TODO HTML PRINCIPAL -->
+
+	<!--TODO dark-menu Y ICONO LOADER -->
 	<body class="app sidebar-mini dark-menu color-header">
 
         <!---Global-loader-->

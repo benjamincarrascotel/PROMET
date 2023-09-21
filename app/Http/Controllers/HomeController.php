@@ -15,7 +15,7 @@ class HomeController extends Controller
         }else if(auth()->user()->admin){
             return redirect()->route('proveedor.index');
         }else if(auth()->user()->bodega){
-            return redirect()->route('activo.index');
+            return redirect()->route('arriendo.transporte');
         }else 
             return redirect('/login');
     }
