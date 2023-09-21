@@ -48,6 +48,27 @@
         </div>
 
         <div class="row">
+            <div class="col-md-6 col-lg-6 mb-4">
+                <label for="familia_id" class="form-label">Familia de Productos: </label>
+                <select id="familia_id" class="form-control block mt-1 w-full" name="familia_id" required>
+                    <option value={{null}}>Seleccione alguna de las opciones</option>
+                    @foreach ($familias as $value)
+                        <option value="{{ $value->id }}" {{ $value->id == $selectedID ? 'selected' : '' }}>
+                            {{ "[ ".$value->id." ] - ".$value->acronimo." - ".$value->nombre }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        
+            <div class="col-md-6 col-lg-6 mb-4">
+                <label for="sub_familia_id" class="form-label">Sub Familia de Productos: </label>
+                <select id="sub_familia_id" class="form-control block mt-1 w-full" name="sub_familia_id" required>
+                    <option value={{null}} selected >Seleccione alguna de las opciones</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
             <label for="foto" class="col-sm-2 col-form-label">Imagen:<br>(Max. 2 MB)</label>
             
                 <div class="col-lg-4 col-sm-12">
@@ -67,6 +88,45 @@
                     };
                 };
         </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var familiaSelect = document.getElementById("familia_id");
+                var subFamiliaSelect = document.getElementById("sub_familia_id");
+                var subFamilias = {!! $sub_familias->toJson() !!}; // Convierte la colección de sub_familias a un array JavaScript
+                
+                // Función para actualizar las opciones del input de sub_familias
+                function actualizarSubFamilias() {
+                    var selectedFamiliaId = familiaSelect.value;
+
+                    // Limpiar las opciones actuales
+                    subFamiliaSelect.innerHTML = '';
+
+                    // Agregar la opción predeterminada
+                    var defaultOption = document.createElement("option");
+                    defaultOption.value = null;
+                    defaultOption.text = "Seleccione alguna de las opciones";
+                    subFamiliaSelect.appendChild(defaultOption);
+
+                    // Agregar las sub_familias correspondientes a la familia seleccionada
+                    subFamilias[selectedFamiliaId].forEach(function (subFamilia) {
+                        var option = document.createElement("option");
+                        option.value = subFamilia.id;
+                        option.text = "[ "+subFamilia.id+" ] - "+subFamilia.acronimo+" - "+subFamilia.nombre ;
+                        subFamiliaSelect.appendChild(option);
+                    });
+                }
+
+                // Asignar el evento change al input de familias
+                familiaSelect.addEventListener("change", function () {
+                    actualizarSubFamilias();
+                });
+
+            });
+        </script>
+
+
+        
 
     </section>
 
@@ -144,7 +204,6 @@
         });
     </script>
 
-    <!-- Debo colocar el script dentro de la "section" para que logre acceder al input "foto" -->
     <script>
         var uploadField = document.getElementById("archivo");
             uploadField.onchange = function() {
@@ -155,7 +214,6 @@
             };
     </script>
 
-    <!-- Debo colocar el script dentro de la "section" para que logre acceder al input "foto" -->
     <script>
         var uploadField = document.getElementById("archivo2");
             uploadField.onchange = function() {
@@ -166,7 +224,6 @@
             };
     </script>
 
-    <!-- Debo colocar el script dentro de la "section" para que logre acceder al input "foto" -->
     <script>
         var uploadField = document.getElementById("archivo3");
             uploadField.onchange = function() {

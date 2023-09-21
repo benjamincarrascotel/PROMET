@@ -13,12 +13,17 @@ class Activo extends Model
 
     public $table = 'activos';
 
+    public function sub_familia(){
+        return $this->belongsTo('App\Models\SubFamiliaProducto','sub_familia_id','id');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
+        'sub_familia_id',
         'marca',
         'modelo',
         'año',

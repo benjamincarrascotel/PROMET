@@ -6,7 +6,7 @@
 		@elseif(auth()->user()->admin)
 			<a class="header-brand" href="{{route('admin.index')}}">
 		@elseif(auth()->user()->bodega)
-			<a class="header-brand" href="{{route('activo.index')}}">
+			<a class="header-brand" href="{{route('arriendo.transporte')}}">
 		@endif
 			<img src="{{asset('assets/images/brand/LogoMOS.png')}}" class="header-brand-img desktop-lgo" alt="CEMIN logo">
 			<img src="{{asset('assets/images/brand/LogoMOS.png')}}" class="header-brand-img dark-logo" alt="Azea logo">

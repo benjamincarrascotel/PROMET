@@ -8,6 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\Activo;
 use App\Models\ArriendoActivo;
 use App\Models\Venta;
+use App\Models\FamiliaProducto;
+use App\Models\SubFamiliaProducto;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -42,7 +44,13 @@ class ActivoController extends Controller
      */
     public function create()
     {
-        return view('activo.create');
+        $familias = FamiliaProducto::get();
+        $sub_familias = SubFamiliaProducto::get()->groupBy('familia_id');
+        $selectedID = 0;
+        return view('activo.create')
+                ->with('selectedID', $selectedID)
+                ->with('sub_familias', $sub_familias)
+                ->with('familias', $familias);
     }
 
     /**
@@ -57,10 +65,12 @@ class ActivoController extends Controller
 
         $validated = $request->validate([
             'codigo_interno' => 'required|string|unique:activos',
+            'sub_familia_id' => 'required|integer',
         ]);
 
         //dd($request->all());
         $activo = Activo::create([
+            "sub_familia_id" => $input['sub_familia_id'],
             "marca" => $input['marca'],
             "modelo" => $input['modelo'],
             "año" => $input['año'],
@@ -158,9 +168,13 @@ class ActivoController extends Controller
     public function show($id)
     {
         $activo = Activo::where('id', $id)->first();
+        $familias = FamiliaProducto::get();
+        $sub_familias = SubFamiliaProducto::get()->groupBy('familia_id');
 
         $n_arriendos = ArriendoActivo::where('activo_id', $id)->get()->count();
         return view('activo.show')
+                ->with('familias', $familias)
+                ->with('sub_familias', $sub_familias)
                 ->with('n_arriendos', $n_arriendos)
                 ->with('activo', $activo);
     }
@@ -186,7 +200,13 @@ class ActivoController extends Controller
     public function update(Request $request, $id)
     {
         $request->request->remove('_token');
+        $request->request->remove('familia_id');
         $input = $request->all();
+
+        $validated = $request->validate([
+            'sub_familia_id' => 'required|integer',
+        ]);
+
         $activo = Activo::where('id', $id)->update($request->all());
         $activo = Activo::where('id', $id)->first();
 

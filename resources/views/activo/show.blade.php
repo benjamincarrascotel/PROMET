@@ -25,6 +25,16 @@
 
 @section('content')
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
 
     <!--Page header-->
     <div class="page-header">
@@ -183,6 +193,36 @@
                                     <input type="number" id="tiempo_uso_meses" name="tiempo_uso_meses" min="0" class="form-control" value="{{$activo->tiempo_uso_meses}}">
                                 </div>
                             </div>
+                            
+                            <div class="row">
+
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label for="familia_id" class="form-label">Familia de Productos: </label>
+                                        <select id="familia_id" class="form-control block mt-1 w-full" name="familia_id" required>
+                                            <option value={{null}}>Seleccione alguna de las opciones</option>
+                                            @foreach ($familias as $value)
+                                                <option value="{{ $value->id }}" {{ $value->id == $activo->sub_familia->familia->id ? 'selected' : '' }}>
+                                                    {{ "[ ".$value->id." ] - ".$value->acronimo." - ".$value->nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label for="sub_familia_id" class="form-label">Familia de Productos: </label>
+                                        <select id="sub_familia_id" class="form-control block mt-1 w-full" name="sub_familia_id" required>
+                                            <option value={{null}}>Seleccione alguna de las opciones</option>
+                                            @foreach ($sub_familias[$activo->sub_familia->familia->id] as $value)
+                                                <option value="{{ $value->id }}" {{ $value->id == $activo->sub_familia->id ? 'selected' : '' }}>
+                                                    {{ "[ ".$value->id." ] - ".$value->acronimo." - ".$value->nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-title font-weight-bold mt-5">Imagen del activo:</div>
                         <div class="row">
@@ -279,6 +319,42 @@
 @endsection('content')
 
 @section('scripts')
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var familiaSelect = document.getElementById("familia_id");
+            var subFamiliaSelect = document.getElementById("sub_familia_id");
+            var subFamilias = {!! $sub_familias->toJson() !!}; // Convierte la colección de sub_familias a un array JavaScript
+            
+            // Función para actualizar las opciones del input de sub_familias
+            function actualizarSubFamilias() {
+                var selectedFamiliaId = familiaSelect.value;
+
+                // Limpiar las opciones actuales
+                subFamiliaSelect.innerHTML = '';
+
+                // Agregar la opción predeterminada
+                var defaultOption = document.createElement("option");
+                defaultOption.value = null;
+                defaultOption.text = "Seleccione alguna de las opciones";
+                subFamiliaSelect.appendChild(defaultOption);
+
+                // Agregar las sub_familias correspondientes a la familia seleccionada
+                subFamilias[selectedFamiliaId].forEach(function (subFamilia) {
+                    var option = document.createElement("option");
+                    option.value = subFamilia.id;
+                    option.text = "[ "+subFamilia.id+" ] - "+subFamilia.acronimo+" - "+subFamilia.nombre ;
+                    subFamiliaSelect.appendChild(option);
+                });
+            }
+
+            // Asignar el evento change al input de familias
+            familiaSelect.addEventListener("change", function () {
+                actualizarSubFamilias();
+            });
+
+        });
+    </script>
 
     <!-- Debo colocar el script dentro de la "section" para que logre acceder al input "foto" -->
     <script>

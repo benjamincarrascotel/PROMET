@@ -88,6 +88,7 @@ class Insertion extends Seeder
                     'password' => 'b1ff8785329d17dc78b8a01928fba6b81064c2ba8ce960008c2731e62896a02c',
                     'admin' => 1,
                     'superadmin' => 1,
+                    'bodega' => 1,
                     'salt' => 'af04b0649c7a1dae40c7c46e6fbd139c',
                 ],
 
@@ -97,8 +98,8 @@ class Insertion extends Seeder
                 [
                     'email' => 'superadmin@gmail.com',
                     'password' => 'b1ff8785329d17dc78b8a01928fba6b81064c2ba8ce960008c2731e62896a02c',
-                    'rut' => '19790978',
-                    'rut_dv' => '1',
+                    'rut' => '19790977',
+                    'rut_dv' => '4',
                     'nombre' => 'superadmin',
                     'apellido1' => 'Apellido 1',
                     'apellido2' => 'Apellido 2',
@@ -954,6 +955,245 @@ class Insertion extends Seeder
                 [
                 'nombre_centro' => 'UV01',
                 ],
+            ]);
+        }
+
+        // FAMILIAS PRODUCTOS
+        if(DB::table('familia_productos')->count() == 0){
+            DB::table('familia_productos')->insert([
+                [
+                    'id' => 1,
+                    'nombre' => 'EQUIPOS MAYORES',
+                    'acronimo' => 'EMA',
+                ],
+                [
+                    'id' => 2,
+                    'nombre' => 'EQUIPOS MENORES',
+                    'acronimo' => 'EME',
+                ],
+                [
+                    'id' => 3,
+                    'nombre' => 'VEHICULOS',
+                    'acronimo' => 'VEH',
+                ],
+            ]);
+        }
+
+        // SUB FAMILIAS
+        if(DB::table('sub_familia_productos')->count() == 0){
+            DB::table('sub_familia_productos')->insert([
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Grua Hidraulica',
+                    'acronimo' => 'GH',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Grua Horquilla',
+                    'acronimo' => 'GHOR',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Alza Hombre',
+                    'acronimo' => 'ALZH',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Manipulador Telescopico',
+                    'acronimo' => 'MANIT',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Retroexcavadora',
+                    'acronimo' => 'RETEX',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Excavadora',
+                    'acronimo' => 'EXCA',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Rodillo Compactador',
+                    'acronimo' => 'RCOMP',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Motoniveladora',
+                    'acronimo' => 'MNIVEL',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Mini Retroexcavadora',
+                    'acronimo' => 'MINRE',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Minicargador',
+                    'acronimo' => 'MINCA',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Tractocamion',
+                    'acronimo' => 'TRCAM',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Semiremolque',
+                    'acronimo' => 'SREM',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Camion Pluma',
+                    'acronimo' => 'CP',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Camion Abastecedor de Combustible',
+                    'acronimo' => 'CACOM',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Camion Plano 3/4',
+                    'acronimo' => 'CPLAN',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Camion Aljibes',
+                    'acronimo' => 'CALJ',
+                ],
+                [
+                    'familia_id' => 1,
+                    'nombre' => 'Camion Tolva',
+                    'acronimo' => 'CTOL',
+                ],
+
+                
+
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Generador',
+                    'acronimo' => 'GEN',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Termofusionadora',
+                    'acronimo' => 'TERF',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Equipo Topográfico',
+                    'acronimo' => 'ETOP',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Torre de Iluminación',
+                    'acronimo' => 'TRILU',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Equipo Compactador',
+                    'acronimo' => 'ECOMP',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Radio de Comunicacion',
+                    'acronimo' => 'RACO',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Moto Bomba y Bombas',
+                    'acronimo' => 'MBOM',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Motoniveladora',
+                    'acronimo' => 'MNIV',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Calefactor',
+                    'acronimo' => 'CAL',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Compresor',
+                    'acronimo' => 'COM',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Andamios',
+                    'acronimo' => 'ANDA',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Moldajes',
+                    'acronimo' => 'MOLD',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Herramientas Electricas',
+                    'acronimo' => 'HEEL',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Herramientas Inalambricas',
+                    'acronimo' => 'HEIN',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Equipos e Instrumentos de Precisión',
+                    'acronimo' => 'EQPR',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Yugos',
+                    'acronimo' => 'YUGO',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Equipos de Carga y Levante',
+                    'acronimo' => 'ECV',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Equipos Hidraulicos',
+                    'acronimo' => 'EHID',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Equipos Manuales',
+                    'acronimo' => 'EMAN',
+                ],
+                [
+                    'familia_id' => 2,
+                    'nombre' => 'Equipos Neumaticos',
+                    'acronimo' => 'ENEU',
+                ],
+
+
+
+                [
+                    'familia_id' => 3,
+                    'nombre' => 'Camioneta',
+                    'acronimo' => 'CAM',
+                ],
+                [
+                    'familia_id' => 3,
+                    'nombre' => 'Furgones y Minibuses',
+                    'acronimo' => 'FTP',
+                ],
+                [
+                    'familia_id' => 3,
+                    'nombre' => 'Camion Liviano',
+                    'acronimo' => 'CL',
+                ],
+                [
+                    'familia_id' => 3,
+                    'nombre' => 'BUS',
+                    'acronimo' => 'BUS',
+                ],
+
             ]);
         }
 
