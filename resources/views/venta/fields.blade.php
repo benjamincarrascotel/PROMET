@@ -18,17 +18,18 @@
 </div>
 
 <!-- Datos del cliente -->
-<div class="mb-3 row">
-    <label for="rut_cliente" class="col-sm-2 col-form-label">RUT del Cliente</label>
-    <div class="col-sm-10">
-        <input name="rut_cliente" id='rut_cliente' type="text" class="form-control"  required>
-    </div>
-</div>
 
 <div class="mb-3 row">
-    <label for="nombre_cliente" class="col-sm-2 col-form-label">Nombre del Cliente</label>
+    <label for="proyecto_id" class="col-sm-2 col-form-label">Proyecto</label>
     <div class="col-sm-10">
-        <input name="nombre_cliente" id='nombre_cliente' type="text" class="form-control"  required>
+        <select id="proyecto_id" class="form-control block mt-1 w-full" name="proyecto_id" required>
+            <option value={{null}}>Seleccione alguna de las opciones</option>
+            @foreach ($proyectos as $value)
+                <option value="{{ $value->id }}" {{ $value->id == $selectedID ? 'selected' : '' }}>
+                    {{ "Nombre: ".$value->nombre." - "."RUT: ".$value->rut." - "."Empresa: ".$value->empresa." - "."Centro de Costos: ".$value->centro_costo}}
+                </option>
+            @endforeach
+        </select>
     </div>
 </div>
 

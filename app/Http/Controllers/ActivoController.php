@@ -10,6 +10,7 @@ use App\Models\ArriendoActivo;
 use App\Models\Venta;
 use App\Models\FamiliaProducto;
 use App\Models\SubFamiliaProducto;
+use App\Models\Proyecto;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -472,7 +473,11 @@ class ActivoController extends Controller
     public function venta_create($id)
     {
         $activo = Activo::where('id', $id)->first();
+        $proyectos = Proyecto::where('estado', 'ACTIVO')->get();
+        $selectedID = 0;
         return view('venta.create')
+                ->with('selectedID', $selectedID)
+                ->with('proyectos', $proyectos)
                 ->with('activo', $activo);
     }
 
@@ -495,8 +500,7 @@ class ActivoController extends Controller
             "activo_id" => $input['activo_id'],
             "precio_venta" => $input['precio_venta'],
             "fecha_venta" => $input['fecha_venta'],
-            "rut_cliente" => $input['rut_cliente'],
-            "nombre_cliente" => $input['nombre_cliente'],
+            "proyecto_id" => $input['proyecto_id'],
             "contacto_cliente" => $input['contacto_cliente'],
             "estado" => "EN PROCESO",
         ]);
@@ -519,6 +523,43 @@ class ActivoController extends Controller
 
         return redirect()->route('activo.index')
             ->with('activos', $activos);
+    }
+
+
+    public function venta_finish(Request $request)
+    {
+        $input = $request->all();
+
+        $venta = Venta::where('activo_id', $input['activo_id_venta'])->where('estado', 'EN PROCESO')->first();
+        $venta->estado = "TERMINADA";
+        
+        // Manejo de imagen
+        $file = null;
+        if($request->hasFile('documento')){
+            $file = $request->file('documento');
+
+            $type = $file->guessExtension();
+            $nombre = 'comprobante_venta_'.$input['activo_id_venta']."_".time().'.'.$type;
+
+            $ruta = public_path("storage/activos/".$input['activo_id_venta'].'/'.$nombre);
+            copy($file,$ruta);
+
+            $venta->comprobante_termino = $nombre;
+            
+
+        }
+
+        $venta->save();
+
+        $activo = Activo::where('id', $input['activo_id_venta'])->first();
+        $activo->estado = "NO DISPONIBLE";
+        $activo->save();
+
+        $activos = Activo::get();
+
+        flash("Se ha terminado el proceso de venta correctamente.", "success");
+
+        return redirect()->back()->with('activos', $activos);
     }
 
 }

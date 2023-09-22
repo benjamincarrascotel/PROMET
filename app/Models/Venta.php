@@ -24,8 +24,7 @@ class Venta extends Model
         'cotizacion_venta',
         'fecha_venta',
 
-        'rut_cliente',
-        'nombre_cliente',
+        'proyecto_id',
         'contacto_cliente',   
         'estado', 
 

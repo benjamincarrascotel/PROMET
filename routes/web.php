@@ -82,6 +82,8 @@ Route::group(['middleware' => ['auth']], function () {
         //VENTAS
         Route::get('/venta/create/{id}', 'ActivoController@venta_create')->name('venta.create');
         Route::post('/venta/store', 'ActivoController@venta_store')->name('venta.store');
+        Route::post('/venta/finish', 'ActivoController@venta_finish')->name('venta.finish');
+
 
         //PROYECTOS
         Route::get('/proyecto/index', 'ProyectoController@index')->name('proyecto.index');

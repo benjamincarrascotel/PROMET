@@ -180,10 +180,17 @@
                                                     </a>
                                                 </td>
 
-                                                <td class="align-middle text-center">
-                                                    <button disabled id="iniciar_venta" data-activo-id="{{ $activo->id }}" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="VENDER" type="button">
-                                                    <svg width="24" height="24" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 5c-.655 0-.66 1.01 0 1h22c.286 0 .5.214.5.5v13c0 .66 1 .66 1 0v-13c0-.822-.678-1.5-1.5-1.5h-22zm-2 2c-.654 0-.654 1 0 1h22c.286 0 .5.214.5.5v13c0 .665 1.01.66 1 0v-13c0-.822-.678-1.5-1.5-1.5h-22zm-2 2C.678 9 0 9.678 0 10.5v12c0 .822.678 1.5 1.5 1.5h22c.822 0 1.5-.678 1.5-1.5v-12c0-.822-.678-1.5-1.5-1.5h-22zm0 1h22c.286 0 .5.214.5.5v12c0 .286-.214.5-.5.5h-22a.488.488 0 0 1-.5-.5v-12c0-.286.214-.5.5-.5zm1 1a.5.5 0 0 0-.5.5v2c0 .672 1 .656 1 0V12h1.5c.672 0 .656-1 0-1h-2zm10 0C9.468 11 7 13.468 7 16.5S9.468 22 12.5 22s5.5-2.468 5.5-5.5-2.468-5.5-5.5-5.5zm8 0c-.656 0-.672 1 0 1H22v1.5c0 .656 1 .672 1 0v-2a.5.5 0 0 0-.5-.5h-2zm-8 1c2.49 0 4.5 2.01 4.5 4.5S14.99 21 12.5 21 8 18.99 8 16.5s2.01-4.5 4.5-4.5zm0 1c-.277 0-.5.223-.5.5v.594c-.578.21-1 .76-1 1.406 0 .82.68 1.5 1.5 1.5.28 0 .5.212.5.5 0 .288-.22.5-.5.5h-1c-.338-.005-.5.248-.5.5s.162.505.5.5h.5v.5a.499.499 0 1 0 1 0v-.594c.578-.21 1-.76 1-1.406 0-.82-.68-1.5-1.5-1.5a.49.49 0 0 1-.5-.5c0-.288.22-.5.5-.5h1c.338.005.5-.248.5-.5s-.162-.505-.5-.5H13v-.5c0-.277-.223-.5-.5-.5zm-10 6.002c-.25-.002-.5.162-.5.498v2a.5.5 0 0 0 .5.5h2c.656 0 .672-1 0-1H3v-1.5c0-.328-.25-.496-.5-.498zm20 0c-.25.002-.5.17-.5.498V21h-1.5c-.672 0-.656 1 0 1h2a.5.5 0 0 0 .5-.5v-2c0-.336-.25-.5-.5-.498z"/></svg>                                                        
-                                                </td>
+                                                @if($activo->estado == "NO DISPONIBLE")
+                                                    <td class="align-middle text-center">
+                                                        <button disabled id="iniciar_venta" data-activo-id="{{ $activo->id }}" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="VENDER" type="button">
+                                                        <svg width="24" height="24" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 5c-.655 0-.66 1.01 0 1h22c.286 0 .5.214.5.5v13c0 .66 1 .66 1 0v-13c0-.822-.678-1.5-1.5-1.5h-22zm-2 2c-.654 0-.654 1 0 1h22c.286 0 .5.214.5.5v13c0 .665 1.01.66 1 0v-13c0-.822-.678-1.5-1.5-1.5h-22zm-2 2C.678 9 0 9.678 0 10.5v12c0 .822.678 1.5 1.5 1.5h22c.822 0 1.5-.678 1.5-1.5v-12c0-.822-.678-1.5-1.5-1.5h-22zm0 1h22c.286 0 .5.214.5.5v12c0 .286-.214.5-.5.5h-22a.488.488 0 0 1-.5-.5v-12c0-.286.214-.5.5-.5zm1 1a.5.5 0 0 0-.5.5v2c0 .672 1 .656 1 0V12h1.5c.672 0 .656-1 0-1h-2zm10 0C9.468 11 7 13.468 7 16.5S9.468 22 12.5 22s5.5-2.468 5.5-5.5-2.468-5.5-5.5-5.5zm8 0c-.656 0-.672 1 0 1H22v1.5c0 .656 1 .672 1 0v-2a.5.5 0 0 0-.5-.5h-2zm-8 1c2.49 0 4.5 2.01 4.5 4.5S14.99 21 12.5 21 8 18.99 8 16.5s2.01-4.5 4.5-4.5zm0 1c-.277 0-.5.223-.5.5v.594c-.578.21-1 .76-1 1.406 0 .82.68 1.5 1.5 1.5.28 0 .5.212.5.5 0 .288-.22.5-.5.5h-1c-.338-.005-.5.248-.5.5s.162.505.5.5h.5v.5a.499.499 0 1 0 1 0v-.594c.578-.21 1-.76 1-1.406 0-.82-.68-1.5-1.5-1.5a.49.49 0 0 1-.5-.5c0-.288.22-.5.5-.5h1c.338.005.5-.248.5-.5s-.162-.505-.5-.5H13v-.5c0-.277-.223-.5-.5-.5zm-10 6.002c-.25-.002-.5.162-.5.498v2a.5.5 0 0 0 .5.5h2c.656 0 .672-1 0-1H3v-1.5c0-.328-.25-.496-.5-.498zm20 0c-.25.002-.5.17-.5.498V21h-1.5c-.672 0-.656 1 0 1h2a.5.5 0 0 0 .5-.5v-2c0-.336-.25-.5-.5-.498z"/></svg>                                                        
+                                                    </td>
+                                                @else
+                                                    <td class="align-middle text-center">
+                                                        <button id="terminar_venta" data-activo-id="{{ $activo->id }}" class="btn btn-sm btn-danger terminar-venta-btn" data-toggle="tooltip" data-placement="top" title="TERMINAR VENTA" type="button">
+                                                        <svg width="24" height="24" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 5c-.655 0-.66 1.01 0 1h22c.286 0 .5.214.5.5v13c0 .66 1 .66 1 0v-13c0-.822-.678-1.5-1.5-1.5h-22zm-2 2c-.654 0-.654 1 0 1h22c.286 0 .5.214.5.5v13c0 .665 1.01.66 1 0v-13c0-.822-.678-1.5-1.5-1.5h-22zm-2 2C.678 9 0 9.678 0 10.5v12c0 .822.678 1.5 1.5 1.5h22c.822 0 1.5-.678 1.5-1.5v-12c0-.822-.678-1.5-1.5-1.5h-22zm0 1h22c.286 0 .5.214.5.5v12c0 .286-.214.5-.5.5h-22a.488.488 0 0 1-.5-.5v-12c0-.286.214-.5.5-.5zm1 1a.5.5 0 0 0-.5.5v2c0 .672 1 .656 1 0V12h1.5c.672 0 .656-1 0-1h-2zm10 0C9.468 11 7 13.468 7 16.5S9.468 22 12.5 22s5.5-2.468 5.5-5.5-2.468-5.5-5.5-5.5zm8 0c-.656 0-.672 1 0 1H22v1.5c0 .656 1 .672 1 0v-2a.5.5 0 0 0-.5-.5h-2zm-8 1c2.49 0 4.5 2.01 4.5 4.5S14.99 21 12.5 21 8 18.99 8 16.5s2.01-4.5 4.5-4.5zm0 1c-.277 0-.5.223-.5.5v.594c-.578.21-1 .76-1 1.406 0 .82.68 1.5 1.5 1.5.28 0 .5.212.5.5 0 .288-.22.5-.5.5h-1c-.338-.005-.5.248-.5.5s.162.505.5.5h.5v.5a.499.499 0 1 0 1 0v-.594c.578-.21 1-.76 1-1.406 0-.82-.68-1.5-1.5-1.5a.49.49 0 0 1-.5-.5c0-.288.22-.5.5-.5h1c.338.005.5-.248.5-.5s-.162-.505-.5-.5H13v-.5c0-.277-.223-.5-.5-.5zm-10 6.002c-.25-.002-.5.162-.5.498v2a.5.5 0 0 0 .5.5h2c.656 0 .672-1 0-1H3v-1.5c0-.328-.25-.496-.5-.498zm20 0c-.25.002-.5.17-.5.498V21h-1.5c-.672 0-.656 1 0 1h2a.5.5 0 0 0 .5-.5v-2c0-.336-.25-.5-.5-.498z"/></svg>                                                        
+                                                    </td>
+                                                @endif
                                             @endif
                                         </tr>
                                     @endforeach                                                            
@@ -223,6 +230,33 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Agrega este código al final de tu vista Blade para crear el modal -->
+            <div class="modal fade" id="terminarVentaModal" tabindex="-1" aria-labelledby="terminarVentaModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="{{ route('venta.finish') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input hidden name="activo_id_venta" id="activo_id_venta" type="text">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="terminarVentaModalLabel">Terminar Venta</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="documento" class="form-label">Documento</label>
+                                    <input type="file" class="dropify" id="documento" name="documento">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Terminar Venta</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         @endif
 
         <!-- Debo colocar el script dentro de la "section" para que logre acceder al input "foto" -->
@@ -234,11 +268,16 @@
                     $('#activo_id').val(activoId); // Establece el valor en el campo activo_id del formulario
                     $('#terminarMantencionModal').modal('show'); // Muestra el modal
                 });
+
+                $('.terminar-venta-btn').on('click', function () {
+                    var activoId = $(this).data('activo-id'); // Obtiene el valor de data-activo-id
+                    $('#activo_id_venta').val(activoId); // Establece el valor en el campo activo_id del formulario
+                    $('#terminarVentaModal').modal('show'); // Muestra el modal
+                });
             });
 
             var uploadField = document.getElementById("documento");
                 uploadField.onchange = function() {
-                    console.log("entra");
                     if(this.files[0].size > 2097152){
                         alert("Ingresa un archivo de máximo 2 [Mb]");
                         this.value = "";
