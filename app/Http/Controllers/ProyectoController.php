@@ -41,6 +41,8 @@ class ProyectoController extends Controller
         $input = $request->all();
         $proyecto = Proyecto::create([
             "nombre" => $input['nombre'],
+            "rut" => $input['rut'],
+            "empresa" => $input['empresa'],
             "centro_costo" => $input['centro_costo'],
             "estado" => "ACTIVO",
         ]);

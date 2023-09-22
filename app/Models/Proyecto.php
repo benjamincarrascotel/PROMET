@@ -22,6 +22,8 @@ class Proyecto extends Model
         'nombre',
         'centro_costo',
         'estado',
+        'rut',
+        'empresa'
 
     ];
 
