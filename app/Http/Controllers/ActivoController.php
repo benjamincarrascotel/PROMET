@@ -300,8 +300,10 @@ class ActivoController extends Controller
     {
         $selectedID = $id;
         $activos = Activo::where('estado', "DISPONIBLE")->get();
+        $proyectos = Proyecto::where('estado', 'ACTIVO')->get();
 
         return view('arriendo.create')
+            ->with('proyectos', $proyectos)
             ->with('activos', $activos)
             ->with('selectedID', $selectedID);
     }
@@ -315,10 +317,11 @@ class ActivoController extends Controller
             //dd($request->all());
             $arriendo = ArriendoActivo::create([
                 "activo_id" => $input['activo_id'],
+                "proyecto_id" => $input['proyecto_id'],
                 "monto" => $input['monto'],
+                "tipo_moneda" => $input['tipo_moneda'],
                 "fecha_inicio" => $input['fecha_inicio'],
                 "fecha_termino" => $input['fecha_termino'],
-                "cliente_area" => $input['cliente_area'],
                 "encargado" => $input['encargado'],
                 "estado" => 'BODEGA',
             ]);
@@ -452,6 +455,7 @@ class ActivoController extends Controller
     public function show_arriendo($id)
     {
         $arriendo = ArriendoActivo::where('id', $id)->first();
+
         return view('arriendo.show')
                 ->with('arriendo', $arriendo);
     }
@@ -499,6 +503,7 @@ class ActivoController extends Controller
         $venta = Venta::create([
             "activo_id" => $input['activo_id'],
             "precio_venta" => $input['precio_venta'],
+            "tipo_moneda" => $input['tipo_moneda'],
             "fecha_venta" => $input['fecha_venta'],
             "proyecto_id" => $input['proyecto_id'],
             "contacto_cliente" => $input['contacto_cliente'],

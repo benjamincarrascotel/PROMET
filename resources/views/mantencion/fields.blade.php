@@ -1,22 +1,30 @@
-<!-- Costo de Mantención -->
-
 <input type="integer" name="activo_id" id="activo_id" value="{{$activo->id}}" hidden>
-<div class="mb-3 row">
-    <label for="costo_mantencion" class="col-sm-2 col-form-label">Costo de mantención</label>
-    <div class="col-sm-10">
+
+<!-- Costo de Mantención -->
+<div class="row ">
+    <label for="costo_mantencion" class="col-sm-2 col-form-label">Costo de mantención: </label>
+    <div class="col">
         <input name="costo_mantencion" id='costo_mantencion' type="number" min="0" oninput="validity.valid||(value='');" class="form-control"  required>
+    </div>
+    <div class="col">
+        <div class="dropdown">
+            <select class="form-control " id="tipo_moneda" name="tipo_moneda" required>
+                <option value="CLP">CLP</option>
+                <option value="UF">UF</option>
+            </select>
+        </div>
     </div>
 </div>
 
 <!-- Fechas -->
-<div class="mb-3 row">
-    <label for="fecha_inicio" class="col-sm-2 col-form-label">Fecha Inicio</label>
+<div class="mb-3 row mt-4">
+    <label for="fecha_inicio" class="col-sm-2 col-form-label">Fecha Inicio: </label>
     <div class="col-sm-10">
         <input name="fecha_inicio" id='fecha_inicio' type="date" class="form-control" style="width:20vw" required>
     </div>
 </div>
 <div class="mb-3 row">
-    <label for="fecha_termino" class="col-sm-2 col-form-label">Fecha Termino</label>
+    <label for="fecha_termino" class="col-sm-2 col-form-label">Fecha Termino: </label>
     <div class="col-sm-10">
         <input name="fecha_termino" id='fecha_termino' type="date" class="form-control" style="width:20vw" required>
     </div>
@@ -24,21 +32,21 @@
 
 <!-- Datos del proveedor -->
 <div class="mb-3 row">
-    <label for="rut_proveedor" class="col-sm-2 col-form-label">RUT del Proveedor</label>
+    <label for="rut_proveedor" class="col-sm-2 col-form-label">RUT del Proveedor: </label>
     <div class="col-sm-10">
         <input name="rut_proveedor" id='rut_proveedor' type="text" class="form-control"  required>
     </div>
 </div>
 
 <div class="mb-3 row">
-    <label for="nombre_proveedor" class="col-sm-2 col-form-label">Nombre del Proveedor</label>
+    <label for="nombre_proveedor" class="col-sm-2 col-form-label">Nombre del Proveedor: </label>
     <div class="col-sm-10">
         <input name="nombre_proveedor" id='nombre_proveedor' type="text" class="form-control"  required>
     </div>
 </div>
 
 <div class="mb-3 row">
-    <label for="contacto_proveedor" class="col-sm-2 col-form-label">Contacto del Proveedor</label>
+    <label for="contacto_proveedor" class="col-sm-2 col-form-label">Contacto del Proveedor: </label>
     <div class="col-sm-10">
         <input name="contacto_proveedor" id='contacto_proveedor' type="text" class="form-control"  required>
     </div>

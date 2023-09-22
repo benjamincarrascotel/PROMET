@@ -18,6 +18,10 @@ class ArriendoActivo extends Model
         return $this->belongsTo('App\Models\Activo','activo_id','id');
     }
 
+    public function proyecto(){
+        return $this->belongsTo('App\Models\Proyecto','proyecto_id','id');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -25,10 +29,11 @@ class ArriendoActivo extends Model
      */
     protected $fillable = [
         'activo_id',
+        'proyecto_id',
         'monto',
+        'tipo_moneda',
         'fecha_inicio',
         'fecha_termino',
-        'cliente_area',
         'encargado',
         'estado',
     ];

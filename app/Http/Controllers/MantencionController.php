@@ -53,6 +53,7 @@ class MantencionController extends Controller
         $mantencion = Mantencion::create([
             "activo_id" => $input['activo_id'],
             "costo_mantencion" => $input['costo_mantencion'],
+            "tipo_moneda" => $input['tipo_moneda'],
             "fecha_inicio" => $input['fecha_inicio'],
             "fecha_termino" => $input['fecha_termino'],
             "rut_proveedor" => $input['rut_proveedor'],

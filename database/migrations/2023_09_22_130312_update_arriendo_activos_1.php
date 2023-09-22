@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateVentas2 extends Migration
+class UpdateArriendoActivos1 extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class UpdateVentas2 extends Migration
      */
     public function up()
     {
-        Schema::table('ventas', function(Blueprint $table){
+        Schema::table('arriendo_activos', function(Blueprint $table){
 
-            $table->dropColumn('rut_cliente');
-            $table->dropColumn('nombre_cliente');
+            $table->dropColumn('cliente_area');
 
-            $table->after('fecha_venta', function (Blueprint $table){
+            $table->after('activo_id', function (Blueprint $table){
                 $table->integer('proyecto_id')->nullable();
             });
 
-            $table->after('precio_venta', function (Blueprint $table){
+            $table->after('monto', function (Blueprint $table){
                 $table->string('tipo_moneda')->nullable();
             });
 
@@ -36,7 +35,7 @@ class UpdateVentas2 extends Migration
      */
     public function down()
     {
-        Schema::table('ventas', function(Blueprint $table){
+        Schema::table('arriendo_activos', function(Blueprint $table){
             $table->dropColumn('proyecto_id');
         });
     }

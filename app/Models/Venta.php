@@ -21,6 +21,7 @@ class Venta extends Model
     protected $fillable = [
         'activo_id',
         'precio_venta',
+        'tipo_moneda',
         'cotizacion_venta',
         'fecha_venta',
 

@@ -21,6 +21,7 @@ class Mantencion extends Model
     protected $fillable = [
         'activo_id',
         'costo_mantencion',
+        'tipo_moneda',
         'cotizacion_mantencion',
         'fecha_inicio',
         'fecha_termino',

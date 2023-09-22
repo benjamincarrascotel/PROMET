@@ -118,60 +118,55 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="card-title font-weight-bold">DATOS GENERALES:</div>
+                    <div class="card-title font-weight-bold">DATOS GENERALES</div>
                     <form action="{{ route('arriendo.update', $arriendo->id) }}" method="post" id="myform" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">Monto</label>
-                                    <input type="number" id="monto" name="monto" min="0" class="form-control" required="" value="{{$arriendo->monto}}">
+                                <div class="row">
+                                    <label class="form-label">Monto:</label>
+                                    <div class="col form-group">
+                                        <input type="number" id="monto" name="monto" min="0" class="form-control" required="" value="{{$arriendo->monto}}">
+                                    </div>
+                                    <div class="col form-group">
+                                        <div class="dropdown">
+                                            <select class="form-control " id="tipo_moneda" name="tipo_moneda" required>
+                                                <option @if($arriendo->tipo_moneda == "CLP") selected @endif value="CLP">CLP</option>
+                                                <option @if($arriendo->tipo_moneda == "UF")  selected @endif value="UF">UF</option>
+                                                <option @if($arriendo->tipo_moneda == "USD") selected @endif value="USD">USD</option>
+                                            </select>
+                                        </div>                                
+                                    </div>
                                 </div>
                             </div>
+                            
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">Fecha Inicio</label>
+                                    <label class="form-label">Fecha Inicio:</label>
                                     <input class="form-control" id="fecha_inicio" name="fecha_inicio" placeholder="Ingrese la fecha de inicio" required="" type="date" value="{{$arriendo->fecha_inicio}}" >
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">Cliente (Área)</label>
-                                    <select id="cliente_area" class="form-control block mt-1 w-full" name="cliente_area" required>
-                                        <option value={{null}} >                
-                                            Seleccione alguna de las opciones                 
-                                        </option>
-                                        <option @if($arriendo->cliente_area == "GERENCIA PROYECTOS MINEROS") selected @endif>                
-                                            GERENCIA PROYECTOS MINEROS                 
-                                        </option>  
-                                        <option @if($arriendo->cliente_area == "GERENCIA PROYECTOS ENTERPRISE") selected @endif>                
-                                            GERENCIA PROYECTOS ENTERPRISE                
-                                        </option>  
-                                        <option @if($arriendo->cliente_area == "GERENCIA OPERACIONES MINERAS") selected @endif>                
-                                            GERENCIA OPERACIONES MINERAS
-                                        </option>  
-                                        <option @if($arriendo->cliente_area == "GERENCIA OPERACIONES ENTERPRISE") selected @endif>                
-                                            GERENCIA OPERACIONES ENTERPRISE
-                                        </option>  
-                                        <option @if($arriendo->cliente_area == "GERENCIA DE LOGÍSTICA") selected @endif>                
-                                            GERENCIA DE LOGÍSTICA               
-                                        </option>  
-                                    </select>                                
+                                    <label class="form-label">Encargado:</label>
+                                    <input type="text" id="encargado" name="encargado"  class="form-control" required="" value="{{$arriendo->encargado}}">
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">Fecha Término Arriendo</label>
+                                    <label class="form-label">Fecha Término Arriendo:</label>
                                     <input class="form-control" id="fecha_termino" name="fecha_termino" placeholder="Ingrese la fecha de término" required="" type="date" value="{{$arriendo->fecha_termino}}">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">Encargado</label>
-                                    <input type="text" id="encargado" name="encargado"  class="form-control" required="" value="{{$arriendo->encargado}}">
-                                </div>
+                            <div class="col">
+                                <label for="proyecto_id" class="form-control-label">Proyecto:</label>
+                                <select id="proyecto_id" class="form-control block mt-1 w-full" name="proyecto_id" required>
+                                    <option value="{{ $arriendo->proyecto->id }}">
+                                        {{ "Nombre: ".$arriendo->proyecto->nombre." - "."RUT: ".$arriendo->proyecto->rut." - "."Empresa: ".$arriendo->proyecto->empresa." - "."Centro de Costos: ".$arriendo->proyecto->centro_costo}}
+                                    </option>
+                                </select>
                             </div>
                         </div>
                     </form>

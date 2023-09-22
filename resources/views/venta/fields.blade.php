@@ -2,16 +2,27 @@
 
 <input type="integer" name="activo_id" id="activo_id" value="{{$activo->id}}" hidden>
 
+<!-- Fecha -->
 <div class="mb-3 row">
-    <label for="precio_venta" class="col-sm-2 col-form-label">Precio de venta</label>
-    <div class="col-sm-10">
+    <label for="precio_venta" class="col-sm-2 col-form-label">Precio de venta: <span class="tx-danger">*</span></label>
+    <div class="col">
         <input name="precio_venta" id='precio_venta' type="number" min="0" oninput="validity.valid||(value='');" class="form-control"  required>
+    </div>
+    <div class="col">
+        <div class="dropdown">
+            <select class="form-control " id="tipo_moneda" name="tipo_moneda" required value="{{ old('tipo_moneda') }}">
+                <option value="CLP">CLP</option>
+                <option value="UF">UF</option>
+                <option value="USD">USD</option>
+            </select>
+        </div>
     </div>
 </div>
 
+
 <!-- Fecha -->
 <div class="mb-3 row">
-    <label for="fecha_venta" class="col-sm-2 col-form-label">Fecha de venta</label>
+    <label for="fecha_venta" class="col-sm-2 col-form-label">Fecha de venta: <span class="tx-danger">*</span></label>
     <div class="col-sm-10">
         <input name="fecha_venta" id='fecha_venta' type="date" class="form-control" style="width:20vw" required>
     </div>
@@ -20,7 +31,7 @@
 <!-- Datos del cliente -->
 
 <div class="mb-3 row">
-    <label for="proyecto_id" class="col-sm-2 col-form-label">Proyecto</label>
+    <label for="proyecto_id" class="col-sm-2 col-form-label">Proyecto: <span class="tx-danger">*</span></label>
     <div class="col-sm-10">
         <select id="proyecto_id" class="form-control block mt-1 w-full" name="proyecto_id" required>
             <option value={{null}}>Seleccione alguna de las opciones</option>
@@ -34,7 +45,7 @@
 </div>
 
 <div class="mb-3 row">
-    <label for="contacto_cliente" class="col-sm-2 col-form-label">Contacto del Cliente</label>
+    <label for="contacto_cliente" class="col-sm-2 col-form-label">Contacto del Cliente: <span class="tx-danger">*</span></label>
     <div class="col-sm-10">
         <input name="contacto_cliente" id='contacto_cliente' type="text" class="form-control"  required>
     </div>

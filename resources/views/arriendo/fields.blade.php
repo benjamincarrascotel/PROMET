@@ -25,52 +25,53 @@
 
     <section>
         <div class="row ">
-            <div class="col-md-6 col-lg-6 mb-4">
-                <label class="form-control-label">Monto: <span class="tx-danger">*</span></label>
+            <div class="col">
+                <label class="form-control-label">Monto Mensual: <span class="tx-danger">*</span></label>
                 <input type="number" id="monto" name="monto" min="0" class="form-control" required="">
             </div>
-            <div class="col-md-6 col-lg-6 mb-4">
-                <label class="form-control-label">Fecha Inicio Arriendo: <span class="tx-danger">*</span></label>
-                <input class="form-control" id="fecha_inicio" name="fecha_inicio" placeholder="Ingrese la fecha de inicio" required="" type="date">
+            <div class="col">
+                <label class="form-control-label">Tipo de moneda: </label>
+                <div class="dropdown">
+                    <select class="form-control " id="tipo_moneda" name="tipo_moneda" required value="{{ old('tipo_moneda') }}">
+                        <option value="CLP">CLP</option>
+                        <option value="UF">UF</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <div class="row ">
-            <div class="col-md-6 col-lg-6 mb-4">
-                <label class="form-control-label">Cliente (Área): <span class="tx-danger">*</span></label>
-                    <select id="cliente_area" class="form-control block mt-1 w-full" name="cliente_area" required>
-                        <option value={{null}} >                
-                            Seleccione alguna de las opciones                 
-                        </option>
-                        <option>                
-                            GERENCIA PROYECTOS MINEROS                 
-                        </option>  
-                        <option>                
-                            GERENCIA PROYECTOS ENTERPRISE                
-                        </option>  
-                        <option>                
-                            GERENCIA OPERACIONES MINERAS
-                        </option>  
-                        <option>                
-                            GERENCIA OPERACIONES ENTERPRISE
-                        </option>  
-                        <option>                
-                            GERENCIA DE LOGÍSTICA               
-                        </option>  
-                    </select>
+        <!-- Datos del cliente -->
+
+        <div class="row mt-4">
+            <label for="proyecto_id" class="form-control-label">Proyecto: <span class="tx-danger">*</span></label>
+            <select id="proyecto_id" class="form-control block mt-1 w-full" name="proyecto_id" required>
+                <option value={{null}}>Seleccione alguna de las opciones</option>
+                @foreach ($proyectos as $value)
+                    <option value="{{ $value->id }}">
+                        {{ "Nombre: ".$value->nombre." - "."RUT: ".$value->rut." - "."Empresa: ".$value->empresa." - "."Centro de Costos: ".$value->centro_costo}}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col">
+                <label class="form-control-label">Fecha Inicio Arriendo: <span class="tx-danger">*</span></label>
+                <input class="form-control" id="fecha_inicio" name="fecha_inicio" placeholder="Ingrese la fecha de inicio" required="" type="date">
             </div>
+            
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-control-label">Fecha Término Arriendo: <span class="tx-danger">*</span></label>
                 <input class="form-control" id="fecha_termino" name="fecha_termino" placeholder="Ingrese la fecha de término" required="" type="date">
             </div>
-        </div>
 
-        <div class="row ">
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-label">Encargado: <span class="tx-danger">*</span></label>
                 <input type="text" id="encargado" name="encargado"  class="form-control" required="">
             </div>
         </div>
+
+        
 
     </section>
 
