@@ -22,6 +22,13 @@
         border-radius: 10px; /* Adjust the radius as needed */
         overflow: hidden; /* Hide the overflowing content */
     }
+
+    /* Estilo para la celda de la imagen */
+    .image-cell {
+        max-width: 100%; /* Establece el ancho máximo de la celda */
+        overflow: hidden; /* Evita que el contenido se desborde */
+    }
+
 </style>
 
 @section('content')
@@ -173,7 +180,7 @@
                                                                     </div>
                                                                 </td>
                                                                 <td class="align-middle"><span>{{$arriendo->activo->codigo_interno}}</span></td>
-                                                                <td class="align-middle">
+                                                                <td class="align-middle image-cell">
                                                                     <!-- State 1 -->
                                                                     @if($arriendo->estado == "BODEGA")
                                                                     <img src="{{ asset('assets/images/arriendo/state1.svg') }}" alt="State 1">
