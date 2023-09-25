@@ -292,7 +292,9 @@ class ActivoController extends Controller
     public function trazabilidad()
     {
         $arriendos = ArriendoActivo::get()->reverse();
+        $proyectos = Proyecto::pluck('nombre', 'id');
         return view('activo.trazabilidad')
+            ->with("proyectos", $proyectos)
             ->with('arriendos', $arriendos);
     }
 

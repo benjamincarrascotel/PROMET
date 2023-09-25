@@ -38,6 +38,57 @@
     &nbsp;
     @endsection
 
+    <div class="row">
+        <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Filtros de búsqueda</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <form class="form-horizontal">
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-label mt-2">Estado del activo: </label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" id="estado" name="estado" placeholder="Buscar por estado del activo.">
+                                            <option value="{{null}}">Todos los activos</option>
+                                            <option value="DISPONIBLE">DISPONIBLE</option>
+                                            <option value="EN PROCESO DE ARRIENDO">EN PROCESO DE ARRIENDO</option>
+                                            <option value="EN PROCESO DE MANTENCION">EN PROCESO DE MANTENCION</option>
+                                            <option value="EN PROCESO DE VENTA">EN PROCESO DE VENTA</option>
+                                            <option value="VENDIDO">VENDIDO</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <!--
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-label">Subido</label>
+                                    
+                                    <div class="col-md-9">
+                                        <div class="dropdown">
+                                            <select class="form-control " id="subido" name="tipo_elemento" >
+                                                    <option value="{{null}}">Todos los documentos</option>
+                                                    <option value="subido">Subido</option>
+                                                    <option value="pendiente">Pendiente</option>
+                                                    <option value="no aplica">No aplica</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                -->
+                                
+                                
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @push('cards')
         @section('card_title')
             Información
@@ -65,9 +116,10 @@
                 <div class="e-panel card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class='table table-bordered data-table-global datatable' id='datatable'>
+                            <table class='table table-bordered data-table-global datatable'>
                                 <thead>
                                     <tr>
+                                        <th class="border-bottom-0 ">Estado</th>
                                         <th class="border-bottom-0 ">ID</th>
                                         <th class="border-bottom-0 ">Elemento</th>
                                         <th class="border-bottom-0 ">Clasificación</th>
@@ -84,6 +136,27 @@
                                 <tbody>
                                     @foreach ($activos as $activo)
                                         <tr>
+                                            <!-- ESTADOS -->
+                                            @switch($activo->estado)
+                                                @case("DISPONIBLE")
+                                                    <td class="text-nowrap align-middle"><span>DISPONIBLE</span></td>
+                                                    @break
+                                                @case("PARA RETIRO" || "EN RUTA IDA" || "ARRENDADO" || "EN RUTA VUELTA" || "RECIBIDO")
+                                                    <td class="text-nowrap align-middle"><span>EN PROCESO DE ARRIENDO</span></td>
+                                                    @break
+                                                @case("EN MANTENCION")
+                                                    <td class="text-nowrap align-middle"><span>EN PROCESO DE MANTENCION</span></td>
+                                                    @break
+                                                @case("VENDIDO")
+                                                    <td class="text-nowrap align-middle"><span>EN PROCESO DE VENTA</span></td>
+                                                    @break
+                                                @case("NO DISPONIBLE")
+                                                    <td class="text-nowrap align-middle"><span>VENDIDO</span></td>
+                                                    @break
+                                                @default
+
+                                                    
+                                            @endswitch
                                             <td class="text-nowrap align-middle"><span>{{$activo->id}}</span></td>
                                             <td class="align-middle">
                                                 <div class="d-flex">
@@ -262,8 +335,14 @@
         @endif
 
         <!-- Debo colocar el script dentro de la "section" para que logre acceder al input "foto" -->
-        <script>
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+        <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
+
+        <script type="text/javascript">
             $(document).ready(function () {
+                //Inicializamos DROPIFY
+                $('.dropify').dropify();
                 // Captura el evento de clic en los botones "Terminar Mantención"
                 $('.terminar-mantencion-btn').on('click', function () {
                     var activoId = $(this).data('activo-id'); // Obtiene el valor de data-activo-id
@@ -276,40 +355,49 @@
                     $('#activo_id_venta').val(activoId); // Establece el valor en el campo activo_id del formulario
                     $('#terminarVentaModal').modal('show'); // Muestra el modal
                 });
+
+                //FILTROS
+                var table = $('.datatable').DataTable({
+                    orderCellsTop: true,
+                    fixedHeader: true,
+                    columnDefs: [
+                        {
+                            targets: [0], // El índice de la columna que quieres ocultar (cambia esto al índice de tu columna)
+                            visible: false, // Establece esta columna como no visible
+                            searchable: true // Opcional: permite buscar en esta columna
+                        }
+                    ]
+                });
+
+                $('#estado').on( 'keyup change', function () {
+                    if ( table.column(0).search() !== this.value ) {
+                        table
+                            .column(0)
+                            .search( this.value )
+                            .draw();
+                    }
+                });
+                
             });
 
             var uploadField = document.getElementById("documento");
-                uploadField.onchange = function() {
-                    if(this.files[0].size > 2097152){
-                        alert("Ingresa un archivo de máximo 2 [Mb]");
-                        this.value = "";
-                    };
+            uploadField.onchange = function() {
+                if(this.files[0].size > 2097152){
+                    alert("Ingresa un archivo de máximo 2 [Mb]");
+                    this.value = "";
                 };
+            };
+
         </script>
 
         <script src="{{ asset('dropify/js/dropify.js' )}}"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $('.dropify').dropify();
-            });
-        </script>
-
 
         <!-- INTERNAL File Uploads css-->
         <link href="{{asset('assets/plugins/fileupload/css/fileupload.css')}}" rel="stylesheet" type="text/css" />
 
 
-
-
         @overwrite
         @include('layouts.card')
     @endpush
-
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    
-    <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
-    <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
 
 @endsection
