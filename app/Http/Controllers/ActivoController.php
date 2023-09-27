@@ -11,6 +11,7 @@ use App\Models\Venta;
 use App\Models\FamiliaProducto;
 use App\Models\SubFamiliaProducto;
 use App\Models\Proyecto;
+use App\Models\Traspaso;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -567,6 +568,74 @@ class ActivoController extends Controller
         flash("Se ha terminado el proceso de venta correctamente.", "success");
 
         return redirect()->back()->with('activos', $activos);
+    }
+
+    public function traspaso_create($id){
+
+        $arriendo = ArriendoActivo::where('id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
+        $proyectos = Proyecto::whereNotIn('id', [$arriendo->proyecto_id])->where('estado', 'ACTIVO')->get();
+
+        if($arriendo->estado == "EN CLIENTE"){
+            return view('traspaso.create')
+                ->with('proyectos', $proyectos)
+                ->with('arriendo',  $arriendo);
+        }else{
+            $arriendos = ArriendoActivo::get();
+            flash("No es posible traspasar este arriendo.", "danger");
+            return redirect()->back()->with('arriendos', $arriendos);
+        }
+    }
+
+    public function traspaso_store(Request $request)
+    {
+        $input = $request->all();
+
+        $arriendo = ArriendoActivo::where('id', $input['arriendo_id'])->first();
+
+        // Manejo de imagen
+        /*
+        $file = null;
+        if($request->hasFile('cotizacion_venta')){
+            $file = $request->file('cotizacion_venta');
+        }
+        */
+
+        //dd($request->all());
+        $traspaso = Traspaso::create([
+            "arriendo_id" => $input['arriendo_id'],
+            "fecha_traspaso" => $input['fecha_traspaso'],
+            "monto_anterior" => $arriendo->monto,
+            "tipo_moneda_anterior" => $arriendo->tipo_moneda,
+            "proyecto_anterior_id" => $input['proyecto_anterior_id'],
+            "proyecto_actual_id" => $input['proyecto_actual_id'],
+        ]);
+
+        // Actualizamos el arriendo
+        $arriendo->proyecto_id = $input['proyecto_actual_id'];
+        $arriendo->monto = $input['monto'];
+        $arriendo->tipo_moneda = $input['tipo_moneda'];
+        $arriendo->save();
+
+        // Guardamos la imagen
+        /*
+        if($request->hasFile('cotizacion_venta'))
+        {
+            $type = $file->guessExtension();
+            $nombre = 'cotizacion_venta_'.$input['activo_id']."_".time().'.'.$type;
+
+            $ruta = public_path("storage/activos/".$input['activo_id'].'/'.$nombre);
+            copy($file,$ruta);
+
+            $venta->cotizacion_venta = $nombre;
+            $venta->save();
+        }
+        */
+
+        flash("El traspaso del arriendo se ha sido realizado correctamente", 'success');
+        $arriendos = ArriendoActivo::get();
+
+        return redirect()->route('activo.trazabilidad')
+            ->with('arriendos', $arriendos);
     }
 
 }

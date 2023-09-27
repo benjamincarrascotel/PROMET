@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Activo;
 use App\Models\Mantencion;
-
+use App\Models\ArriendoActivo;
+use App\Models\Venta;
 
 use Illuminate\Support\Facades\File;
 
@@ -159,7 +160,17 @@ class MantencionController extends Controller
         $mantencion->save();
 
         $activo = Activo::where('id', $input['activo_id'])->first();
-        $activo->estado = "DISPONIBLE";
+        $arriendo = ArriendoActivo::where('activo_id', $input['activo_id'])->where("estado", "BODEGA DE VUELTA")->first();
+        $venta = Venta::where('activo_id', $input['activo_id'])->first();
+
+        if($arriendo){
+            $activo->estado = "RECIBIDO";
+        }elseif($venta){
+            $activo->estado = "NO DISPONIBLE";
+        }else{
+            $activo->estado = "DISPONIBLE";
+        }
+        
         $activo->save();
 
         $activos = Activo::get();
