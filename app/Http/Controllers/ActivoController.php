@@ -97,7 +97,7 @@ class ActivoController extends Controller
         File::makeDirectory(public_path('storage/mantenciones/'.$activo->id));
 
         //Generamos QR
-        QrCode::generate('https://mos-demo.ingetelma.cl/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE.svg'));
+        QrCode::generate($_ENV['APP_URL'].'/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE.svg'));
         $activo->codigo_qr = 'QR_CODE.svg';
 
         // Guardamos la imagen

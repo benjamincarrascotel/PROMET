@@ -88,14 +88,10 @@
                                             <td>{{$proyecto->centro_costo}}</td>
                                             <td>    
                                                 <div class="material-switch mt-4">
-                                                    @if($proyecto->estado == "ACTIVO")
-                                                        <input checked class="estado-checkbox" data-proyecto-id="{{$proyecto->id}}" name="someSwitchOption001" type="checkbox" id="someSwitchOptionSuccess"/>
-                                                        <label for="someSwitchOptionSuccess" class="label-danger"></label>
-                                                        
-                                                    @else
-                                                        <input class="estado-checkbox" data-proyecto-id="{{$proyecto->id}}" name="someSwitchOption001" type="checkbox" id="someSwitchOptionSuccess"/>
-                                                        <label for="someSwitchOptionSuccess" class="label-danger"></label>
-                                                    @endif
+                                                    <input class="estado-checkbox" data-proyecto-id="{{$proyecto->id}}" name="estado-checkbox-{{$proyecto->id}}" type="checkbox" id="estado-checkbox-{{$proyecto->id}}"
+                                                        @if($proyecto->estado == "ACTIVO") checked @endif
+                                                    />
+                                                    <label for="estado-checkbox-{{$proyecto->id}}" class="label-danger"></label>
                                                 </div>
                                             </td>
                                             

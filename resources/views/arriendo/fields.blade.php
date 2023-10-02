@@ -43,15 +43,17 @@
         <!-- Datos del cliente -->
 
         <div class="row mt-4">
-            <label for="proyecto_id" class="form-control-label">Proyecto: <span class="tx-danger">*</span></label>
-            <select id="proyecto_id" class="form-control block mt-1 w-full" name="proyecto_id" required>
-                <option value={{null}}>Seleccione alguna de las opciones</option>
-                @foreach ($proyectos as $value)
-                    <option value="{{ $value->id }}">
-                        {{ "Nombre: ".$value->nombre." - "."RUT: ".$value->rut." - "."Empresa: ".$value->empresa." - "."Centro de Costos: ".$value->centro_costo}}
-                    </option>
-                @endforeach
-            </select>
+            <div class="col">
+                <label for="proyecto_id" class="form-control-label">Proyecto: <span class="tx-danger">*</span></label>
+                <select id="proyecto_id" class="form-control block mt-1 w-full" name="proyecto_id" required>
+                    <option value={{null}}>Seleccione alguna de las opciones</option>
+                    @foreach ($proyectos as $value)
+                        <option value="{{ $value->id }}">
+                            {{ "Nombre: ".$value->nombre." - "."RUT: ".$value->rut." - "."Empresa: ".$value->empresa." - "."Centro de Costos: ".$value->centro_costo}}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
         </div>
 
         <div class="row mt-4">

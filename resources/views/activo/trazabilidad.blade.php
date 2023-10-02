@@ -29,6 +29,17 @@
         overflow: hidden; /* Evita que el contenido se desborde */
     }
 
+    .button-container {
+        display: flex;
+        flex-direction: column; /* Coloca los botones en columnas */
+    }
+
+    .button-container .btn {
+        flex: 1; /* Distribuye el espacio de manera uniforme entre los botones */
+        width: 100%; /* Asegura que todos los botones tengan el mismo ancho */
+        margin-bottom: 5px; /* Espacio entre los botones */
+    }
+
 </style>
 
 @section('content')
@@ -212,30 +223,25 @@
                                                                     </div>
                                                                 </td>
                                                                 <td class="align-middle">
-                                                                    <div class="d-flex"> <!-- Adjusted here -->
+                                                                    <div class="d-flex flex-column align-items-center"> <!-- Columnas separadas -->
                                                                         <form method="POST" action="{{ route('arriendo.cambio_fase') }}">
-                                                                            <div class="row">
-                                                                                <a class="btn btn-sm btn-primary" type="button" href="{{route('arriendo.show', [$arriendo->id])}}">Ver</a>
-                                                                                @csrf
-                                                                            </div>
-
+                                                                            @csrf
                                                                             <input hidden type="integer" id="arriendo_id" name="arriendo_id" value="{{$arriendo->id}}">
 
-                                                                            <div class="row ">
+                                                                            <div class="button-container">
+                                                                                <a class="btn btn-sm btn-primary mb-1" type="button" href="{{route('arriendo.show', [$arriendo->id])}}">Ver</a>
                                                                                 @if($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "ARRENDADO")
-                                                                                    <button class="btn btn-sm btn-success mt-1" type="submit"><i class="fe fe-check-square"></i> Disponibilizar para retiro </button>
-                                                                                    <a class="btn btn-sm btn-primary mt-1" type="button" href="{{route('traspaso.create', [$arriendo->id])}}"><i class="fe fe-truck"></i> Traspasar</a>
-
+                                                                                    <button class="btn btn-sm btn-success flex-fill mb-1" type="submit"><i class="fe fe-check-square"></i> Disponibilizar para retiro </button>
+                                                                                    <a class="btn btn-sm btn-primary flex-fill mb-1" type="button" href="{{route('traspaso.create', [$arriendo->id])}}"><i class="fe fe-truck"></i> Traspasar</a>
                                                                                 @elseif($arriendo->estado == "BODEGA DE VUELTA" && $arriendo->activo->estado != "EN MANTENCION")
-                                                                                    <button class="btn btn-sm btn-success " type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Confirmación FINAL</button>
+                                                                                    <button class="btn btn-sm btn-success flex-fill mb-1" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Confirmación FINAL</button>
                                                                                 @endif
-                                                                            </div>
-                                                                            <div class="row">
-                                                                                <button class="btn btn-sm btn-danger mt-1"" type="button"><i class="fe fe-trash-2"></i></button>
+                                                                                <button class="btn btn-sm btn-danger flex-fill" type="button"><i class="fe fe-trash-2"></i></button>
                                                                             </div>
                                                                         </form>
                                                                     </div>
                                                                 </td>
+                                                                
                                                             </tr>
                                                         @endforeach
                                                     @endif

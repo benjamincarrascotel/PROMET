@@ -174,12 +174,16 @@
                                                 <div class="d-flex">
                                                     @if($activo->foto)
                                                         @if($activo->estado != "DISPONIBLE")
-                                                        <span class="avatar brround avatar-xxl d-block blurred-img" style="background-image: url({{Storage::url('activos/'.$activo->id."/".$activo->foto)}})"></span>
+                                                            <span class="avatar brround avatar-xxl d-block blurred-img" style="background-image: url({{Storage::url('activos/'.$activo->id."/".$activo->foto)}})"></span>
                                                         @else
-                                                        <span class="avatar brround avatar-xxl d-block" style="background-image: url({{Storage::url('activos/'.$activo->id."/".$activo->foto)}})"></span>
+                                                            <span class="avatar brround avatar-xxl d-block" style="background-image: url({{Storage::url('activos/'.$activo->id."/".$activo->foto)}})"></span>
                                                         @endif
                                                     @else
-                                                        <span class="avatar brround avatar-xxl d-block" style="background-image: url({{asset('assets/images/brand/favicon1.png')}})"></span>
+                                                        @if($activo->estado != "DISPONIBLE")
+                                                            <span class="avatar brround avatar-xxl d-block blurred-img" style="background-image: url({{asset('assets/images/brand/favicon1.png')}})"></span>
+                                                        @else
+                                                            <span class="avatar brround avatar-xxl d-block" style="background-image: url({{asset('assets/images/brand/favicon1.png')}})"></span>
+                                                        @endif
                                                     @endif
                                                     <div class="ms-3 mt-5">
                                                         <h6 class="mb-0 font-weight-bold mt-2">{{$activo->marca." - ".$activo->modelo." - ".$activo->año}}</h6>
