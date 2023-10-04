@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Proyecto;
+use App\Models\Empresa;
 
 class ProyectoController extends Controller
 {
@@ -27,7 +28,9 @@ class ProyectoController extends Controller
      */
     public function create()
     {
-        return view('proyecto.create');
+        $empresas = Empresa::get();
+        return view('proyecto.create')
+                ->with('empresas', $empresas);
     }
 
     /**
@@ -41,8 +44,7 @@ class ProyectoController extends Controller
         $input = $request->all();
         $proyecto = Proyecto::create([
             "nombre" => $input['nombre'],
-            "rut" => $input['rut'],
-            "empresa" => $input['empresa'],
+            "empresa_id" => $input['empresa_id'],
             "centro_costo" => $input['centro_costo'],
             "estado" => "ACTIVO",
         ]);

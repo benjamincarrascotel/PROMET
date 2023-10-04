@@ -70,8 +70,8 @@
                                     <tr>
                                         <th class="border-bottom-0 ">ID</th>
                                         <th>Nombre</th>
-                                        <th>RUT</th>
                                         <th>Empresa</th>
+                                        <th>RUT</th>
                                         <th>Centro de costo</th>
                                         <th>Estado</th>
                                         <th>Acción</th>
@@ -83,8 +83,8 @@
                                         <tr>
                                             <td>{{$proyecto->id}}</td>
                                             <td>{{$proyecto->nombre}}</td>
-                                            <td>{{$proyecto->rut}}</td>
-                                            <td>{{$proyecto->empresa}}</td>
+                                            <td>{{$proyecto->empresa->nombre}}</td>
+                                            <td>{{$proyecto->empresa->rut}}</td>
                                             <td>{{$proyecto->centro_costo}}</td>
                                             <td>    
                                                 <div class="material-switch mt-4">

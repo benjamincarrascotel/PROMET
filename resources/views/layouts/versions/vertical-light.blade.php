@@ -20,7 +20,8 @@
 	<style>
 		.color-header .header-icon {
 			fill: #212529!important;
-		}
+		}		
+		
 
 	</style>
 

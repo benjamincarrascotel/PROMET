@@ -6,20 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Traspaso extends Model
+class Empresa extends Model
 {
     use HasFactory;
-    //use SoftDeletes;
+    use SoftDeletes;
 
-    public $table = 'traspasos';
-
-    public function anterior(){
-        return $this->belongsTo('App\Models\Proyecto','proyecto_anterior_id','id');
-    }
-
-    public function actual(){
-        return $this->belongsTo('App\Models\Proyecto','proyecto_actual_id','id');
-    }
+    public $table = 'empresas';
 
     /**
      * The attributes that are mass assignable.
@@ -27,13 +19,9 @@ class Traspaso extends Model
      * @var array
      */
     protected $fillable = [
-        'arriendo_id',
-        'fecha_traspaso',
-        'monto_anterior',
-        'tipo_moneda_anterior',
-        'proyecto_anterior_id',
-        'proyecto_actual_id',
-
+        'nombre',
+        'rut',
+        'giro',
     ];
 
     /**
@@ -43,6 +31,7 @@ class Traspaso extends Model
      */
     protected $casts = [
         'created_at' => 'datetime:Y-m-d H:i:s',
+
         // 'fecha' => 'datetime:Y-m-d H:i:s'
     ];
 }

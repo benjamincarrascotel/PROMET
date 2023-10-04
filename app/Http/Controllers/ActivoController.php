@@ -12,6 +12,7 @@ use App\Models\FamiliaProducto;
 use App\Models\SubFamiliaProducto;
 use App\Models\Proyecto;
 use App\Models\Traspaso;
+use App\Models\Empresa;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -458,8 +459,10 @@ class ActivoController extends Controller
     public function show_arriendo($id)
     {
         $arriendo = ArriendoActivo::where('id', $id)->first();
+        $traspasos = Traspaso::where('arriendo_id', $id)->get();
 
         return view('arriendo.show')
+                ->with('traspasos', $traspasos)
                 ->with('arriendo', $arriendo);
     }
 
@@ -573,10 +576,14 @@ class ActivoController extends Controller
     public function traspaso_create($id){
 
         $arriendo = ArriendoActivo::where('id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
-        $proyectos = Proyecto::whereNotIn('id', [$arriendo->proyecto_id])->where('estado', 'ACTIVO')->get();
+        $proyectos = Proyecto::whereNotIn('id', [$arriendo->proyecto_id])->where('estado', 'ACTIVO')->get()->groupBy('empresa_id');
+        $empresas = Empresa::get();
+        $selectedID = 0;
 
         if($arriendo->estado == "EN CLIENTE"){
             return view('traspaso.create')
+                ->with('empresas', $empresas)
+                ->with('selectedID', $selectedID)
                 ->with('proyectos', $proyectos)
                 ->with('arriendo',  $arriendo);
         }else{
@@ -588,7 +595,11 @@ class ActivoController extends Controller
 
     public function traspaso_store(Request $request)
     {
+        $validated = $request->validate([
+            'proyecto_actual_id' => 'required|integer',
+        ]);
         $input = $request->all();
+        
 
         $arriendo = ArriendoActivo::where('id', $input['arriendo_id'])->first();
 

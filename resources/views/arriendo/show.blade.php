@@ -66,7 +66,7 @@
                 <div class="card-body text-center pt-2 mt-2">
                     <div class="pro-user">
                         <h3 class="pro-user-username  mb-1 fs-22">{{$arriendo->activo->marca." - ".$arriendo->activo->modelo}}</h3>
-                        <h6 class="pro-user-desc text-muted">{{$arriendo->activo->clasificacion}}</h6>
+                        <h6 class="pro-user-desc text-muted">Estado: <b>{{$arriendo->estado}}</b></h6>
                         <!--
                         <div class="text-center mb-4">
                             <span><i class="fa fa-star text-warning"></i></span>
@@ -164,7 +164,7 @@
                                 <label for="proyecto_id" class="form-control-label">Proyecto:</label>
                                 <select id="proyecto_id" class="form-control block mt-1 w-full" name="proyecto_id" required>
                                     <option value="{{ $arriendo->proyecto->id }}">
-                                        {{ "Nombre: ".$arriendo->proyecto->nombre." - "."RUT: ".$arriendo->proyecto->rut." - "."Empresa: ".$arriendo->proyecto->empresa." - "."Centro de Costos: ".$arriendo->proyecto->centro_costo}}
+                                        {{ $arriendo->proyecto->nombre." - "."Empresa: ".$arriendo->proyecto->empresa->nombre." - "."RUT: ".$arriendo->proyecto->empresa->rut." - "."Centro de Costos: ".$arriendo->proyecto->centro_costo}}
                                     </option>
                                 </select>
                             </div>
@@ -179,6 +179,45 @@
         </div>
     </div>
     <!-- End Row-->
+
+    <div class="row">
+        <div class="card mt-4">
+            <div class="card-header ">
+                <div class="card-title">Registro de traspasos del arriendo</div>
+            </div>
+
+            @if(count($traspasos))
+                @foreach ($traspasos as $traspaso)
+                    <div class="card overflow-hidden">
+                        <div class="card-header bg-primary ">
+                            <h3 class="card-title text-white">{{$traspaso->anterior->nombre}} <i class="fa fa-arrow-right text-white"></i> {{$traspaso->actual->nombre}}</h3>
+                            <div class="card-options ">
+                                <a href="javascript:void(0);" class="card-options-collapse me-2" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up text-white"></i></a>
+                                <a href="javascript:void(0);" class="card-options-remove" data-bs-toggle="card-remove"><i class="fe fe-x text-white"></i></a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title text-black"><i class="fa fa-calendar text-black"></i> FECHA: {{Carbon\Carbon::parse($traspaso->fecha_traspaso)->format('d-m-Y')}}</h3>
+                            <h3 class="card-title text-black"><i class="fa fa-money text-black"></i> MONTO ANTERIOR: {{$traspaso->monto_anterior}} [{{$traspaso->tipo_moneda_anterior}}]</h3>
+
+
+                        </div>
+                        <!-- 
+                        <div class="card-footer">
+                            
+                        </div>
+                        -->
+                    </div>
+                @endforeach
+            @else
+                <div class="alert alert-danger">
+                    <ul>
+                        <h4 class="text-center mt-4"><b><i class="fa fa-ban text-white"></i> ESTE ARRIENDO NO HA SIDO TRASPASADO  <i class="fa fa-ban text-white"></i></b></h4>
+                    </ul>
+                </div>
+            @endif
+        </div>
+    </div>
 
     
 

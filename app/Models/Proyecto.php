@@ -13,6 +13,10 @@ class Proyecto extends Model
 
     public $table = 'proyectos';
 
+    public function empresa(){
+        return $this->belongsTo('App\Models\Empresa','empresa_id','id');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,8 +26,7 @@ class Proyecto extends Model
         'nombre',
         'centro_costo',
         'estado',
-        'rut',
-        'empresa'
+        'empresa_id',
 
     ];
 

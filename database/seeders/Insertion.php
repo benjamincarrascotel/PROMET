@@ -1197,6 +1197,37 @@ class Insertion extends Seeder
             ]);
         }
 
+        // EMPRESAS
+        if(DB::table('empresas')->count() == 0){
+            DB::table('empresas')->insert([
+                [
+                    'nombre' => 'Promet Servicios Spa',
+                    'rut' => '96.853.940-k',
+                    'giro' => 'Construcción Modulares, servicios y obra de ingeniería, hotelera, arriendo y compra de bienes',
+                ],
+                [
+                    'nombre' => 'Promet Montajes Spa',
+                    'rut' => '76.543.046-1',
+                    'giro' => 'Ejecución de obras civiles, montaje de plantas, asesoría e inversión',
+                ],
+                [
+                    'nombre' => 'Promet Maquinarias y Equipos Spa',
+                    'rut' => '76.248.021-2',
+                    'giro' => 'Arriendo y venta de equipos y maquinaria, arriendo de camionetas.',
+                ],
+                [
+                    'nombre' => 'Promet Transportes Spa',
+                    'rut' => '76.248.012-3',
+                    'giro' => 'Transporte de carga.',
+                ],
+                [
+                    'nombre' => 'Servicios Industriales Spa',
+                    'rut' => '76.576.479-3',
+                    'giro' => 'Servicios Industriales y obra menores.',
+                ],
+            ]);
+        }
+
 
     }
 }
