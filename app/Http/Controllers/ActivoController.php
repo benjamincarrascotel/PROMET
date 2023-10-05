@@ -13,8 +13,11 @@ use App\Models\SubFamiliaProducto;
 use App\Models\Proyecto;
 use App\Models\Traspaso;
 use App\Models\Empresa;
+use App\Models\CambioFaseArriendo;
 
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -330,6 +333,9 @@ class ActivoController extends Controller
                 "estado" => 'BODEGA',
             ]);
 
+            //Creamos la ruta pública primero
+            File::makeDirectory(public_path('storage/arriendos/'.$arriendo->id));
+
             $activo->estado = 'PARA RETIRO';
             $activo->save();
 
@@ -358,12 +364,50 @@ class ActivoController extends Controller
     {
         //dd($request->all());
         $input = $request->all();
+        //dd($input);
         $arriendo = ArriendoActivo::where('id', $input['arriendo_id'])->first();
         $activo = Activo::where('id', $arriendo->activo->id)->first();
         //dd($activo);
+
+        //Dejar registro de cambio de fase
+        $cambio_fase = CambioFaseArriendo::create([
+            "arriendo_id" => $input['arriendo_id'],
+            "fecha" => Carbon::now(),
+        ]);
+
+        if(isset($input['encargado']) && isset($input['firma'])){
+            
+            $cambio_fase->encargado = $input['encargado'];
+
+            if(isset($input['firma'])){
+                $nombre = 'firma_'.($arriendo->id)."_".time();
+                //$ruta = storage_path("app/solicituds/".$solicitud->id.'/'.$nombre);
+    
+                //Storage::makeDirectory('solicituds/'.$solicitud->id);
+    
+                $base64_image = $input['firma']; // your base64 encoded     
+                @list($type, $file_data) = explode(';', $base64_image);
+                @list(, $file_data) = explode(',', $file_data); 
+                $imageName = 'arriendos/'.$arriendo->id.'/'.$nombre.'.png';
+    
+                //Storage::disk('local')->put($imageName, base64_decode($file_data));
+                Storage::disk('public')->put($imageName, base64_decode($file_data));
+    
+                // copy(base64_decode($input['plano_marcado']), $ruta);
+                $cambio_fase->firma = $nombre.'.png';
+                $cambio_fase->save();
+            }
+
+        }
+
+        //Guardamos fase anterior
+        $cambio_fase->fase_anterior = $arriendo->estado;
+
         switch ($arriendo->estado) {
+
             case 'BODEGA':
                 if($activo->estado == "PARA RETIRO"){
+                    $cambio_fase->etapa = 1;
                     $arriendo->estado = "EN CAMINO IDA";
                     $arriendo->save();
                     $activo->estado = "EN RUTA IDA";
@@ -372,6 +416,7 @@ class ActivoController extends Controller
                 break;
             case 'EN CAMINO IDA':
                 if($activo->estado == "EN RUTA IDA"){
+                    $cambio_fase->etapa = 2;
                     $arriendo->estado = "EN CLIENTE";
                     $arriendo->save();
                     $activo->estado = "ARRENDADO";
@@ -380,9 +425,11 @@ class ActivoController extends Controller
                 break;
             case 'EN CLIENTE':
                 if($activo->estado == "ARRENDADO"){
+                    $cambio_fase->etapa = 3;
                     $activo->estado = "PARA RETIRO";
                     $activo->save();
                 }elseif($activo->estado == "PARA RETIRO"){
+                    $cambio_fase->etapa = 4;
                     $arriendo->estado = "EN CAMINO VUELTA";
                     $arriendo->save();
                     $activo->estado = "EN RUTA VUELTA";
@@ -391,6 +438,7 @@ class ActivoController extends Controller
                 break;
             case 'EN CAMINO VUELTA':
                 if($activo->estado == "EN RUTA VUELTA"){
+                    $cambio_fase->etapa = 5;
                     $arriendo->estado = "BODEGA DE VUELTA";
                     $arriendo->save();
                     $activo->estado = "RECIBIDO";
@@ -399,6 +447,7 @@ class ActivoController extends Controller
                 break;
             case 'BODEGA DE VUELTA':
                 if($activo->estado == "RECIBIDO"){
+                    $cambio_fase->etapa = 6;
                     $arriendo->estado = "TERMINADO";
                     $arriendo->save();
                     $activo->estado = "DISPONIBLE";
@@ -409,6 +458,8 @@ class ActivoController extends Controller
                 # code...
                 break;
         }
+        $cambio_fase->fase_actual = $arriendo->estado;
+        $cambio_fase->save();
 
         flash('Cambio de fase registrado correctamente.', 'success');
 
@@ -438,7 +489,10 @@ class ActivoController extends Controller
         if(  $arriendo->estado == "BODEGA" || $arriendo->estado == "EN CAMINO IDA" || 
             ($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "PARA RETIRO") ||
              $arriendo->estado == "EN CAMINO VUELTA"){
-            //dd($arriendo);
+
+            //TODO dejar registro de cambio de fase
+
+
             return view('bodega.cambio_fase')
                 ->with('arriendo',  $arriendo);
         }else{
