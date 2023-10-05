@@ -1228,6 +1228,1191 @@ class Insertion extends Seeder
             ]);
         }
 
+        // PROYECTOS
+        if(DB::table('proyectos')->count() == 0){
+            DB::table('proyectos')->insert([
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 5,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Hotelería',
+                    'sociedad_sap' => 'PIN',
+                    'codigo_sap' => 'V/PIN-HOT-22-001-01',
+                    'nombre_sap' => 'CC188 Guardias',
+
+                    'estado' => 'ACTIVO',
+                ],
+
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Rental',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => '610001',
+                    'nombre_sap' => 'CC880 GAV Rental',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Rental',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => '610002',
+                    'nombre_sap' => 'CC890 GAV Habitacional',
+
+                    'estado' => 'ACTIVO',
+                ],
+
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Administración',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-ADM-23-001-01',
+                    'nombre_sap' => 'Staff Adm Infr Modular y Activos',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Maquinarias',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-MAQ-22-001-01',
+                    'nombre_sap' => 'CC257 Equipos Mayores',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Maquinarias',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-MAQ-22-001-02',
+                    'nombre_sap' => 'CC258 Equipos Menores',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Maquinarias',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-MAQ-22-001-03',
+                    'nombre_sap' => 'CC259 Vehículos',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Maquinarias',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-MAQ-22-001-05',
+                    'nombre_sap' => 'CC250 ADMINISTRACION DE EQUIPOS',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Maquinarias',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-MAQ-22-001-06',
+                    'nombre_sap' => 'CC251 EQUIPOS SANTIAGO',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Rental',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-REN-22-001-04',
+                    'nombre_sap' => 'CC881 Operaciones Norte',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Rental',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-REN-22-001-05',
+                    'nombre_sap' => 'CC882 Operaciones RM',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Rental',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-REN-22-001-06',
+                    'nombre_sap' => 'CC883 Mantenciones Norte',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Rental',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-REN-22-001-07',
+                    'nombre_sap' => 'CC884 Mantenciones RM',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Rental',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-REN-22-001-16',
+                    'nombre_sap' => 'Fletes Norte',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Rental',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-REN-22-001-17',
+                    'nombre_sap' => 'Fletes RM',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Rental',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-REN-22-001-11',
+                    'nombre_sap' => 'CC888 Desarrollo Inmobiliario',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Rental',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-REN-22-002-01',
+                    'nombre_sap' => 'Operación Rental',
+
+                    'estado' => 'ACTIVO',
+                ],
+
+
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Administración',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => '620011',
+                    'nombre_sap' => 'CC909 OPERACIONES MONTAJE',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Control de Gestión',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => '620008',
+                    'nombre_sap' => 'CC908 Gerencia Control de Gestión',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Estudios',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => '620007',
+                    'nombre_sap' => 'CC907 Gerencia Estudios',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Gerencia General',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => '620002',
+                    'nombre_sap' => 'CC903 Gerencia General ',
+
+                    'estado' => 'ACTIVO',
+                ],
+
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Operaciones Montajes',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => 'V/PMO-MON-23-003-01',
+                    'nombre_sap' => 'Gestión Compras CMP Huasco',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Maquinarias',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => 'V/PMO-MAQ-23-001-01',
+                    'nombre_sap' => 'ADMINISTRACION DE EQUIPOS',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Operaciones Montajes',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => 'V/PMO-MON-21-004-01',
+                    'nombre_sap' => 'CC29 QB Misceláneos área Puerto y Pipeline',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Operaciones Montajes',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => 'V/PMO-MON-21-005-01',
+                    'nombre_sap' => 'CC34 Proyecto Manto Verde C5003',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Operaciones Montajes',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => 'V/PMO-MON-22-001-01',
+                    'nombre_sap' => 'CC915 Profesionales en tránsito (915)',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Operaciones Montajes',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => 'V/PMO-MON-22-004-01',
+                    'nombre_sap' => 'CMP Huasco Proyecto CEDRE',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Operaciones Montajes',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => 'V/PMO-MON-22-005-01',
+                    'nombre_sap' => 'Anglo American Las Tórtolas II',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Operaciones Montajes',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => 'V/PMO-MON-23-001-01',
+                    'nombre_sap' => 'QB Misceláneos II',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Operaciones Montajes',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => 'V/PMO-MON-23-004-01',
+                    'nombre_sap' => 'Escondida Extensión Correa CV-030',
+
+                    'estado' => 'ACTIVO',
+                ],
+
+
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Administración',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630007',
+                    'nombre_sap' => 'CC901 Gastos Generales',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Administración',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630053',
+                    'nombre_sap' => 'Gerencia Infraestructura',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Administración',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630004',
+                    'nombre_sap' => 'CC904 Gerencia Admin. y Finanzas',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Control de Gestión',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630011',
+                    'nombre_sap' => 'CC908 Gerencia Control de Gestión',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Estudios',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630009',
+                    'nombre_sap' => 'CC907 Gerencia Estudios I+C',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Gerencia General',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630003',
+                    'nombre_sap' => 'CC903 Gerencia General ',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Habitacional',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630058',
+                    'nombre_sap' => 'CC890 GAV Habitacional',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Hotelería',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630018',
+                    'nombre_sap' => 'CC912 Gerencia Hotelería',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'I+C Modular',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630012',
+                    'nombre_sap' => 'CC909 Gerencia Operaciones I+C',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Planta',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630022',
+                    'nombre_sap' => 'Planta Chacabuco',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'SSOMA',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630006',
+                    'nombre_sap' => 'CC906 Gerencia SSOMA',
+
+                    'estado' => 'ACTIVO',
+                ],
+                
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Abastecimiento',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-ABA-22-002-06',
+                    'nombre_sap' => 'CC115 Gerencia Abastecimiento',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Abastecimiento',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-ABA-22-002-07',
+                    'nombre_sap' => 'CC117 Bodega Central',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Abastecimiento',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-ABA-22-002-05',
+                    'nombre_sap' => 'Bodega Limón Verde',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-INF-23-001-01',
+                    'nombre_sap' => 'Ordenamiento Patio L. Verde',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-INF-23-001-02',
+                    'nombre_sap' => 'Desmovilizaciones',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-INF-23-001-03',
+                    'nombre_sap' => 'Gastos Generales Patio Limón Verde',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Hotelería',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-HOT-22-001-01',
+                    'nombre_sap' => 'CC386 Hotel Coya',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Hotelería',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-HOT-22-001-02',
+                    'nombre_sap' => 'CC225 Hotel Huechún',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Hotelería',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-HOT-22-001-03',
+                    'nombre_sap' => 'CC202 Hotel Calama',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Hotelería',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-HOT-22-001-04',
+                    'nombre_sap' => 'CC391 Hotel Mejillones',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Hotelería',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-HOT-22-001-05',
+                    'nombre_sap' => 'CC563 Hotel Colbún',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Hotelería',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-HOT-22-001-06',
+                    'nombre_sap' => 'Campamento Pionero Aguas Verdes',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Hotelería',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-HOT-22-005-01',
+                    'nombre_sap' => 'CC107 Administración Hoteles',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Hotelería',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-HOT-21-001-10',
+                    'nombre_sap' => 'CC427 Arriendo Inf. Camp MV+6to',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'I+C Modular',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-MOD-22-002-01',
+                    'nombre_sap' => 'CC915 Profesionales en tránsito',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'I+C Modular',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-MOD-22-002-05',
+                    'nombre_sap' => 'Supply Chain',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'I+C Modular',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-MOD-22-007-01',
+                    'nombre_sap' => 'Const. y Montaje Pabellones DRT',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'I+C Modular',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-MOD-23-001-01',
+                    'nombre_sap' => 'Kit Montajes y Fundaciones (INVERSIÓN)',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'I+C Modular',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-MOD-23-002-01',
+                    'nombre_sap' => 'Campamento Engie',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Maquinarias',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-MAQ-22-001-01',
+                    'nombre_sap' => 'CC250 ADMINISTRACION DE EQUIPOS',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Planta',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-FAB-22-001-11',
+                    'nombre_sap' => 'CC888 Desarrollo Inmobiliario',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Planta',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-FAB-22-001-12',
+                    'nombre_sap' => 'Fabricación Pabellones Codelco Chuqui',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Planta',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-FAB-22-003-01',
+                    'nombre_sap' => 'CC114 Gerencia Producción',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Planta',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-FAB-22-003-04',
+                    'nombre_sap' => 'Gastos Generales Planta',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 4,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Transportes',
+                    'sociedad_sap' => 'PTR',
+                    'codigo_sap' => 'V/PTR-TRA-22-001-03',
+                    'nombre_sap' => 'CC322 Operaciones Transportes',
+
+                    'estado' => 'ACTIVO',
+                ],
+                //TRASPORTE
+
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Administración',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630062',
+                    'nombre_sap' => 'Supply Chain',
+
+                    'estado' => 'ACTIVO',
+                ],
+
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'I+C Modular',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-MOD-23-002-05',
+                    'nombre_sap' => 'Equipamiento Engie',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'I+C Modular',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-MOD-23-002-06',
+                    'nombre_sap' => 'Mantención Equipos Engie',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Hotelería',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-HOT-23-002-01',
+                    'nombre_sap' => 'Arriendo Inf. Engie',
+
+                    'estado' => 'ACTIVO',
+                ],
+                
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => '610025',
+                    'nombre_sap' => 'Operación Infraestructura Norte',
+
+                    'estado' => 'ACTIVO',
+                ],
+
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-INF-23-001-01',
+                    'nombre_sap' => 'Mantención Rental N',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-INF-23-001-02',
+                    'nombre_sap' => 'Reparación Rental N',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-INF-23-001-03',
+                    'nombre_sap' => 'Modificación Rental N',
+
+                    'estado' => 'ACTIVO',
+                ],
+
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => '610024',
+                    'nombre_sap' => 'Operación Infraestructura RM',
+
+                    'estado' => 'ACTIVO',
+                ],
+
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-INF-23-002-01',
+                    'nombre_sap' => 'Mantención Rental RM',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-INF-23-002-02',
+                    'nombre_sap' => 'Reparación Rental RM',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 3,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PMA',
+                    'codigo_sap' => 'V/PMA-INF-23-002-03',
+                    'nombre_sap' => 'Modificación Rental RM',
+
+                    'estado' => 'ACTIVO',
+                ],
+
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Operaciones Montajes',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => 'V/PMO-MON-23-005-01',
+                    'nombre_sap' => 'CMP Reparación Molino El Romeral',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630063',
+                    'nombre_sap' => 'Operación Infraestructura Norte ',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'CECO',
+                    'area' => 'Infraestructura',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => '630064',
+                    'nombre_sap' => 'Operación Infraestructura RM',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Planta',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-FAB-23-003-01',
+                    'nombre_sap' => 'Fabricación Láscar',
+
+                    'estado' => 'ACTIVO',
+                ],
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 1,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'I+C Modular',
+                    'sociedad_sap' => 'PSE',
+                    'codigo_sap' => 'V/PSE-MOD-23-003-01',
+                    'nombre_sap' => 'IIFF Láscar',
+
+                    'estado' => 'ACTIVO',
+                ],
+                
+            ]);
+        }
+
 
     }
 }

@@ -163,12 +163,17 @@ class MantencionController extends Controller
         $arriendo = ArriendoActivo::where('activo_id', $input['activo_id'])->where("estado", "BODEGA DE VUELTA")->first();
         $venta = Venta::where('activo_id', $input['activo_id'])->first();
 
+
         if($arriendo){
             $activo->estado = "RECIBIDO";
         }elseif($venta){
             $activo->estado = "NO DISPONIBLE";
         }else{
             $activo->estado = "DISPONIBLE";
+        }
+
+        if(isset($input['estado-checkbox'])){
+            $activo->inoperativo = 1;
         }
         
         $activo->save();

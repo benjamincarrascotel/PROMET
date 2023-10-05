@@ -306,7 +306,7 @@ class ActivoController extends Controller
     public function ingresar_arriendo_create($id)
     {
         $selectedID = $id;
-        $activos = Activo::where('estado', "DISPONIBLE")->get();
+        $activos = Activo::where('estado', "DISPONIBLE")->where('inoperativo', 0)->get();
         $proyectos = Proyecto::where('estado', 'ACTIVO')->get();
 
         return view('arriendo.create')

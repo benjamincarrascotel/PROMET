@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateProyectos1 extends Migration
+class UpdateProyectos2 extends Migration
 {
     /**
      * Run the migrations.
@@ -16,8 +16,12 @@ class UpdateProyectos1 extends Migration
         Schema::table('proyectos', function(Blueprint $table){
 
             $table->after('centro_costo', function (Blueprint $table){
-                $table->string('rut')->nullable();
-                $table->string('empresa')->nullable();
+                
+                $table->string('objeto_imputacion')->nullable();
+                $table->string('area')->nullable();
+                $table->string('sociedad_sap')->nullable();
+                $table->string('codigo_sap')->nullable();
+                $table->string('nombre_sap')->nullable();
             });
 
         });
@@ -31,8 +35,10 @@ class UpdateProyectos1 extends Migration
     public function down()
     {
         Schema::table('proyectos', function (Blueprint $table) {
-            $table->dropColumn('rut');
-            $table->dropColumn('empresa');
+            $table->dropColumn('objeto_imputacion');
+            $table->dropColumn('area');
+            $table->dropColumn('codigo_sap');
+            $table->dropColumn('nombre_sap');
         });
     }
 }

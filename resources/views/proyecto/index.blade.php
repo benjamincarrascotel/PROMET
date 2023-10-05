@@ -38,6 +38,40 @@
     &nbsp;
     @endsection
 
+
+    <div class="row">
+        <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Filtros de búsqueda</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <form class="form-horizontal">
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-label mt-2">Empresa: </label>
+                                    <div class="col-md-9">
+                                        <select class="form-control " id="empresa" name="empresa" placeholder="Seleccione una Empresa.">
+                                            <option value="{{null}}">Todos los proyectos</option>
+                                            @foreach ($empresas as $key => $value)
+                                                <option value="{{ $value }}"> 
+                                                    {{ "[ ID : ".$key." ] ".$value }} 
+                                                </option>
+                                            @endforeach 
+                                    </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     @push('cards')
         @section('card_title')
             Información
@@ -65,14 +99,15 @@
                 <div class="e-panel card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class='table table-bordered data-table-global datatable' id='datatable'>
+                            <table class='table table-bordered data-table-global datatable'>
                                 <thead>
                                     <tr>
                                         <th class="border-bottom-0 ">ID</th>
                                         <th>Nombre</th>
                                         <th>Empresa</th>
                                         <th>RUT</th>
-                                        <th>Centro de costo</th>
+                                        <th>Área</th>
+                                        <th>Código SAP</th>
                                         <th>Estado</th>
                                         <th>Acción</th>
 
@@ -82,10 +117,11 @@
                                     @foreach($proyectos as $proyecto)
                                         <tr>
                                             <td>{{$proyecto->id}}</td>
-                                            <td>{{$proyecto->nombre}}</td>
+                                            <td>{{$proyecto->nombre_sap}}</td>
                                             <td>{{$proyecto->empresa->nombre}}</td>
                                             <td>{{$proyecto->empresa->rut}}</td>
-                                            <td>{{$proyecto->centro_costo}}</td>
+                                            <td>{{$proyecto->area}}</td>
+                                            <td>{{$proyecto->codigo_sap}}</td>
                                             <td>    
                                                 <div class="material-switch mt-4">
                                                     <input class="estado-checkbox" data-proyecto-id="{{$proyecto->id}}" name="estado-checkbox-{{$proyecto->id}}" type="checkbox" id="estado-checkbox-{{$proyecto->id}}"
@@ -143,6 +179,29 @@
                         console.error(error);
                     },
                 });
+            });
+
+            //FILTROS
+            var table = $('.datatable').DataTable({
+                orderCellsTop: true,
+                fixedHeader: true,
+                columnDefs: [
+                    {
+                        targets: [0], // El índice de la columna que quieres ocultar (cambia esto al índice de tu columna)
+                        visible: false, // Establece esta columna como no visible
+                        searchable: true // Opcional: permite buscar en esta columna
+                    }
+                ]
+                
+            });
+
+            $('#empresa').on( 'keyup change', function () {
+                if ( table.column(2).search() !== this.value ) {
+                    table
+                        .column(2)
+                        .search( this.value )
+                        .draw();
+                }
             });
 
 

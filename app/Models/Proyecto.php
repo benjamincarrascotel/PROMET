@@ -25,6 +25,13 @@ class Proyecto extends Model
     protected $fillable = [
         'nombre',
         'centro_costo',
+
+        'objeto_imputacion',
+        'area',
+        'sociedad_sap',
+        'codigo_sap',
+        'nombre_sap',
+
         'estado',
         'empresa_id',
 

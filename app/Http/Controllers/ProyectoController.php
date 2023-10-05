@@ -16,7 +16,9 @@ class ProyectoController extends Controller
     public function index()
     {
         $proyectos = Proyecto::get();
+        $empresas = Empresa::pluck('nombre', 'id');
         return view('proyecto.index')
+                ->with('empresas', $empresas)
                 ->with('proyectos', $proyectos);
 
     }
@@ -46,6 +48,13 @@ class ProyectoController extends Controller
             "nombre" => $input['nombre'],
             "empresa_id" => $input['empresa_id'],
             "centro_costo" => $input['centro_costo'],
+
+            "objeto_imputacion" => $input['objeto_imputacion'],
+            "area" => $input['area'],
+            "sociedad_sap" => $input['sociedad_sap'],
+            "codigo_sap" => $input['codigo_sap'],
+            "nombre_sap" => $input['nombre_sap'],
+
             "estado" => "ACTIVO",
         ]);
 
