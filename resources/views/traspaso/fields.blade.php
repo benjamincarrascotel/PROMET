@@ -6,7 +6,7 @@
     <label for="proyecto_anterior_id" class="col-sm-2 col-form-label">Proyecto anterior: </label>
     <div class="col-sm-10">
         <input hidden name="proyecto_anterior_id" id='proyecto_anterior_id' type="number" class="form-control" value="{{$arriendo->proyecto_id}}"  required>
-        <input disabled name="proyecto" id='proyecto' type="text" class="form-control" value="{{"Nombre: ".$arriendo->proyecto->nombre." - "."Empresa: ".$arriendo->proyecto->empresa->nombre." - "."RUT: ".$arriendo->proyecto->empresa->rut." - "."Centro de Costos: ".$arriendo->proyecto->centro_costo}}"  required>
+        <input disabled name="proyecto" id='proyecto' type="text" class="form-control" value="{{ "[ ".$arriendo->proyecto->codigo_sap." ] ".$arriendo->proyecto->nombre_sap." - "."Empresa: ".$arriendo->proyecto->empresa->nombre." - "."RUT: ".$arriendo->proyecto->empresa->rut}}"  required>
     </div>
 </div>
 
@@ -20,7 +20,7 @@
             <option value={{null}}>Seleccione la empresa</option>
             @foreach ($empresas as $value)
                 <option value="{{ $value->id }}" {{ $value->id == $selectedID ? 'selected' : '' }}>
-                    {{ "Nombre: ".$value->nombre." - "."RUT: ".$value->rut." - "."Giro: ".$value->giro}}
+                    {{ "Empresa: ".$value->nombre." - "."RUT: ".$value->rut." - "."Giro: ".$value->giro}}
                 </option>
             @endforeach
         </select>
@@ -80,7 +80,7 @@
             proyectos[selectedEmpresaId].forEach(function (proyecto) {
                 var option = document.createElement("option");
                 option.value = proyecto.id;
-                option.text = proyecto.nombre;
+                option.text = "[ "+proyecto.codigo_sap+" ] "+proyecto.nombre_sap;
                 proyectoSelect.appendChild(option);
             });
         }

@@ -44,14 +44,20 @@
 
         <div class="row mt-4">
             <div class="col">
-                <label for="proyecto_id" class="form-control-label">Proyecto: <span class="tx-danger">*</span></label>
-                <select id="proyecto_id" class="form-control block mt-1 w-full" name="proyecto_id" required>
-                    <option value={{null}}>Seleccione alguna de las opciones</option>
-                    @foreach ($proyectos as $value)
-                        <option value="{{ $value->id }}">
-                            {{ "Nombre: ".$value->nombre." - "."RUT: ".$value->rut." - "."Empresa: ".$value->empresa." - "."Centro de Costos: ".$value->centro_costo}}
+                <label class="form-control-label">Empresa: <span class="tx-danger">*</span></label>
+                <select id="empresa" class="form-control block mt-1 w-full" name="empresa" required>
+                    <option value={{null}}>Seleccione la empresa</option>
+                    @foreach ($empresas as $value)
+                        <option value="{{ $value->id }}" {{ $value->id == $selectedID ? 'selected' : '' }}>
+                            {{ "Nombre: ".$value->nombre." - "."RUT: ".$value->rut}}
                         </option>
                     @endforeach
+                </select>
+            </div>
+            <div class="col">
+                <label for="proyecto_id" class="form-control-label">Proyecto: <span class="tx-danger">*</span></label>
+                <select id="proyecto_id" class="form-control block mt-1 w-full" name="proyecto_id" required>
+                    <option value={{null}}>Seleccione alguno de los proyectos</option>
                 </select>
             </div>
         </div>
@@ -73,6 +79,9 @@
             </div>
         </div>
 
+
+        
+
         
 
     </section>
@@ -84,18 +93,45 @@
 
 
 @section('scripts')
-
-    <script src="{{ asset('dropify/js/dropify.js' )}}"></script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('.dropify').dropify();
-        });
-    </script>
-    
-
     <!-- INTERNAL File Uploads css-->
     <link href="{{asset('assets/plugins/fileupload/css/fileupload.css')}}" rel="stylesheet" type="text/css" />
 
+    <script type="text/javascript">
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var empresaSelect = document.getElementById("empresa");
+            var proyectoSelect = document.getElementById("proyecto_id");
+            var proyectos = {!! $proyectos->toJson() !!}; // Convierte la colección de sub_familias a un array JavaScript
+            
+            // Función para actualizar las opciones del input de sub_familias
+            function actualizarProyectos() {
+                var selectedEmpresaId = empresaSelect.value;
+    
+                // Limpiar las opciones actuales
+                proyectoSelect.innerHTML = '';
+    
+                // Agregar la opción predeterminada
+                var defaultOption = document.createElement("option");
+                defaultOption.value = {{!! null !!}};
+                defaultOption.text = "Seleccione alguno de los proyectos";
+                proyectoSelect.appendChild(defaultOption);
+    
+                // Agregar las sub_familias correspondientes a la familia seleccionada
+                proyectos[selectedEmpresaId].forEach(function (proyecto) {
+                    var option = document.createElement("option");
+                    option.value = proyecto.id;
+                    option.text = "[ "+proyecto.codigo_sap+" ] "+proyecto.nombre_sap;
+                    proyectoSelect.appendChild(option);
+                });
+            }
+    
+            // Asignar el evento change al input de familias
+            empresaSelect.addEventListener("change", function () {
+                actualizarProyectos();
+            });
+    
+        });
+    </script>
 
     <script>
         window.onload = function() {

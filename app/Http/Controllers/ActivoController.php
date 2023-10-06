@@ -297,8 +297,12 @@ class ActivoController extends Controller
     public function trazabilidad()
     {
         $arriendos = ArriendoActivo::get()->reverse();
-        $proyectos = Proyecto::pluck('nombre', 'id');
+        $empresas = Empresa::get();
+        $proyectos = Proyecto::get()->groupBy('empresa_id');
+        $selectedID = 0;
         return view('activo.trazabilidad')
+            ->with('selectedID', $selectedID)
+            ->with('empresas', $empresas)
             ->with("proyectos", $proyectos)
             ->with('arriendos', $arriendos);
     }
@@ -307,9 +311,11 @@ class ActivoController extends Controller
     {
         $selectedID = $id;
         $activos = Activo::where('estado', "DISPONIBLE")->where('inoperativo', 0)->get();
-        $proyectos = Proyecto::where('estado', 'ACTIVO')->get();
+        $empresas = Empresa::get();
+        $proyectos = Proyecto::where('estado', 'ACTIVO')->get()->groupBy('empresa_id');
 
         return view('arriendo.create')
+            ->with('empresas', $empresas)
             ->with('proyectos', $proyectos)
             ->with('activos', $activos)
             ->with('selectedID', $selectedID);

@@ -164,7 +164,7 @@
                                 <label for="proyecto_id" class="form-control-label">Proyecto:</label>
                                 <select id="proyecto_id" class="form-control block mt-1 w-full" name="proyecto_id" required>
                                     <option value="{{ $arriendo->proyecto->id }}">
-                                        {{ $arriendo->proyecto->nombre." - "."Empresa: ".$arriendo->proyecto->empresa->nombre." - "."RUT: ".$arriendo->proyecto->empresa->rut." - "."Centro de Costos: ".$arriendo->proyecto->centro_costo}}
+                                        {{ "[ ".$arriendo->proyecto->codigo_sap." ] ".$arriendo->proyecto->nombre_sap." - "."Empresa: ".$arriendo->proyecto->empresa->nombre." - "."RUT: ".$arriendo->proyecto->empresa->rut}}
                                     </option>
                                 </select>
                             </div>
@@ -190,7 +190,7 @@
                 @foreach ($traspasos as $traspaso)
                     <div class="card overflow-hidden">
                         <div class="card-header bg-primary ">
-                            <h3 class="card-title text-white">{{$traspaso->anterior->nombre}} <i class="fa fa-arrow-right text-white"></i> {{$traspaso->actual->nombre}}</h3>
+                            <h3 class="card-title text-white">{{"[ ".$traspaso->anterior->codigo_sap." ] ".$traspaso->anterior->nombre_sap}} <i class="fa fa-arrow-right text-white"></i> {{"[ ".$traspaso->actual->codigo_sap." ] ".$traspaso->actual->nombre_sap}}</h3>
                             <div class="card-options ">
                                 <a href="javascript:void(0);" class="card-options-collapse me-2" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up text-white"></i></a>
                                 <a href="javascript:void(0);" class="card-options-remove" data-bs-toggle="card-remove"><i class="fe fe-x text-white"></i></a>

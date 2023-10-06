@@ -77,22 +77,17 @@
                                     </div>
                                 </div>
                                 
-                                <!--
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-label">Subido</label>
+                                    <label class="col-md-3 form-label mt-2">Proyecto:</label>
                                     
                                     <div class="col-md-9">
                                         <div class="dropdown">
-                                            <select class="form-control " id="subido" name="tipo_elemento" >
-                                                    <option value="{{null}}">Todos los documentos</option>
-                                                    <option value="subido">Subido</option>
-                                                    <option value="pendiente">Pendiente</option>
-                                                    <option value="no aplica">No aplica</option>
+                                            <select class="form-control " id="proyecto" name="proyecto" >
+                                                <option value="{{null}}">Todos los proyectos</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                -->
                                 
                                 
                             </form>
@@ -101,17 +96,17 @@
                         <div class="col-lg-6 col-md-12">
                             <form class="form-horizontal">
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-label mt-2">Proyecto: </label>
+                                    <label class="col-md-3 form-label mt-2">Empresa: </label>
                                     
                                     <div class="col-md-9">
                                         <div class="dropdown">
-                                            <select class="form-control " id="proyecto" name="proyecto" placeholder="Buscar por proyecto.">
-                                                    <option value="{{null}}">Todos los proyectos</option>
-                                                    @foreach ($proyectos as $key => $value)
-                                                        <option value="{{ $key }}"> 
-                                                            {{ "[ ID : ".$key." ] ".$value }} 
-                                                        </option>
-                                                    @endforeach 
+                                            <select class="form-control " id="empresa" name="empresa" placeholder="Buscar por empresa.">
+                                                <option value="{{null}}">Todas las empresas</option>
+                                                @foreach ($empresas as $value)
+                                                    <option value="{{ $value->id }}" {{ $value->id == $selectedID ? 'selected' : '' }}>
+                                                        {{ $value->nombre." - ".$value->rut}}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -162,7 +157,7 @@
                                                     <tr>
                                                         <th class="border-bottom-0">Estado</th>
                                                         <th class="border-bottom-0">Proyecto ID</th>
-                                                        <th class="border-bottom-0">ID</th>
+                                                        <th class="border-bottom-0">Empresa ID</th>
                                                         <th class="border-bottom-0">Activo</th>
                                                         <th class="border-bottom-0">Código Interno</th>
                                                         <th class="border-bottom-0">Estado Arriendo</th>
@@ -177,7 +172,7 @@
                                                             <tr>
                                                                 <td class="align-middle">{{$arriendo->estado}}</td>
                                                                 <td class="align-middle">{{$arriendo->proyecto_id}}</td>
-                                                                <td class="align-middle"><span>{{$arriendo->id}}</span></td>
+                                                                <td class="align-middle">{{$arriendo->proyecto->empresa->id}}</td>
                                                                 <td class="align-middle">
                                                                     <div class="d-flex align-items-center"> <!-- Adjusted here -->
                                                                         @if($arriendo->activo->foto)
@@ -261,6 +256,43 @@
 
         <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
 
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var empresaSelect = document.getElementById("empresa");
+                var proyectoSelect = document.getElementById("proyecto");
+                var proyectos = {!! $proyectos->toJson() !!}; // Convierte la colección de sub_familias a un array JavaScript
+                
+                // Función para actualizar las opciones del input de sub_familias
+                function actualizarProyectos() {
+                    var selectedEmpresaId = empresaSelect.value;
+        
+                    // Limpiar las opciones actuales
+                    proyectoSelect.innerHTML = '';
+        
+                    // Agregar la opción predeterminada
+                    var defaultOption = document.createElement("option");
+                    defaultOption.value = {{!! null !!}};
+                    defaultOption.text = "Seleccione alguno de los proyectos";
+                    proyectoSelect.appendChild(defaultOption);
+        
+                    // Agregar las sub_familias correspondientes a la familia seleccionada
+                    proyectos[selectedEmpresaId].forEach(function (proyecto) {
+                        var option = document.createElement("option");
+                        option.value = proyecto.id;
+                        option.text = "[ "+proyecto.codigo_sap+" ] "+proyecto.nombre_sap;
+                        proyectoSelect.appendChild(option);
+                    });
+                }
+        
+                // Asignar el evento change al input de familias
+                empresaSelect.addEventListener("change", function () {
+                    actualizarProyectos();
+                });
+        
+            });
+        </script>
+
         <script type="text/javascript">
             $(document).ready(function () {
 
@@ -270,7 +302,7 @@
                     fixedHeader: true,
                     columnDefs: [
                         {
-                            targets: [0,1], // El índice de la columna que quieres ocultar (cambia esto al índice de tu columna)
+                            targets: [0,1,2], // El índice de la columna que quieres ocultar (cambia esto al índice de tu columna)
                             visible: false, // Establece esta columna como no visible
                             searchable: true // Opcional: permite buscar en esta columna
                         }
@@ -281,6 +313,15 @@
                     if ( table.column(0).search() !== this.value ) {
                         table
                             .column(0)
+                            .search( this.value )
+                            .draw();
+                    }
+                });
+
+                $('#empresa').on( 'keyup change', function () {
+                    if ( table.column(2).search() !== this.value ) {
+                        table
+                            .column(2)
                             .search( this.value )
                             .draw();
                     }
