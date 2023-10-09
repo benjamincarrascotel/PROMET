@@ -66,7 +66,6 @@
                                             <option value="EN PROCESO DE ARRIENDO">EN PROCESO DE ARRIENDO</option>
                                             <option value="EN PROCESO DE MANTENCION">EN PROCESO DE MANTENCION</option>
                                             <option value="EN PROCESO DE VENTA">EN PROCESO DE VENTA</option>
-                                            <option value="VENDIDO">VENDIDO</option>
                                             <option value="INOPERATIVO">INOPERATIVO</option>
                                         </select>
                                     </div>
@@ -148,38 +147,15 @@
                                         <tr>
                                             <!-- ESTADOS -->
                                             @if(! $activo->inoperativo)
-                                                @switch($activo->estado)
-                                                    @case("DISPONIBLE")
-                                                        <td class="text-nowrap align-middle"><span>DISPONIBLE</span></td>
-                                                        @break
-                                                    @case("PARA RETIRO")
-                                                        <td class="text-nowrap align-middle"><span>EN PROCESO DE ARRIENDO</span></td>
-                                                        @break
-                                                    @case("EN RUTA IDA")
-                                                        <td class="text-nowrap align-middle"><span>EN PROCESO DE ARRIENDO</span></td>
-                                                        @break
-                                                    @case("ARRENDADO")
-                                                        <td class="text-nowrap align-middle"><span>EN PROCESO DE ARRIENDO</span></td>
-                                                        @break
-                                                    @case("EN RUTA VUELTA")
-                                                        <td class="text-nowrap align-middle"><span>EN PROCESO DE ARRIENDO</span></td>
-                                                        @break
-                                                    @case("RECIBIDO")
-                                                        <td class="text-nowrap align-middle"><span>EN PROCESO DE ARRIENDO</span></td>
-                                                        @break
-                                                    @case("EN MANTENCION")
-                                                        <td class="text-nowrap align-middle"><span>EN PROCESO DE MANTENCION</span></td>
-                                                        @break
-                                                    @case("VENDIDO")
-                                                        <td class="text-nowrap align-middle"><span>EN PROCESO DE VENTA</span></td>
-                                                        @break
-                                                    @case("NO DISPONIBLE")
-                                                        <td class="text-nowrap align-middle"><span>VENDIDO</span></td>
-                                                        @break
-                                                    @default
-                                                        @break
-                                                        
-                                                @endswitch
+                                                @if($activo->estado == "EN MANTENCION")
+                                                    <td class="text-nowrap align-middle"><span>EN PROCESO DE MANTENCION</span></td>
+                                                @elseif($activo->arriendo_flag)
+                                                    <td class="text-nowrap align-middle"><span>EN PROCESO DE ARRIENDO</span></td>
+                                                @elseif($activo->venta_flag)
+                                                    <td class="text-nowrap align-middle"><span>EN PROCESO DE VENTA</span></td>
+                                                @elseif($activo->estado == "DISPONIBLE")
+                                                    <td class="text-nowrap align-middle"><span>DISPONIBLE</span></td>
+                                                @endif
                                             @else
                                                 <td class="text-nowrap align-middle"><span>INOPERATIVO</span></td>
                                             @endif
@@ -315,6 +291,7 @@
                                                     </td>
                                                 @endif
 
+                                                <!-- TODO borrar elementos innecesarios -->
                                                 @if($activo->estado == "VENDIDO")
                                                     <td class="align-middle text-center">
                                                         <button id="terminar_venta" data-activo-id="{{ $activo->id }}" class="btn btn-sm btn-danger terminar-venta-btn" data-toggle="tooltip" data-placement="top" title="TERMINAR VENTA" type="button">

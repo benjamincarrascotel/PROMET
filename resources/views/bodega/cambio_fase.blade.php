@@ -20,10 +20,10 @@
             <!-- LOGO -->
             @section('card_title')
                 <h1 class="card-title" style="width: 100%">
-                    @if($proceso->estado == "BODEGA" || $proceso->estado == "EN CAMINO VUELTA")
-                    Ingresar datos de <b class="mb-0 font-weight-bold">BODEGA</b>
-                    @else
-                    Ingresar datos de <b class="mb-0 font-weight-bold">CLIENTE</b>
+                    @if($proceso->estado == "BODEGA")
+                        Ingresar datos de <b class="mb-0 font-weight-bold">BODEGA</b>
+                    @elseif($proceso->estado == "EN CAMINO VUELTA")
+                        Ingresar datos de <b class="mb-0 font-weight-bold">CLIENTE</b>
                     @endif
                 </h1>
             @overwrite
