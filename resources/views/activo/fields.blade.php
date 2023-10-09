@@ -38,7 +38,7 @@
 
         <div class="row ">
             <div class="col-md-6 col-lg-6 mb-4">
-                <label class="form-label">Horas de uso promedio: </label>
+                <label class="form-label">Horas de uso promedio: <span class="tx-danger">*</span></label>
                 <input type="number" id="horas_uso_promedio" name="horas_uso_promedio" min="0" class="form-control" required="" value="{{ old('horas_uso_promedio') }}">
             </div>
             <div class="col-md-6 col-lg-6 mb-4">

@@ -2,8 +2,19 @@
 
 
 @push('cards')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+
     @section('card_title')
-        Ingresar Venta del Activo: [ ID : {{$activo->id}} ]     {{$activo->marca." ".$activo->modelo}}
+        Ingresar Venta del Activo: [ ID : {{$activo->id}} ]     {{$activo->marca." - ".$activo->modelo}}
         
     @overwrite
 

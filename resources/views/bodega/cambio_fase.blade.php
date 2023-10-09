@@ -20,7 +20,7 @@
             <!-- LOGO -->
             @section('card_title')
                 <h1 class="card-title" style="width: 100%">
-                    @if($arriendo->estado == "BODEGA" || $arriendo->estado == "EN CAMINO VUELTA")
+                    @if($proceso->estado == "BODEGA" || $proceso->estado == "EN CAMINO VUELTA")
                     Ingresar datos de <b class="mb-0 font-weight-bold">BODEGA</b>
                     @else
                     Ingresar datos de <b class="mb-0 font-weight-bold">CLIENTE</b>
@@ -29,9 +29,9 @@
             @overwrite
                 
             @section('card_content')
-                <form id="cambio_fase" class="container-fluid" action="{!! route('arriendo.cambio_fase') !!}" method="post" enctype="multipart/form-data">
+                <form id="cambio_fase" class="container-fluid" action="{!! route('transporte.cambio_fase') !!}" method="post" enctype="multipart/form-data">
                     @csrf
-                    <input hidden type="integer" id="arriendo_id" name="arriendo_id" value="{{$arriendo->id}}">
+                    <input hidden type="integer" id="activo_id" name="activo_id" value="{{$proceso->activo->id}}">
                     
                     <div class="mb-3 row">
                         <label class="form-label">Encargado: <span class="tx-danger">*</span></label>

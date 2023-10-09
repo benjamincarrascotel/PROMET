@@ -160,14 +160,12 @@ class MantencionController extends Controller
         $mantencion->save();
 
         $activo = Activo::where('id', $input['activo_id'])->first();
-        $arriendo = ArriendoActivo::where('activo_id', $input['activo_id'])->where("estado", "BODEGA DE VUELTA")->first();
-        $venta = Venta::where('activo_id', $input['activo_id'])->first();
+        //$arriendo = ArriendoActivo::where('activo_id', $input['activo_id'])->where("estado", "BODEGA DE VUELTA")->first();
+        //$venta = Venta::where('activo_id', $input['activo_id'])->first();
 
 
-        if($arriendo){
+        if($activo->arriendo_flag || $activo->venta_flag){
             $activo->estado = "RECIBIDO";
-        }elseif($venta){
-            $activo->estado = "NO DISPONIBLE";
         }else{
             $activo->estado = "DISPONIBLE";
         }

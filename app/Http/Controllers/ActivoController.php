@@ -14,6 +14,7 @@ use App\Models\Proyecto;
 use App\Models\Traspaso;
 use App\Models\Empresa;
 use App\Models\CambioFaseArriendo;
+use App\Models\CambioFaseVenta;
 
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -297,6 +298,7 @@ class ActivoController extends Controller
     public function trazabilidad()
     {
         $arriendos = ArriendoActivo::get()->reverse();
+        $ventas = Venta::get()->reverse();
         $empresas = Empresa::get();
         $proyectos = Proyecto::get()->groupBy('empresa_id');
         $selectedID = 0;
@@ -304,6 +306,7 @@ class ActivoController extends Controller
             ->with('selectedID', $selectedID)
             ->with('empresas', $empresas)
             ->with("proyectos", $proyectos)
+            ->with("ventas", $ventas)
             ->with('arriendos', $arriendos);
     }
 
@@ -325,7 +328,7 @@ class ActivoController extends Controller
     {
         $input = $request->all();
         $activo = Activo::where('id', $input['activo_id'])->first();
-        if($activo->estado == "DISPONIBLE"){           
+        if($activo->estado == "DISPONIBLE" && !$activo->venta_flag && !$activo->arriendo_flag){           
 
             //dd($request->all());
             $arriendo = ArriendoActivo::create([
@@ -343,6 +346,7 @@ class ActivoController extends Controller
             File::makeDirectory(public_path('storage/arriendos/'.$arriendo->id));
 
             $activo->estado = 'PARA RETIRO';
+            $activo->arriendo_flag = true;
             $activo->save();
 
             flash('Arriendo registrado correctamente.', 'success');
@@ -353,7 +357,7 @@ class ActivoController extends Controller
                 ->with('activos', $activos);
         }else{
 
-            flash("El activo ya está en un proceso de arriendo.", "danger");
+            flash("El activo ya está en un proceso de arriendo o venta.", "danger");
             return redirect()->back();
         }
     }
@@ -361,32 +365,49 @@ class ActivoController extends Controller
     public function transporte()
     {
         $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get()->reverse();
+        $ventas = Venta::whereNotIn('estado', ["TERMINADO"])->get()->reverse();
         return view('bodega.transporte')
+            ->with('ventas', $ventas)
             ->with('arriendos', $arriendos);
     }
 
 
     public function cambio_fase(Request $request)
     {
-        //dd($request->all());
         $input = $request->all();
-        //dd($input);
-        $arriendo = ArriendoActivo::where('id', $input['arriendo_id'])->first();
-        $activo = Activo::where('id', $arriendo->activo->id)->first();
-        //dd($activo);
 
-        //Dejar registro de cambio de fase
-        $cambio_fase = CambioFaseArriendo::create([
-            "arriendo_id" => $input['arriendo_id'],
-            "fecha" => Carbon::now(),
-        ]);
+        $arriendo_venta_flag = 0;
 
+        //Verificación de proceso actual
+        $activo = Activo::where('id', $input['activo_id'])->first();
+        if($activo->arriendo_flag && !$activo->venta_flag){
+            $proceso = ArriendoActivo::where('activo_id', $input['activo_id'])->whereNotIn('estado', ["TERMINADO"])->first();
+            $cambio_fase = CambioFaseArriendo::create([
+                "arriendo_id" => $proceso->id,
+                "fecha" => Carbon::now(),
+            ]);
+            $arriendo_venta_flag = 1;
+        }
+        elseif($activo->venta_flag && !$activo->arriendo_flag){
+            $proceso = Venta::where('activo_id', $input['activo_id'])->whereNotIn('estado', ["TERMINADO"])->first();
+            $cambio_fase = CambioFaseVenta::create([
+                "venta_id" => $proceso->id,
+                "fecha" => Carbon::now(),
+            ]);
+            $arriendo_venta_flag = 2;
+        }
+        else{
+            flash("Error: Los registros de trazabilidad no coinciden.", "danger");
+            return redirect()->back();
+        }
+
+        //Guardamos la firma y encargado
         if(isset($input['encargado']) && isset($input['firma'])){
             
             $cambio_fase->encargado = $input['encargado'];
 
             if(isset($input['firma'])){
-                $nombre = 'firma_'.($arriendo->id)."_".time();
+                $nombre = 'firma_'.($proceso->id)."_".time();
                 //$ruta = storage_path("app/solicituds/".$solicitud->id.'/'.$nombre);
     
                 //Storage::makeDirectory('solicituds/'.$solicitud->id);
@@ -394,7 +415,11 @@ class ActivoController extends Controller
                 $base64_image = $input['firma']; // your base64 encoded     
                 @list($type, $file_data) = explode(';', $base64_image);
                 @list(, $file_data) = explode(',', $file_data); 
-                $imageName = 'arriendos/'.$arriendo->id.'/'.$nombre.'.png';
+
+                if($arriendo_venta_flag == 1)
+                    $imageName = 'arriendos/'.$proceso->id.'/'.$nombre.'.png';
+                elseif($arriendo_venta_flag == 2)
+                    $imageName = 'ventas/'.$proceso->id.'/'.$nombre.'.png';
     
                 //Storage::disk('local')->put($imageName, base64_decode($file_data));
                 Storage::disk('public')->put($imageName, base64_decode($file_data));
@@ -407,15 +432,15 @@ class ActivoController extends Controller
         }
 
         //Guardamos fase anterior
-        $cambio_fase->fase_anterior = $arriendo->estado;
+        $cambio_fase->fase_anterior = $proceso->estado;
 
-        switch ($arriendo->estado) {
+        switch ($proceso->estado) {
 
             case 'BODEGA':
                 if($activo->estado == "PARA RETIRO"){
                     $cambio_fase->etapa = 1;
-                    $arriendo->estado = "EN CAMINO IDA";
-                    $arriendo->save();
+                    $proceso->estado = "EN CAMINO IDA";
+                    $proceso->save();
                     $activo->estado = "EN RUTA IDA";
                     $activo->save();
                 }
@@ -423,8 +448,8 @@ class ActivoController extends Controller
             case 'EN CAMINO IDA':
                 if($activo->estado == "EN RUTA IDA"){
                     $cambio_fase->etapa = 2;
-                    $arriendo->estado = "EN CLIENTE";
-                    $arriendo->save();
+                    $proceso->estado = "EN CLIENTE";
+                    $proceso->save();
                     $activo->estado = "ARRENDADO";
                     $activo->save();
                 }
@@ -436,8 +461,8 @@ class ActivoController extends Controller
                     $activo->save();
                 }elseif($activo->estado == "PARA RETIRO"){
                     $cambio_fase->etapa = 4;
-                    $arriendo->estado = "EN CAMINO VUELTA";
-                    $arriendo->save();
+                    $proceso->estado = "EN CAMINO VUELTA";
+                    $proceso->save();
                     $activo->estado = "EN RUTA VUELTA";
                     $activo->save();
                 }
@@ -445,8 +470,8 @@ class ActivoController extends Controller
             case 'EN CAMINO VUELTA':
                 if($activo->estado == "EN RUTA VUELTA"){
                     $cambio_fase->etapa = 5;
-                    $arriendo->estado = "BODEGA DE VUELTA";
-                    $arriendo->save();
+                    $proceso->estado = "BODEGA DE VUELTA";
+                    $proceso->save();
                     $activo->estado = "RECIBIDO";
                     $activo->save();
                 }
@@ -454,9 +479,14 @@ class ActivoController extends Controller
             case 'BODEGA DE VUELTA':
                 if($activo->estado == "RECIBIDO"){
                     $cambio_fase->etapa = 6;
-                    $arriendo->estado = "TERMINADO";
-                    $arriendo->save();
+                    $proceso->estado = "TERMINADO";
+                    $proceso->save();
                     $activo->estado = "DISPONIBLE";
+
+                    if($activo->arriendo_flag && !$activo->venta_flag)
+                        $activo->arriendo_flag = false;
+                    elseif($activo->venta_flag && !$activo->arriendo_flag)
+                        $activo->venta_flag = false;
                     $activo->save();
                 }
                 break;
@@ -464,7 +494,7 @@ class ActivoController extends Controller
                 # code...
                 break;
         }
-        $cambio_fase->fase_actual = $arriendo->estado;
+        $cambio_fase->fase_actual = $proceso->estado;
         $cambio_fase->save();
 
         flash('Cambio de fase registrado correctamente.', 'success');
@@ -472,12 +502,9 @@ class ActivoController extends Controller
         //CASO SUPERADMIN
         $user = Auth::user();
         if (isset($user) && $user->superadmin) {
-            $arriendos = ArriendoActivo::get();
-            return redirect()->back();
-
+            return redirect()->route('activo.trazabilidad');
         }else{
             //CASO BODEGA O ADMIN
-            $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
             return redirect()->route('arriendo.transporte');
         }
 
@@ -490,24 +517,31 @@ class ActivoController extends Controller
         //EN TODOS LOS CASOS "TRANSPORTE" DEBE INGRESAR DATOS PARA EL CAMBIO DE FASE
         //[FIRMA EL QUE PASA y RECIBE] (BODEGA), (EN CAMINO IDA) (FIRMA BODEGA Y CLIENTE)
         //[FIRMA EL QUE PASA y RECIBE] (EN CLIENTE y PARA RETIRO), (EN CAMINO VUELTA) (FIRMA CLIENTE Y BODEGA)
-        $arriendo = ArriendoActivo::where('activo_id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
 
-        if(  $arriendo->estado == "BODEGA" || $arriendo->estado == "EN CAMINO IDA" || 
-            ($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "PARA RETIRO") ||
-             $arriendo->estado == "EN CAMINO VUELTA"){
+        //Verificación de proceso actual
+        $activo = Activo::where('id', $id)->first();
+        if($activo->arriendo_flag && !$activo->venta_flag)
+            $proceso = ArriendoActivo::where('activo_id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
+        elseif($activo->venta_flag && !$activo->arriendo_flag)
+            $proceso = Venta::where('activo_id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
+        else{
+            flash("Error: Los registros de trazabilidad no coinciden.", "danger");
+            return redirect()->back();
+        }
+            
 
-            //TODO dejar registro de cambio de fase
-
+        if(  $proceso->estado == "BODEGA" || $proceso->estado == "EN CAMINO IDA" || 
+            ($proceso->estado == "EN CLIENTE" && $proceso->activo->estado == "PARA RETIRO") ||
+             $proceso->estado == "EN CAMINO VUELTA"){
 
             return view('bodega.cambio_fase')
-                ->with('arriendo',  $arriendo);
+                ->with('proceso',  $proceso);
         }else{
             //dd("entra");
             $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
             return view('bodega.transporte')
                 ->with('arriendos', $arriendos);
             //Casos en que se pueda cambiar directamente de fase (REDIRECT A OTRA RUTA POST)
-            return redirect()->route('arriendo.cambio_fase');
         }
     }
 
@@ -543,57 +577,78 @@ class ActivoController extends Controller
     public function venta_create($id)
     {
         $activo = Activo::where('id', $id)->first();
-        $proyectos = Proyecto::where('estado', 'ACTIVO')->get();
+        $empresas = Empresa::get();
+        $proyectos = Proyecto::where('estado', 'ACTIVO')->get()->groupBy('empresa_id');
         $selectedID = 0;
         return view('venta.create')
-                ->with('selectedID', $selectedID)
-                ->with('proyectos', $proyectos)
-                ->with('activo', $activo);
+            ->with('empresas', $empresas)
+            ->with('selectedID', $selectedID)
+            ->with('proyectos', $proyectos)
+            ->with('activo', $activo);
     }
 
     public function venta_store(Request $request)
     {
         $input = $request->all();
 
-        $activo = Activo::where('id', $input['activo_id'])->first();
-        $activo->estado = "VENDIDO";
-        $activo->save();
-
-        // Manejo de imagen
-        $file = null;
-        if($request->hasFile('cotizacion_venta')){
-            $file = $request->file('cotizacion_venta');
-        }
-
-        //dd($request->all());
-        $venta = Venta::create([
-            "activo_id" => $input['activo_id'],
-            "precio_venta" => $input['precio_venta'],
-            "tipo_moneda" => $input['tipo_moneda'],
-            "fecha_venta" => $input['fecha_venta'],
-            "proyecto_id" => $input['proyecto_id'],
-            "contacto_cliente" => $input['contacto_cliente'],
-            "estado" => "EN PROCESO",
+        $validated = $request->validate([
+            'proyecto_id' => 'required|integer',
         ]);
 
-        // Guardamos la imagen
-        if($request->hasFile('cotizacion_venta'))
-        {
-            $type = $file->guessExtension();
-            $nombre = 'cotizacion_venta_'.$input['activo_id']."_".time().'.'.$type;
+        $activo = Activo::where('id', $input['activo_id'])->first();
 
-            $ruta = public_path("storage/activos/".$input['activo_id'].'/'.$nombre);
-            copy($file,$ruta);
+        if($activo->estado == "DISPONIBLE" && !$activo->venta_flag && !$activo->arriendo_flag){   
+            $activo->estado = "PARA RETIRO";
+            $activo->venta_flag = true;
+            
+            $activo->save();
 
-            $venta->cotizacion_venta = $nombre;
-            $venta->save();
+            /* Manejo de imagen
+            $file = null;
+            if($request->hasFile('cotizacion_venta')){
+                $file = $request->file('cotizacion_venta');
+            }
+            */
+
+            //dd($request->all());
+            $venta = Venta::create([
+                "activo_id" => $input['activo_id'],
+                "precio_venta" => $input['precio_venta'],
+                "tipo_moneda" => $input['tipo_moneda'],
+                "fecha_inicio" => $input['fecha_inicio'],
+                "fecha_termino" => $input['fecha_termino'],
+                "proyecto_id" => $input['proyecto_id'],
+                "encargado" => $input['encargado'],
+                
+                "estado" => "BODEGA",
+            ]);
+
+            //Creamos la ruta pública primero
+            File::makeDirectory(public_path('storage/ventas/'.$venta->id));
+
+            /* Guardamos la imagen
+            if($request->hasFile('cotizacion_venta'))
+            {
+                $type = $file->guessExtension();
+                $nombre = 'cotizacion_venta_'.$input['activo_id']."_".time().'.'.$type;
+
+                $ruta = public_path("storage/activos/".$input['activo_id'].'/'.$nombre);
+                copy($file,$ruta);
+
+                $venta->cotizacion_venta = $nombre;
+                $venta->save();
+            }
+            */
+
+            flash("La venta del activo se ha sido realizado correctamente", 'success');
+            $activos = Activo::get();
+
+            return redirect()->route('activo.index')
+                ->with('activos', $activos);
+        }else{
+            flash("El activo ya está en un proceso de venta o arriendo.", "danger");
+            return redirect()->back();
         }
-
-        flash("La venta del activo se ha sido realizado correctamente", 'success');
-        $activos = Activo::get();
-
-        return redirect()->route('activo.index')
-            ->with('activos', $activos);
     }
 
 
@@ -633,6 +688,7 @@ class ActivoController extends Controller
         return redirect()->back()->with('activos', $activos);
     }
 
+    //TODO traspasos
     public function traspaso_create($id){
 
         $arriendo = ArriendoActivo::where('id', $id)->whereNotIn('estado', ["TERMINADO"])->first();

@@ -38,6 +38,9 @@ class Activo extends Model
         'foto',
         'codigo_qr',
         'estado',
+        'inoperativo',
+        'arriendo_flag',
+        'venta_flag',
 
         'tiempo_uso_meses',
         'centro_costos',

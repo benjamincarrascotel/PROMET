@@ -6,20 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Venta extends Model
+class CambioFaseVenta extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    public $table = 'ventas';
-
-    public function activo(){
-        return $this->belongsTo('App\Models\Activo','activo_id','id');
-    }
-
-    public function proyecto(){
-        return $this->belongsTo('App\Models\Proyecto','proyecto_id','id');
-    }
+    public $table = 'cambio_fase_ventas';
 
     /**
      * The attributes that are mass assignable.
@@ -27,14 +19,13 @@ class Venta extends Model
      * @var array
      */
     protected $fillable = [
-        'activo_id',
-        'precio_venta',
-        'tipo_moneda',
-        'proyecto_id',
-        'fecha_inicio',
-        'fecha_termino',
-        'encargado', 
-        'estado', 
+        'venta_id',
+        'etapa',
+        'fecha',
+        'fase_anterior',
+        'fase_actual',
+        'encargado',
+        'firma',
     ];
 
     /**
@@ -44,6 +35,7 @@ class Venta extends Model
      */
     protected $casts = [
         'created_at' => 'datetime:Y-m-d H:i:s',
+        'fecha' => 'datetime:Y-m-d H:i:s',
 
         // 'fecha' => 'datetime:Y-m-d H:i:s'
     ];

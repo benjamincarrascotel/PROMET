@@ -111,11 +111,11 @@ Route::group(['middleware' => ['auth']], function () {
 
         //TRANSPORTE
         Route::get('/transporte', 'ActivoController@transporte')->name('arriendo.transporte');
-        Route::post('/transporte/cambio_fase', 'ActivoController@cambio_fase')->name('arriendo.cambio_fase');
-        Route::get('/transporte/qr_reader/{id}', 'ActivoController@qr_reader')->name('arriendo.qr_reader');
+        Route::post('/transporte/cambio_fase', 'ActivoController@cambio_fase')->name('transporte.cambio_fase');
+        Route::get('/transporte/qr_reader/{id}', 'ActivoController@qr_reader')->name('transporte.qr_reader');
 
         //INVENTARIO
-        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('arriendo.cambio_fase_create');
+        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('transporte.cambio_fase_create');
 
         //ACTIVOS
         Route::get('/activo/create', 'ActivoController@create')->name('activo.create');
