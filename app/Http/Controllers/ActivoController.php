@@ -802,8 +802,8 @@ class ActivoController extends Controller
                 if($row[$columnas_ids['año']] != "NO DETALLA") $año = $row[$columnas_ids['año']];
                 else $año = 2000;
 
-                //$activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]],
-                $activo = Activo::create(
+                $activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]],
+                //$activo = Activo::create(
                 [
                     "id" => $cont,
                     "sub_familia_id" => $row[$columnas_ids['sub_familia_id']],
