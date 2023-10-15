@@ -69,6 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/activo/show/{id}', 'ActivoController@show')->name('activo.show');
         Route::post('/activo/update/{id}', 'ActivoController@update')->name('activo.update');
         Route::get('/activo/trazabilidad', 'ActivoController@trazabilidad')->name('activo.trazabilidad');
+        Route::post('/activo/carga_masiva', 'ActivoController@carga_masiva')->name('activo.carga_masiva');
 
         //ARRIENDOS
         Route::get('/arriendo/create/{id}', 'ActivoController@ingresar_arriendo_create')->name('arriendo.create');

@@ -23,6 +23,7 @@ class Activo extends Model
      * @var array
      */
     protected $fillable = [
+        'id',
         'sub_familia_id',
         'marca',
         'modelo',

@@ -118,6 +118,14 @@
                             </svg>                                
                             <span class="btn-svg-text mt-1">Crear Activo</span>
                         </a>
+                        <a class="btn btn-outline-success btn-svgs btn-svg-white carga-masiva-btn" data-toggle="modal" data-target="#cargaMasivaModal">
+                            <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                                <path d="M0 0h24v24H0V0z" fill="none"></path>
+                                <path d="M13 4H6v16h12V9h-5V4zm3 14H8v-2h8v2zm0-6v2H8v-2h8z" opacity=".3"></path>
+                                <path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"></path>
+                            </svg>                                
+                            <span class="btn-svg-text mt-1">Carga Masiva</span>
+                        </a>
                     </div>
                 </div>
 
@@ -381,6 +389,29 @@
 
         @endif
 
+        <div class="modal fade" id="cargaMasivaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Carga Masiva</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('activo.carga_masiva') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                <label for="file">Seleccionar Archivo</label>
+                                <input type="file" class="dropify" id="file" name="file">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Subir Archivo</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Debo colocar el script dentro de la "section" para que logre acceder al input "foto" -->
         <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
         <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
@@ -401,6 +432,10 @@
                     var activoId = $(this).data('activo-id'); // Obtiene el valor de data-activo-id
                     $('#activo_id_venta').val(activoId); // Establece el valor en el campo activo_id del formulario
                     $('#terminarVentaModal').modal('show'); // Muestra el modal
+                });
+
+                $('.carga-masiva-btn').on('click', function () {
+                    $('#cargaMasivaModal').modal('show'); // Muestra el modal
                 });
 
                 //FILTROS

@@ -21,6 +21,10 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ImportExcel;
+
+
 
 
 use Illuminate\Support\Facades\File;
@@ -763,6 +767,69 @@ class ActivoController extends Controller
 
         return redirect()->route('activo.trazabilidad')
             ->with('arriendos', $arriendos);
+    }
+
+    public function carga_masiva(Request $request)
+    {
+        $input = $request->all();
+        $validator = Validator::make($input,[
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $rows = Excel::toArray(new ImportExcel(), $request->file('file'))[0];
+        $column_list = $rows[0];
+        $indices = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,18];
+        $columnas_ids = array_intersect_key($column_list, array_flip($indices));
+        // nombre_columna => posicion_excel
+        $columnas_ids = array_flip($columnas_ids);
+
+        $row = $rows[1];
+        //dd($row[$columnas_ids['sub_familia_id']]);
+        $cont = 0;
+        foreach($rows as $row){
+            if($cont > 0 ){
+
+                //TODO definir procedimiento dependiendo del estado del activo
+
+                if($row[$columnas_ids['precio_compra']] != "SIN REGISTRO" && $row[$columnas_ids['precio_compra']] != "SIN COBRO" && $row[$columnas_ids['precio_compra']] != "NO DETALLA")
+                    $precio_compra = $row[$columnas_ids['precio_compra']];
+                else $precio_compra = 0;
+
+                if($row[$columnas_ids['año']] != "NO DETALLA") $año = $row[$columnas_ids['año']];
+                else $año = 2000;
+
+                //$activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]],
+                $activo = Activo::create(
+                [
+                    "id" => $cont,
+                    "sub_familia_id" => $row[$columnas_ids['sub_familia_id']],
+                    "marca" => $row[$columnas_ids['marca']],
+                    "modelo" => $row[$columnas_ids['modelo']],
+                    "año" => $año,
+                    "clasificacion" => $row[$columnas_ids['clasificacion']],
+                    "codigo_interno" => $row[$columnas_ids['codigo_interno']],
+                    "numero_serie" => $row[$columnas_ids['numero_serie']],
+                    "horas_uso_promedio" => $row[$columnas_ids['horas_uso_promedio']],
+                    "precio_compra" => $precio_compra,
+                    "orden_compra" => $row[$columnas_ids['orden_compra']],
+                    "vida_util" => $row[$columnas_ids['vida_util']],
+                    "valor_residual" => $row[$columnas_ids['valor_residual']],
+                    "estado" => "DISPONIBLE",
+        
+                    "tiempo_uso_meses" => $row[$columnas_ids['tiempo_uso_meses']],
+                    "centro_costos" => $row[$columnas_ids['centro_costos']],
+                    "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
+                ]);
+            }
+            $cont +=1;
+        }
+
+        flash("Los datos se han registrado correctamente", "success");
+        return back();
     }
 
 }

@@ -983,86 +983,103 @@ class Insertion extends Seeder
         if(DB::table('sub_familia_productos')->count() == 0){
             DB::table('sub_familia_productos')->insert([
                 [
+                    'id' => 1,
                     'familia_id' => 1,
                     'nombre' => 'Grua Hidraulica',
                     'acronimo' => 'GH',
                 ],
                 [
+                    'id' => 2,
                     'familia_id' => 1,
                     'nombre' => 'Grua Horquilla',
                     'acronimo' => 'GHOR',
                 ],
                 [
+                    'id' => 3,
                     'familia_id' => 1,
                     'nombre' => 'Alza Hombre',
                     'acronimo' => 'ALZH',
                 ],
                 [
+                    'id' => 4,
                     'familia_id' => 1,
                     'nombre' => 'Manipulador Telescopico',
                     'acronimo' => 'MANIT',
                 ],
                 [
+                    'id' => 5,
                     'familia_id' => 1,
                     'nombre' => 'Retroexcavadora',
                     'acronimo' => 'RETEX',
                 ],
                 [
+                    'id' => 6,
                     'familia_id' => 1,
                     'nombre' => 'Excavadora',
                     'acronimo' => 'EXCA',
                 ],
                 [
+                    'id' => 7,
                     'familia_id' => 1,
                     'nombre' => 'Rodillo Compactador',
                     'acronimo' => 'RCOMP',
                 ],
                 [
+                    'id' => 8,
                     'familia_id' => 1,
                     'nombre' => 'Motoniveladora',
                     'acronimo' => 'MNIVEL',
                 ],
                 [
+                    'id' => 9,
                     'familia_id' => 1,
                     'nombre' => 'Mini Retroexcavadora',
                     'acronimo' => 'MINRE',
                 ],
                 [
+                    'id' => 10,
                     'familia_id' => 1,
                     'nombre' => 'Minicargador',
                     'acronimo' => 'MINCA',
                 ],
                 [
+                    'id' => 11,
                     'familia_id' => 1,
                     'nombre' => 'Tractocamion',
                     'acronimo' => 'TRCAM',
                 ],
                 [
+                    'id' => 12,
                     'familia_id' => 1,
                     'nombre' => 'Semiremolque',
                     'acronimo' => 'SREM',
                 ],
                 [
+                    'id' => 13,
                     'familia_id' => 1,
                     'nombre' => 'Camion Pluma',
                     'acronimo' => 'CP',
                 ],
                 [
+                    'id' => 14,
                     'familia_id' => 1,
                     'nombre' => 'Camion Abastecedor de Combustible',
                     'acronimo' => 'CACOM',
                 ],
                 [
+                    'id' => 15,
                     'familia_id' => 1,
                     'nombre' => 'Camion Plano 3/4',
                     'acronimo' => 'CPLAN',
                 ],
                 [
+                    'id' => 16,
                     'familia_id' => 1,
                     'nombre' => 'Camion Aljibes',
                     'acronimo' => 'CALJ',
                 ],
                 [
+                    'id' => 17,
                     'familia_id' => 1,
                     'nombre' => 'Camion Tolva',
                     'acronimo' => 'CTOL',
@@ -1071,101 +1088,121 @@ class Insertion extends Seeder
                 
 
                 [
+                    'id' => 18,
                     'familia_id' => 2,
                     'nombre' => 'Generador',
                     'acronimo' => 'GEN',
                 ],
                 [
+                    'id' => 19,
                     'familia_id' => 2,
                     'nombre' => 'Termofusionadora',
                     'acronimo' => 'TERF',
                 ],
                 [
+                    'id' => 20,
                     'familia_id' => 2,
                     'nombre' => 'Equipo Topográfico',
                     'acronimo' => 'ETOP',
                 ],
                 [
+                    'id' => 21,
                     'familia_id' => 2,
                     'nombre' => 'Torre de Iluminación',
                     'acronimo' => 'TRILU',
                 ],
                 [
+                    'id' => 22,
                     'familia_id' => 2,
                     'nombre' => 'Equipo Compactador',
                     'acronimo' => 'ECOMP',
                 ],
                 [
+                    'id' => 23,
                     'familia_id' => 2,
                     'nombre' => 'Radio de Comunicacion',
                     'acronimo' => 'RACO',
                 ],
                 [
+                    'id' => 24,
                     'familia_id' => 2,
                     'nombre' => 'Moto Bomba y Bombas',
                     'acronimo' => 'MBOM',
                 ],
                 [
+                    'id' => 25,
                     'familia_id' => 2,
                     'nombre' => 'Motoniveladora',
                     'acronimo' => 'MNIV',
                 ],
                 [
+                    'id' => 26,
                     'familia_id' => 2,
                     'nombre' => 'Calefactor',
                     'acronimo' => 'CAL',
                 ],
                 [
+                    'id' => 27,
                     'familia_id' => 2,
                     'nombre' => 'Compresor',
                     'acronimo' => 'COM',
                 ],
                 [
+                    'id' => 28,
                     'familia_id' => 2,
                     'nombre' => 'Andamios',
                     'acronimo' => 'ANDA',
                 ],
                 [
+                    'id' => 29,
                     'familia_id' => 2,
                     'nombre' => 'Moldajes',
                     'acronimo' => 'MOLD',
                 ],
                 [
+                    'id' => 30,
                     'familia_id' => 2,
                     'nombre' => 'Herramientas Electricas',
                     'acronimo' => 'HEEL',
                 ],
                 [
+                    'id' => 31,
                     'familia_id' => 2,
                     'nombre' => 'Herramientas Inalambricas',
                     'acronimo' => 'HEIN',
                 ],
                 [
+                    'id' => 32,
                     'familia_id' => 2,
                     'nombre' => 'Equipos e Instrumentos de Precisión',
                     'acronimo' => 'EQPR',
                 ],
                 [
+                    'id' => 33,
                     'familia_id' => 2,
                     'nombre' => 'Yugos',
                     'acronimo' => 'YUGO',
                 ],
                 [
+                    'id' => 34,
                     'familia_id' => 2,
                     'nombre' => 'Equipos de Carga y Levante',
                     'acronimo' => 'ECV',
                 ],
                 [
+                    'id' => 35,
                     'familia_id' => 2,
                     'nombre' => 'Equipos Hidraulicos',
                     'acronimo' => 'EHID',
                 ],
                 [
+                    'id' => 36,
                     'familia_id' => 2,
                     'nombre' => 'Equipos Manuales',
                     'acronimo' => 'EMAN',
                 ],
                 [
+                    'id' => 37,
                     'familia_id' => 2,
                     'nombre' => 'Equipos Neumaticos',
                     'acronimo' => 'ENEU',
@@ -1174,25 +1211,37 @@ class Insertion extends Seeder
 
 
                 [
+                    'id' => 38,
                     'familia_id' => 3,
                     'nombre' => 'Camioneta',
                     'acronimo' => 'CAM',
                 ],
                 [
+                    'id' => 39,
                     'familia_id' => 3,
                     'nombre' => 'Furgones y Minibuses',
                     'acronimo' => 'FTP',
                 ],
                 [
+                    'id' => 40,
                     'familia_id' => 3,
                     'nombre' => 'Camion Liviano',
                     'acronimo' => 'CL',
                 ],
                 [
+                    'id' => 41,
                     'familia_id' => 3,
                     'nombre' => 'BUS',
                     'acronimo' => 'BUS',
                 ],
+                /*TODO agregar sub_familia
+                [
+                    'id' => 42,
+                    'familia_id' => 3,
+                    'nombre' => 'Módulos y Contenedores',
+                    'acronimo' => 'MOD',
+                ],
+                */
 
             ]);
         }
