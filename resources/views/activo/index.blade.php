@@ -133,13 +133,12 @@
                 <div class="e-panel card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class='table table-bordered data-table-global datatable'>
+                            {{-- <table class='table table-bordered data-table-global datatable'>
                                 <thead>
                                     <tr>
                                         <th class="border-bottom-0 ">Estado</th>
                                         <th class="border-bottom-0 ">ID</th>
                                         <th class="border-bottom-0 ">Elemento</th>
-                                        <th class="border-bottom-0 ">Clasificación</th>
                                         <th class="border-bottom-0 ">Código Interno</th>
                                         <th class="border-bottom-0 " >Número De Serie</th>
                                         <th class="border-bottom-0 ">Acciones</th>
@@ -188,7 +187,6 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-nowrap align-middle"><span>{{$activo->clasificacion}}</span></td>
                                             <td class="text-nowrap align-middle"><span>{{$activo->codigo_interno}}</span></td>
                                             <td class="text-nowrap align-middle"><span>{{$activo->numero_serie}}</span></td>
                                             <td class="align-middle text-center">
@@ -317,7 +315,29 @@
                                         </tr>
                                     @endforeach                                                            
                                 </tbody>
+                            </table> --}}
+
+                            <table class='table table-bordered data-table-global datatable'>
+                                <thead>
+                                    <tr>
+                                        <th >Estado</th>
+                                        <th >ID</th>
+                                        <th >Elemento</th>
+                                        <th >Código Interno</th>
+                                        <th >Número De Serie</th>
+                                        
+                                        <th >Acciones</th>
+                                        <th >Código QR</th>
+                                        <th >Arrendar</th>
+                                        
+                                        <th >Mantención</th>
+                                        <th >Venta</th>
+
+                                    </tr>
+                                </thead>
                             </table>
+
+
                         </div>
                     </div>
                 </div>
@@ -417,6 +437,7 @@
         <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
         <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
 
+
         <script type="text/javascript">
             $(document).ready(function () {
                 //Inicializamos DROPIFY
@@ -438,7 +459,7 @@
                     $('#cargaMasivaModal').modal('show'); // Muestra el modal
                 });
 
-                //FILTROS
+                /*FILTROS
                 var table = $('.datatable').DataTable({
                     orderCellsTop: true,
                     fixedHeader: true,
@@ -451,7 +472,52 @@
                     ]
                     
                 });
+                */
 
+                $(function () {
+                
+                    var table = $('.datatable').DataTable({
+
+                        orderCellsTop: true,
+                        fixedHeader: true,
+                        columnDefs: [
+                            {
+                                targets: [0], // El índice de la columna que quieres ocultar (cambia esto al índice de tu columna)
+                                visible: false, // Establece esta columna como no visible
+                                searchable: true // Opcional: permite buscar en esta columna
+                            }
+                        ],
+
+                        processing: true,
+                        serverSide: true,
+                        ajax: {
+                        url: "{{ route('activo.index') }}",
+                        data: function (d) {
+                                d.estado = $('#estado').val(),
+                                d.search = $('input[type="search"]').val()
+                            }
+                        },
+                        columns: [
+                            {data: 'estado', name: 'estado'},
+                            {data: 'id', name: 'id'},
+                            {data: 'elemento', name: 'elemento'},
+                            {data: 'codigo_interno', name: 'codigo_interno'},
+                            {data: 'numero_serie', name: 'numero_serie'},
+                            {data: 'acciones', name: 'acciones'},
+                            {data: 'codigo_qr', name: 'codigo_qr'},
+                            {data: 'arriendo', name: 'arriendo'},
+                            {data: 'mantencion', name: 'mantencion'},
+                            {data: 'venta', name: 'venta'},
+                        ]
+                    });
+                
+                    $('#estado').change(function(){
+                        table.draw();
+                    });
+                  
+                });
+
+                /*
                 $('#estado').on( 'keyup change', function () {
                     if ( table.column(0).search() !== this.value ) {
                         table
@@ -460,6 +526,7 @@
                             .draw();
                     }
                 });
+                */
                 
             });
 
