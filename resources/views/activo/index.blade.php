@@ -119,12 +119,8 @@
                             <span class="btn-svg-text mt-1">Crear Activo</span>
                         </a>
                         <a class="btn btn-outline-success btn-svgs btn-svg-white carga-masiva-btn" data-toggle="modal" data-target="#cargaMasivaModal">
-                            <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-                                <path d="M0 0h24v24H0V0z" fill="none"></path>
-                                <path d="M13 4H6v16h12V9h-5V4zm3 14H8v-2h8v2zm0-6v2H8v-2h8z" opacity=".3"></path>
-                                <path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"></path>
-                            </svg>                                
-                            <span class="btn-svg-text mt-1">Carga Masiva</span>
+                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 4a1 1 0 0 0-1-1h-3V2a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1H4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1ZM9 3h6v2H9Zm10 18H5V5h2v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5h2Zm-6-3a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h4a1 1 0 0 1 1 1Zm4-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Zm0-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Z"/></svg>
+                        <span class="btn-svg-text mx-2 mt-1">Carga Masiva</span>
                         </a>
                     </div>
                 </div>
@@ -335,6 +331,18 @@
 
                                     </tr>
                                 </thead>
+                                <tbody>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tbody>
                             </table>
 
 
@@ -346,68 +354,65 @@
         </div>
 
 
-        @if(count($activos))
-            <!-- Agrega este código al final de tu vista Blade para crear el modal -->
-            <div class="modal fade" id="terminarMantencionModal" tabindex="-1" aria-labelledby="terminarMantencionModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="{{ route('mantencion.finish') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <input hidden name="activo_id" id="activo_id" type="text">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="terminarMantencionModalLabel">Terminar Mantención</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- Agrega este código al final de tu vista Blade para crear el modal -->
+        <div class="modal fade" id="terminarMantencionModal" tabindex="-1" aria-labelledby="terminarMantencionModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{ route('mantencion.finish') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input hidden name="activo_id" id="activo_id" type="text">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="terminarMantencionModalLabel">Terminar Mantención</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="">
+                                <label for="documento" class="form-label">Documento</label>
+                                <input type="file" class="dropify" id="documento" name="documento">
                             </div>
-                            <div class="modal-body">
-                                <div class="">
-                                    <label for="documento" class="form-label">Documento</label>
-                                    <input type="file" class="dropify" id="documento" name="documento">
+                            <div class="checkbox-container">
+                                <div class="material-switch">
+                                    <input class="estado-checkbox" name="estado-checkbox" type="checkbox" id="estado-checkbox"/>
+                                    <label for="estado-checkbox" class="label-danger"></label>
                                 </div>
-                                <div class="checkbox-container">
-                                    <div class="material-switch">
-                                        <input class="estado-checkbox" name="estado-checkbox" type="checkbox" id="estado-checkbox"/>
-                                        <label for="estado-checkbox" class="label-danger"></label>
-                                    </div>
-                                    <h5>ACTIVO INOPERATIVO</h5>
-                                </div>
-                                
+                                <h5>ACTIVO INOPERATIVO</h5>
                             </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Terminar Mantención</button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                        </form>
-                    </div>
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Terminar Mantención</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
 
-            <!-- Agrega este código al final de tu vista Blade para crear el modal -->
-            <div class="modal fade" id="terminarVentaModal" tabindex="-1" aria-labelledby="terminarVentaModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form action="{{ route('venta.finish') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <input hidden name="activo_id_venta" id="activo_id_venta" type="text">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="terminarVentaModalLabel">Terminar Venta</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- Agrega este código al final de tu vista Blade para crear el modal -->
+        <div class="modal fade" id="terminarVentaModal" tabindex="-1" aria-labelledby="terminarVentaModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{ route('venta.finish') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input hidden name="activo_id_venta" id="activo_id_venta" type="text">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="terminarVentaModalLabel">Terminar Venta</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="documento" class="form-label">Documento</label>
+                                <input type="file" class="dropify" id="documento" name="documento">
                             </div>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="documento" class="form-label">Documento</label>
-                                    <input type="file" class="dropify" id="documento" name="documento">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Terminar Venta</button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Terminar Venta</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-        @endif
+        </div>
 
         <div class="modal fade" id="cargaMasivaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -423,7 +428,7 @@
                             @csrf
                             <div class="form-group">
                                 <label for="file">Seleccionar Archivo</label>
-                                <input type="file" class="dropify" id="file" name="file">
+                                <input type="file" class="dropify" id="documento" name="documento">
                             </div>
                             <button type="submit" class="btn btn-primary">Subir Archivo</button>
                         </form>
@@ -459,20 +464,6 @@
                     $('#cargaMasivaModal').modal('show'); // Muestra el modal
                 });
 
-                /*FILTROS
-                var table = $('.datatable').DataTable({
-                    orderCellsTop: true,
-                    fixedHeader: true,
-                    columnDefs: [
-                        {
-                            targets: [0], // El índice de la columna que quieres ocultar (cambia esto al índice de tu columna)
-                            visible: false, // Establece esta columna como no visible
-                            searchable: true // Opcional: permite buscar en esta columna
-                        }
-                    ]
-                    
-                });
-                */
 
                 $(function () {
                 
@@ -517,7 +508,7 @@
                   
                 });
 
-                /*
+                /* MÉTODO LOCAL
                 $('#estado').on( 'keyup change', function () {
                     if ( table.column(0).search() !== this.value ) {
                         table
