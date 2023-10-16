@@ -313,7 +313,7 @@
                                 </tbody>
                             </table> --}}
 
-                            <table class='table table-bordered data-table-global datatable'>
+                            <table class='table table-bordered data-table-global datatable' id="datatable_activos">
                                 <thead>
                                     <tr>
                                         <th >Estado</th>
@@ -388,32 +388,6 @@
             </div>
         </div>
 
-        <!-- Agrega este código al final de tu vista Blade para crear el modal -->
-        <div class="modal fade" id="terminarVentaModal" tabindex="-1" aria-labelledby="terminarVentaModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form action="{{ route('venta.finish') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <input hidden name="activo_id_venta" id="activo_id_venta" type="text">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="terminarVentaModalLabel">Terminar Venta</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="documento" class="form-label">Documento</label>
-                                <input type="file" class="dropify" id="documento" name="documento">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Terminar Venta</button>
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
         <div class="modal fade" id="cargaMasivaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -447,26 +421,12 @@
             $(document).ready(function () {
                 //Inicializamos DROPIFY
                 $('.dropify').dropify();
-                // Captura el evento de clic en los botones "Terminar Mantención"
-                $('.terminar-mantencion-btn').on('click', function () {
-                    var activoId = $(this).data('activo-id'); // Obtiene el valor de data-activo-id
-                    $('#activo_id').val(activoId); // Establece el valor en el campo activo_id del formulario
-                    $('#terminarMantencionModal').modal('show'); // Muestra el modal
-                });
-
-                $('.terminar-venta-btn').on('click', function () {
-                    var activoId = $(this).data('activo-id'); // Obtiene el valor de data-activo-id
-                    $('#activo_id_venta').val(activoId); // Establece el valor en el campo activo_id del formulario
-                    $('#terminarVentaModal').modal('show'); // Muestra el modal
-                });
 
                 $('.carga-masiva-btn').on('click', function () {
                     $('#cargaMasivaModal').modal('show'); // Muestra el modal
                 });
 
-
                 $(function () {
-                
                     var table = $('.datatable').DataTable({
 
                         orderCellsTop: true,
@@ -500,6 +460,14 @@
                             {data: 'mantencion', name: 'mantencion'},
                             {data: 'venta', name: 'venta'},
                         ]
+                    });
+
+                    table.on('draw.dt', function() {
+                        $('.terminar-mantencion-btn').on('click', function () {
+                            var activoId = $(this).data('activo-id'); // Obtiene el valor de data-activo-id
+                            $('#activo_id').val(activoId); // Establece el valor en el campo activo_id del formulario
+                            $('#terminarMantencionModal').modal('show'); // Muestra el modal
+                        });
                     });
                 
                     $('#estado').change(function(){

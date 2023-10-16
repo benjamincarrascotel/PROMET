@@ -50,7 +50,19 @@ class ActivoController extends Controller
             return Datatables::of($data)
 
                     ->addColumn('estado', function($row){
-                        return $row->estado;
+                        //Operativo
+                        if(! $row->inoperativo){
+                            if($row->estado == "EN MANTENCION")
+                                return '<td class="text-nowrap align-middle"><span>EN PROCESO DE MANTENCION</span></td>';
+                            elseif($row->arriendo_flag)
+                                return '<td class="text-nowrap align-middle"><span>EN PROCESO DE ARRIENDO</span></td>';
+                            elseif($row->venta_flag)
+                                return '<td class="text-nowrap align-middle"><span>EN PROCESO DE VENTA</span></td>';
+                            elseif($row->estado == "DISPONIBLE")
+                                return '<td class="text-nowrap align-middle"><span>DISPONIBLE</span></td>';
+                        }
+                        //Inoperativo
+                        return '<td class="text-nowrap align-middle"><span>INOPERATIVO</span></td>';
                     })
 
                     ->addIndexColumn()
@@ -170,7 +182,17 @@ class ActivoController extends Controller
 
                     ->filter(function ($instance) use ($request) {
                         if ($request->get('estado')) {
-                            $instance->where('estado', $request->get('estado'));
+                            if($request->get('estado') == "INOPERATIVO")
+                                $instance->where('inoperativo', true);
+                            elseif($request->get('estado') == "DISPONIBLE")
+                                $instance->where('estado', "DISPONIBLE");
+                            elseif($request->get('estado') == "EN PROCESO DE MANTENCION")
+                                $instance->where('estado', "EN MANTENCION");
+                            elseif($request->get('estado') == "EN PROCESO DE ARRIENDO")
+                                $instance->where('arriendo_flag', true);
+                            elseif($request->get('estado') == "EN PROCESO DE VENTA")
+                                $instance->where('venta_flag', true);
+                            
                         }
                         if (!empty($request->get('search'))) {
                              $instance->where(function($w) use($request){
