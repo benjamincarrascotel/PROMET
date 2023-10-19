@@ -820,42 +820,30 @@ class ActivoController extends Controller
         }
     }
 
-
-    public function venta_finish(Request $request)
+    public function show_venta($id)
     {
-        $input = $request->all();
+        $venta = Venta::where('id', $id)->first();
+        //$traspasos = Traspaso::where('arriendo_id', $id)->get();
 
-        $venta = Venta::where('activo_id', $input['activo_id_venta'])->where('estado', 'EN PROCESO')->first();
-        $venta->estado = "TERMINADA";
-        
-        // Manejo de imagen
-        $file = null;
-        if($request->hasFile('documento')){
-            $file = $request->file('documento');
-
-            $type = $file->guessExtension();
-            $nombre = 'comprobante_venta_'.$input['activo_id_venta']."_".time().'.'.$type;
-
-            $ruta = public_path("storage/activos/".$input['activo_id_venta'].'/'.$nombre);
-            copy($file,$ruta);
-
-            $venta->comprobante_termino = $nombre;
-            
-
-        }
-
-        $venta->save();
-
-        $activo = Activo::where('id', $input['activo_id_venta'])->first();
-        $activo->estado = "NO DISPONIBLE";
-        $activo->save();
-
-        $activos = Activo::get();
-
-        flash("Se ha terminado el proceso de venta correctamente.", "success");
-
-        return redirect()->back()->with('activos', $activos);
+        return view('venta.show')
+                //->with('traspasos', $traspasos)
+                ->with('venta', $venta);
     }
+
+    public function update_venta(Request $request, $id)
+    {
+        $request->request->remove('_token');
+        $input = $request->all();
+        $venta = Venta::where('id', $id)->update($request->all());
+        $venta = Venta::where('id', $id)->first();
+
+        flash("Los datos se han actualizado correctamente", "success");
+
+        return redirect()->back();
+        
+
+    }
+
 
     //TODO traspasos
     public function traspaso_create($id){
@@ -958,14 +946,86 @@ class ActivoController extends Controller
         foreach($rows as $row){
             if($cont > 0 ){
 
-                //TODO definir procedimiento dependiendo del estado del activo
-
                 if($row[$columnas_ids['precio_compra']] != "SIN REGISTRO" && $row[$columnas_ids['precio_compra']] != "SIN COBRO" && $row[$columnas_ids['precio_compra']] != "NO DETALLA")
                     $precio_compra = $row[$columnas_ids['precio_compra']];
                 else $precio_compra = 0;
 
                 if($row[$columnas_ids['año']] != "NO DETALLA") $año = $row[$columnas_ids['año']];
                 else $año = 2000;
+
+                $activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]],
+                //$activo = Activo::create(
+                [
+                    "id" => $cont,
+                    "sub_familia_id" => $row[$columnas_ids['sub_familia_id']],
+                    "marca" => $row[$columnas_ids['marca']],
+                    "modelo" => $row[$columnas_ids['modelo']],
+                    "año" => $año,
+                    "clasificacion" => $row[$columnas_ids['clasificacion']],
+                    "codigo_interno" => $row[$columnas_ids['codigo_interno']],
+                    "numero_serie" => $row[$columnas_ids['numero_serie']],
+                    "horas_uso_promedio" => $row[$columnas_ids['horas_uso_promedio']],
+                    "precio_compra" => $precio_compra,
+                    "orden_compra" => $row[$columnas_ids['orden_compra']],
+                    "vida_util" => $row[$columnas_ids['vida_util']],
+                    "valor_residual" => $row[$columnas_ids['valor_residual']],
+                    "estado" => "DISPONIBLE",
+        
+                    "tiempo_uso_meses" => $row[$columnas_ids['tiempo_uso_meses']],
+                    "centro_costos" => $row[$columnas_ids['centro_costos']],
+                    "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
+                ]);
+            }
+            $cont +=1;
+        }
+
+        flash("Los datos se han registrado correctamente", "success");
+        return back();
+    }
+
+
+    public function carga_masiva_arriendo(Request $request)
+    {
+        $input = $request->all();
+        $validator = Validator::make($input,[
+            'documento' => 'required|mimes:xlsx,xls',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $rows = Excel::toArray(new ImportExcel(), $request->file('documento'))[0];
+        $column_list = $rows[0];
+
+        $indices = [0,1,2,3,4,5,6,7];
+        $columnas_ids = array_intersect_key($column_list, array_flip($indices));
+        // nombre_columna => posicion_excel
+        $columnas_ids = array_flip($columnas_ids);
+
+        $row = $rows[2];
+        $activo = Activo::where('id', $row[$columnas_ids['activo_id']])->first();
+
+        $delimiter = ' '; // The character to split the string by
+        $codigo_sap = explode($delimiter, $row[$columnas_ids['proyecto_id']])[0];
+        //dd($codigo_sap);
+
+        $proyecto = Proyecto::where('codigo_sap', $codigo_sap)->first();
+        dd($proyecto);
+        
+        //dd($row[$columnas_ids['sub_familia_id']]);
+        $cont = 0;
+        foreach($rows as $row){
+            if($cont > 0 ){
+
+                /*
+                if($row[$columnas_ids['precio_compra']] != "SIN REGISTRO" && $row[$columnas_ids['precio_compra']] != "SIN COBRO" && $row[$columnas_ids['precio_compra']] != "NO DETALLA")
+                    $precio_compra = $row[$columnas_ids['precio_compra']];
+                else $precio_compra = 0;
+
+                if($row[$columnas_ids['año']] != "NO DETALLA") $año = $row[$columnas_ids['año']];
+                else $año = 2000;
+                */
 
                 $activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]],
                 //$activo = Activo::create(

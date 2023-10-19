@@ -10,12 +10,7 @@
         <form id="store" class="container-fluid" action="{!! route('arriendo.store') !!}" method="post" enctype="multipart/form-data">
             @csrf
             @include('arriendo.fields')
-            <div class="btn-list flex-end">
-                <input hidden id="botonSubmit" type="submit" class="btn btn-primary" form="store" value="Guardar" />
-                <!-- TODO pendiente de implementar
-                <a class="btn btn-dark mt-4" href="{{route('activo.index')}}" >Cancelar</a>
-                -->
-            </div>
+            <input hidden id="botonSubmit" type="submit" class="btn btn-primary" form="store" value="Guardar" />
         </form>
     @overwrite
 

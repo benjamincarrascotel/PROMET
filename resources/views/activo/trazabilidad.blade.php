@@ -374,8 +374,7 @@
                                                                             <input hidden type="integer" id="activo_id" name="activo_id" value="{{$venta->activo->id}}">
 
                                                                             <div class="button-container">
-                                                                                <!-- TODO crear vista de "ver" para venta -->
-                                                                                <a class="btn btn-sm btn-primary mb-1 disabled" type="button" href="{{route('arriendo.show', [$venta->id])}}">Ver</a>
+                                                                                <a class="btn btn-sm btn-primary mb-1" type="button" href="{{route('venta.show', [$venta->id])}}">Ver</a>
                                                                                 @if($venta->estado == "EN CLIENTE" && $venta->activo->estado == "ARRENDADO")
                                                                                     <button class="btn btn-sm btn-success flex-fill mb-1" type="submit"><i class="fe fe-check-square"></i> Disponibilizar para retiro </button>
                                                                                     <!--

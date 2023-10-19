@@ -76,6 +76,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/arriendo/store', 'ActivoController@ingresar_arriendo_store')->name('arriendo.store');
         Route::get('/arriendo/show/{id}', 'ActivoController@show_arriendo')->name('arriendo.show');
         Route::post('/arriendo/update/{id}', 'ActivoController@update_arriendo')->name('arriendo.update');
+        Route::post('/arriendo/carga_masiva', 'ActivoController@carga_masiva_arriendo')->name('arriendo.carga_masiva');
 
         //TRASPASOS
         Route::get('/traspaso/{id}', 'ActivoController@traspaso_create')->name('traspaso.create');
@@ -87,7 +88,10 @@ Route::group(['middleware' => ['auth']], function () {
         //VENTAS
         Route::get('/venta/create/{id}', 'ActivoController@venta_create')->name('venta.create');
         Route::post('/venta/store', 'ActivoController@venta_store')->name('venta.store');
-        Route::post('/venta/finish', 'ActivoController@venta_finish')->name('venta.finish');
+        Route::get('/venta/show/{id}', 'ActivoController@show_venta')->name('venta.show');
+        Route::post('/venta/update/{id}', 'ActivoController@update_venta')->name('venta.update');
+
+
 
 
         //PROYECTOS
