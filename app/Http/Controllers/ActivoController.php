@@ -607,8 +607,7 @@ class ActivoController extends Controller
                     if (!empty($request->get('search'))) {
                         $instance->where(function($w) use($request){
                             $search = $request->get('search');
-                            $w->orWhere('estado', 'LIKE', "%$search%")
-                            ->orWhere('marca', 'LIKE', "%$search%")
+                            $w->orWhere('activo_id', 'LIKE', "%$search%")
                             ->orWhere('id', 'LIKE', "%$search%");
                         });
                     }
