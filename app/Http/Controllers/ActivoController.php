@@ -567,14 +567,19 @@ class ActivoController extends Controller
                     $formContent = '<form method="POST" action="' . route('transporte.cambio_fase') . '">
                         <input type="hidden" name="_token" value="' . $csrfToken . '">';
                     $formContent .='<input hidden type="integer" id="activo_id" name="activo_id" value="'.$row->activo->id.'">
-                                    <div class="button-container">
-                                        <a class="btn btn-sm btn-primary mb-1" type="button" href="' . route('venta.show', [$row->id]) . '">Ver</a>
-                                        <button class="btn btn-sm btn-danger flex-fill" type="button"><i class="fe fe-trash-2"></i></button>
-                                    ';
+                                    <div class="button-container">';
+                    if(isset($row->monto))
+                        $formContent .= '<a class="btn btn-sm btn-primary mb-1" type="button" href="' . route('arriendo.show', [$row->id]) . '">Ver</a>';
+                    elseif(isset($row->precio_venta))
+                        $formContent .= '<a class="btn btn-sm btn-primary mb-1" type="button" href="' . route('venta.show', [$row->id]) . '">Ver</a>';
+                    $formContent .= '<button class="btn btn-sm btn-danger flex-fill" type="button"><i class="fe fe-trash-2"></i></button>';
 
                     if ($row->estado == "EN CLIENTE" && $row->activo->estado == "ARRENDADO") {
                         $formContent .= '<button class="btn btn-sm btn-success flex-fill mb-1" type="submit"><i class="fe fe-check-square"></i> Disponibilizar para retiro</button>';
-                        $formContent .= '<a class="btn btn-sm btn-primary flex-fill mb-1" type="button" href="' . route('traspaso.create', [$row->id]) . '"><i class="fe fe-truck"></i> Traspasar</a>';
+                        if(isset($row->monto))
+                            $formContent .= '<a class="btn btn-sm btn-primary flex-fill mb-1" type="button" href="' . route('traspaso.create', [$row->id]) . '"><i class="fe fe-truck"></i> Traspasar</a>';
+                        elseif(isset($row->precio_venta))
+                            $formContent .= '<a class="btn btn-sm btn-primary flex-fill mb-1" type="button" href="' . route('traspaso_venta.create', [$row->id]) . '"><i class="fe fe-truck"></i> Traspasar</a>';
                     } elseif ($row->estado == "BODEGA DE VUELTA" && $row->activo->estado != "EN MANTENCION") {
                         $formContent .= '<button class="btn btn-sm btn-success flex-fill mb-1" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Confirmación FINAL</button>';
                     }

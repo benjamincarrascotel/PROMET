@@ -46,9 +46,9 @@
             <div class="col">
                 <label class="form-control-label">Empresa: <span class="tx-danger">*</span></label>
                 <select id="empresa" class="form-control block mt-1 w-full" name="empresa" required>
-                    <option value={{null}}>Seleccione la empresa</option>
+                    <option selected value={{null}}>Seleccione la empresa</option>
                     @foreach ($empresas as $value)
-                        <option value="{{ $value->id }}" {{ $value->id == $selectedID ? 'selected' : '' }}>
+                        <option value="{{ $value->id }}">
                             {{ "Nombre: ".$value->nombre." - "."RUT: ".$value->rut}}
                         </option>
                     @endforeach

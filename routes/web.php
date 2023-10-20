@@ -83,7 +83,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         //TRASPASOS
         Route::get('/traspaso/{id}', 'ActivoController@traspaso_create')->name('traspaso.create');
-        Route::get('/traspaso_venta/{id}', 'ActivoController@traspaso_venta_create')->name('traspaso.create');
+        Route::get('/traspaso_venta/{id}', 'ActivoController@traspaso_venta_create')->name('traspaso_venta.create');
         Route::post('/traspaso/store', 'ActivoController@traspaso_store')->name('traspaso.store');
 
         //MANTENCIONES
