@@ -14,12 +14,13 @@
     @endif
 
     @section('card_title')
-        Traspaso de Arriendo
+        Traspaso de Proceso
         
     @overwrite
 
     @section('card_content')
-        <form id="store" class="container-fluid" action="{!! route('traspaso.store') !!}" method="post" enctype="multipart/form-data">
+            <form id="store" class="container-fluid" action="{!! route('traspaso.store') !!}" method="post" enctype="multipart/form-data">
+
             @csrf
             @include('traspaso.fields')
             <input type="submit" class="btn btn-primary mt-4" form="store" value="Guardar" />

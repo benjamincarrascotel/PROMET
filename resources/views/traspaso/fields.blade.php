@@ -1,12 +1,17 @@
-<!-- Arriendo ID -->
-<input hidden name="arriendo_id" id='arriendo_id' type="number" class="form-control" value="{{$arriendo->id}}"  required>
+@if(!$proceso->proceso_flag)
+    <!-- proceso ID -->
+    <input hidden name="arriendo_id" id='arriendo_id' type="number" class="form-control" value="{{$proceso->id}}"  required>
+@else
+    <!-- Venta ID -->
+    <input hidden name="venta_id" id='venta_id' type="number" class="form-control" value="{{$proceso->id}}"  required>
+@endif
 
 <!-- Proyecto anterior id -->
 <div class="mb-3 row">
     <label for="proyecto_anterior_id" class="col-sm-2 col-form-label">Proyecto anterior: </label>
     <div class="col-sm-10">
-        <input hidden name="proyecto_anterior_id" id='proyecto_anterior_id' type="number" class="form-control" value="{{$arriendo->proyecto_id}}"  required>
-        <input disabled name="proyecto" id='proyecto' type="text" class="form-control" value="{{ "[ ".$arriendo->proyecto->codigo_sap." ] ".$arriendo->proyecto->nombre_sap." - "."Empresa: ".$arriendo->proyecto->empresa->nombre." - "."RUT: ".$arriendo->proyecto->empresa->rut}}"  required>
+        <input hidden name="proyecto_anterior_id" id='proyecto_anterior_id' type="number" class="form-control" value="{{$proceso->proyecto_id}}"  required>
+        <input disabled name="proyecto" id='proyecto' type="text" class="form-control" value="{{ "[ ".$proceso->proyecto->codigo_sap." ] ".$proceso->proyecto->nombre_sap." - "."Empresa: ".$proceso->proyecto->empresa->nombre." - "."RUT: ".$proceso->proyecto->empresa->rut}}"  required>
     </div>
 </div>
 
@@ -32,21 +37,39 @@
     </div>
 </div>
 
-<!-- Datos nuevos -->
-<div class="row ">
-    <label for="monto" class="col-sm-2 col-form-label">Nuevo Monto Mensual: </label>
-    <div class="col">
-        <input name="monto" id='monto' type="number" min="0" oninput="validity.valid||(value='');" class="form-control"  required>
-    </div>
-    <div class="col">
-        <div class="dropdown">
-            <select class="form-control " id="tipo_moneda" name="tipo_moneda" required>
-                <option value="CLP">CLP</option>
-                <option value="UF">UF</option>
-            </select>
+@if(!$proceso->proceso_flag)
+    <!-- Datos nuevos -->
+    <div class="row ">
+        <label for="monto" class="col-sm-2 col-form-label">Nuevo Monto Mensual: </label>
+        <div class="col">
+            <input name="monto" id='monto' type="number" min="0" oninput="validity.valid||(value='');" class="form-control"  required>
+        </div>
+        <div class="col">
+            <div class="dropdown">
+                <select class="form-control " id="tipo_moneda" name="tipo_moneda" required>
+                    <option value="CLP">CLP</option>
+                    <option value="UF">UF</option>
+                </select>
+            </div>
         </div>
     </div>
-</div>
+@else
+    <!-- Datos nuevos -->
+    <div class="row ">
+        <label for="precio_venta" class="col-sm-2 col-form-label">Nuevo Precio de venta: </label>
+        <div class="col">
+            <input name="precio_venta" id='precio_venta' type="number" min="0" oninput="validity.valid||(value='');" class="form-control"  required>
+        </div>
+        <div class="col">
+            <div class="dropdown">
+                <select class="form-control " id="tipo_moneda" name="tipo_moneda" required>
+                    <option value="CLP">CLP</option>
+                    <option value="UF">UF</option>
+                </select>
+            </div>
+        </div>
+    </div>
+@endif
 
 
 <!-- Fecha traspaso -->

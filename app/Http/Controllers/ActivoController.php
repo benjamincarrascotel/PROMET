@@ -12,6 +12,7 @@ use App\Models\FamiliaProducto;
 use App\Models\SubFamiliaProducto;
 use App\Models\Proyecto;
 use App\Models\Traspaso;
+use App\Models\TraspasoVenta;
 use App\Models\Empresa;
 use App\Models\CambioFaseArriendo;
 use App\Models\CambioFaseVenta;
@@ -479,6 +480,143 @@ class ActivoController extends Controller
             ->with('arriendos', $arriendos);
     }
 
+    public function trazabilidad_datatable(Request $request)
+    {
+        if ($request->ajax()) {
+            if($request->get('tipo_proceso') == "Arriendos"){
+                $data = ArriendoActivo::select('*');
+            }elseif($request->get('tipo_proceso') == "Ventas"){
+                $data = Venta::select('*');
+            }
+            
+            return Datatables::of($data)
+
+                ->addIndexColumn()
+
+                ->addColumn('activo', function($row){
+                    return $row->activo->marca." - ".$row->activo->modelo." - ".$row->activo->año;
+                })
+
+                ->addColumn('codigo_interno', function($row){
+                    return $row->activo->codigo_interno;
+                })
+
+                ->addColumn('imagen', function($row){
+                    if($row->estado == "TERMINADO"){
+                        return
+                            '<td class="align-middle">
+                                <h6 class="mb-0 font-weight-bold">TERMINADO</h6>
+                            </td>'
+                        ;
+                    }else{
+                        if($row->estado == "BODEGA")
+                            return
+                                '<td class="align-middle image-cell">
+                                    <img src="'.asset('assets/images/arriendo/state1.svg').'" alt="State 1">
+                                </td>'
+                            ;
+                        elseif($row->estado == "EN CAMINO IDA")
+                            return
+                                '<td class="align-middle image-cell">
+                                    <img src="'.asset('assets/images/arriendo/state2.svg').'" alt="State 2">
+                                </td>'
+                            ;
+                        elseif($row->estado == "EN CLIENTE")
+                            return
+                                '<td class="align-middle image-cell">
+                                    <img src="'.asset('assets/images/arriendo/state3.svg').'" alt="State 3">
+                                </td>'
+                            ;
+                        elseif($row->estado == "EN CAMINO VUELTA")
+                            return
+                                '<td class="align-middle image-cell">
+                                    <img src="'.asset('assets/images/arriendo/state4.svg').'" alt="State 4">
+                                </td>'
+                            ;
+                        elseif($row->estado == "BODEGA DE VUELTA")
+                            return
+                                '<td class="align-middle image-cell">
+                                    <img src="'.asset('assets/images/arriendo/state5.svg').'" alt="State 5">
+                                </td>'
+                            ;
+
+                        
+                    }
+                })
+
+                ->addColumn('fecha_inicio', function($row){
+                    return 
+                        '<div class="wrapper">
+                            <p class="mt-2 text-muted ">'.Carbon::parse($row->fecha_inicio)->format('d-m-Y').'</p>
+                        </div>'
+                    ;
+                })
+
+                ->addColumn('fecha_termino', function($row){
+                    return 
+                        '<div class="wrapper">
+                            <p class="mt-2 text-muted ">'.Carbon::parse($row->fecha_termino)->format('d-m-Y').'</p>
+                        </div>'
+                    ;
+                })
+
+
+                ->addColumn('acciones', function($row){
+
+                    $csrfToken = csrf_token(); // Genera el token CSRF manualmente
+                    $formContent = '<form method="POST" action="' . route('transporte.cambio_fase') . '">
+                        <input type="hidden" name="_token" value="' . $csrfToken . '">';
+                    $formContent .='<input hidden type="integer" id="activo_id" name="activo_id" value="'.$row->activo->id.'">
+                                    <div class="button-container">
+                                        <a class="btn btn-sm btn-primary mb-1" type="button" href="' . route('venta.show', [$row->id]) . '">Ver</a>
+                                        <button class="btn btn-sm btn-danger flex-fill" type="button"><i class="fe fe-trash-2"></i></button>
+                                    ';
+
+                    if ($row->estado == "EN CLIENTE" && $row->activo->estado == "ARRENDADO") {
+                        $formContent .= '<button class="btn btn-sm btn-success flex-fill mb-1" type="submit"><i class="fe fe-check-square"></i> Disponibilizar para retiro</button>';
+                        $formContent .= '<a class="btn btn-sm btn-primary flex-fill mb-1" type="button" href="' . route('traspaso.create', [$row->id]) . '"><i class="fe fe-truck"></i> Traspasar</a>';
+                    } elseif ($row->estado == "BODEGA DE VUELTA" && $row->activo->estado != "EN MANTENCION") {
+                        $formContent .= '<button class="btn btn-sm btn-success flex-fill mb-1" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Confirmación FINAL</button>';
+                    }
+
+                    $formContent .= '</form>';
+                    $formContent .= '</div>';
+
+                    return 
+                        '<td class="align-middle">
+                            <div class="d-flex flex-column align-items-center">
+                                ' . $formContent . '
+                            </div>
+                        </td>';
+                })
+
+
+                ->filter(function ($instance) use ($request) {
+                    if ($request->get('estado')) {
+                            $instance->where('estado', $request->get('estado'));
+                    }
+                    if ($request->get('proyecto') && $request->get('proyecto') != "null") {
+                        $instance->where('proyecto_id', $request->get('proyecto'));
+                    }
+                    //TODO filtrar por empresa
+                    if (!empty($request->get('search'))) {
+                        $instance->where(function($w) use($request){
+                            $search = $request->get('search');
+                            $w->orWhere('estado', 'LIKE', "%$search%")
+                            ->orWhere('marca', 'LIKE', "%$search%")
+                            ->orWhere('id', 'LIKE', "%$search%");
+                        });
+                    }
+                })
+                ->rawColumns(['id', 'activo', 'codigo_interno', 'imagen', 'fecha_inicio', 'fecha_termino', 'acciones'])
+                ->escapeColumns([])
+                ->make(true)
+            ;
+        }
+        
+    }
+
+
     public function ingresar_arriendo_create($id)
     {
         $selectedID = $id;
@@ -533,11 +671,171 @@ class ActivoController extends Controller
 
     public function transporte()
     {
+        $empresas = Empresa::get();
+        $proyectos = Proyecto::get()->groupBy('empresa_id');
+        $selectedID = 0;
+
         $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get()->reverse();
         $ventas = Venta::whereNotIn('estado', ["TERMINADO"])->get()->reverse();
         return view('bodega.transporte')
+            ->with('empresas', $empresas)
+            ->with('proyectos', $proyectos)
+            ->with('selectedID', $selectedID)
             ->with('ventas', $ventas)
             ->with('arriendos', $arriendos);
+    }
+
+    public function transporte_datatable(Request $request)
+    {
+        if ($request->ajax()) {
+            if($request->get('tipo_proceso') == "Arriendos"){
+                $data = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->select('*');
+            }elseif($request->get('tipo_proceso') == "Ventas"){
+                $data = Venta::whereNotIn('estado', ["TERMINADO"])->select('*');
+            }
+            
+            return Datatables::of($data)
+
+                ->addColumn('detalles', function($row){
+                    $csrfToken = csrf_token();
+                    
+                    $formContent = '<div class="card text-start user-contact-list">
+                                        <div class="">
+                                            <div class="card-header border-bottom text-white p-5" style="background: linear-gradient(135deg, rgb(241, 196, 111) 60%, rgb(214, 87, 2));">';
+                                            
+                    if (!empty($row->activo->foto)) {
+                        $formContent .= '<span class="avatar brround avatar-xxl d-block" style="background-image: url(' . asset('storage/activos/'.$row->activo->id.'/'.$row->activo->foto) . ')"></span>';
+                    } else {
+                        $formContent .= '<span class="avatar brround  " style="background-image: url(' . asset('assets/images/brand/favicon1.png') . '); height: 100px; width: 100px;"></span>';
+                    }
+
+                    if($row->activo->arriendo_flag){
+                        $formContent .= '<div class=" ms-3 text-white">
+                                <p>' . $row->activo->marca . ' -- ' . $row->activo->modelo . ' -- ' . $row->activo->año . '</p>
+                                <small class="">ID ARRIENDO: ' . $row->id . '</small>
+                                <br>
+                                <small class="">ID ACTIVO: ' . $row->activo->id . '</small>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="wrapper">
+                                <p class="fs-14 font-weight-bold">ESTADO ARRIENDO :</p>';
+                    }elseif($row->activo->venta_flag){
+                        $formContent .= '<div class=" ms-3 text-white">
+                                    <p class="mb-0 mt-1 fs-18 font-weight-semibold">' . $row->activo->marca . ' -- ' . $row->activo->modelo . ' -- ' . $row->activo->año . '</p>
+                                    <small class="">ID VENTA: ' . $row->id . '</small>
+                                    <br>
+                                    <small class="">ID ACTIVO: ' . $row->activo->id . '</small>
+                                </div>
+                            </div>
+                            <div class="p-5">
+                                <div class="wrapper">
+                                    <p class="fs-14 font-weight-bold">ESTADO VENTA :</p>';
+                    }
+
+                    // Estado del arriendo
+                    $estado = "";
+                    if ($row->estado == "BODEGA") {
+                        $estado = "BODEGA";
+                    } elseif ($row->estado == "EN CAMINO IDA") {
+                        $estado = "EN CAMINO IDA";
+                    } elseif ($row->estado == "EN CLIENTE") {
+                        if($row->activo->estado == "ARRENDADO")
+                        {
+                            $estado = "EN CLIENTE";
+                        }elseif($row->activo->estado == "PARA RETIRO"){
+                            $estado = "EN CLIENTE (PARA RETIRO)";
+                        }
+                    }elseif ($row->activo->estado == "PARA RETIRO") {
+                        $estado .= "PARA RETIRO";
+                    } elseif ($row->estado == "EN CAMINO VUELTA") {
+                        $estado = "EN CAMINO VUELTA";
+                    } elseif ($row->estado == "BODEGA DE VUELTA") {
+                        $estado = "BODEGA DE VUELTA";
+                    }
+
+                    $formContent .= '<p class="mt-2 text-info ">' . $estado . '</p>
+                            </div>
+                            <div class="wrapper">
+                                <p class="fs-14 font-weight-bold">Código Interno (Activo) :</p>
+                                <p class="mt-2 text-muted ">' . $row->activo->codigo_interno . '</p>
+                            </div>
+                            <div class="wrapper">
+                                <p class="fs-14 font-weight-bold">Fecha Inicio :</p>
+                                <p class="mt-2 text-muted ">' . Carbon::parse($row->fecha_inicio)->format('d-m-Y') . '</p>
+                            </div>
+                            <div class="wrapper">
+                                <p class="fs-14 font-weight-bold">Fecha Término :</p>
+                                <p class="mt-2 text-muted ">' . Carbon::parse($row->fecha_termino)->format('d-m-Y') . '</p>
+                            </div>
+                            <div class="text-white text-center">';
+
+                    if ($row->estado == "BODEGA" || $row->estado == "EN CAMINO VUELTA") {
+                        $formContent .= '<form method="GET" action="' . route('transporte.qr_reader', [$row->activo->id]) . '">
+                            <td class="align-middle">';
+
+                        $formContent .= '<button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>';
+                        $formContent .= '<input type="hidden" name="_token" value="' . $csrfToken . '">';
+
+                        $formContent .= '</td>
+                            </form>';
+                    } elseif ($row->estado == "EN CAMINO IDA" || $row->estado == "EN CLIENTE") {
+                        $formContent .= '<form method="POST" action="' . route('transporte.cambio_fase') . '" enctype="multipart/form-data">
+                            <input type="hidden" name="_token" value="' . $csrfToken . '">
+                            
+                            <input hidden type="integer" id="activo_id" name="activo_id" value="' . $row->activo->id . '">
+                            <td class="align-middle">';
+
+                        if ($row->estado == "EN CAMINO IDA") {
+                            $formContent .= '<button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>';
+                        } elseif ($row->estado == "EN CLIENTE" && $row->activo->estado == "ARRENDADO") {
+                            $formContent .= '<button class="btn btn-xl btn-danger me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Disponibilizar para retiro</button>';
+                        } elseif ($row->estado == "EN CLIENTE" && $row->activo->estado == "PARA RETIRO") {
+                            $formContent .= '<button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>';
+                        }
+
+                        $formContent .= '</td>
+                            </form>';
+                    } else {
+                        $formContent .= '<button disabled class="btn btn-xl btn-warning me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">(ESPERANDO CONFIRMACIÓN)</button>';
+                    }
+
+                    $formContent .= '</div>
+                    </div>
+                    </div>';
+
+                    $columnContent = '<td class="align-middle">
+                        <div class="d-flex flex-column align-items-center">
+                            ' . $formContent . '
+                        </div>
+                    </td>';
+
+                    return $columnContent;
+                })
+
+
+                ->filter(function ($instance) use ($request) {
+                    if ($request->get('estado')) {
+                            $instance->where('estado', $request->get('estado'));
+                    }
+                    if ($request->get('proyecto') && $request->get('proyecto') != "null") {
+                        $instance->where('proyecto_id', $request->get('proyecto'));
+                    }
+                    //TODO filtrar por empresa
+                    if (!empty($request->get('search'))) {
+                        $instance->where(function($w) use($request){
+                            $search = $request->get('search');
+                            $w->orWhere('activo_id', 'LIKE', "%$search%")
+                            ->orWhere('id', 'LIKE', "%$search%");
+                        });
+                    }
+                })
+                ->rawColumns(['detalles'])
+                ->escapeColumns([])
+                ->make(true)
+            ;
+        }
+        
     }
 
 
@@ -823,10 +1121,10 @@ class ActivoController extends Controller
     public function show_venta($id)
     {
         $venta = Venta::where('id', $id)->first();
-        //$traspasos = Traspaso::where('arriendo_id', $id)->get();
+        $traspasos = TraspasoVenta::where('venta_id', $id)->get();
 
         return view('venta.show')
-                //->with('traspasos', $traspasos)
+                ->with('traspasos', $traspasos)
                 ->with('venta', $venta);
     }
 
@@ -854,15 +1152,37 @@ class ActivoController extends Controller
         $selectedID = 0;
 
         if($arriendo->estado == "EN CLIENTE"){
+            $proceso = $arriendo;
+            $proceso['proceso_flag'] = 0;
             return view('traspaso.create')
                 ->with('empresas', $empresas)
                 ->with('selectedID', $selectedID)
                 ->with('proyectos', $proyectos)
-                ->with('arriendo',  $arriendo);
+                ->with('proceso',  $proceso);
         }else{
-            $arriendos = ArriendoActivo::get();
             flash("No es posible traspasar este arriendo.", "danger");
-            return redirect()->back()->with('arriendos', $arriendos);
+            return redirect()->back();
+        }
+    }
+
+    public function traspaso_venta_create($id){
+
+        $venta = Venta::where('id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
+        $proyectos = Proyecto::whereNotIn('id', [$venta->proyecto_id])->where('estado', 'ACTIVO')->get()->groupBy('empresa_id');
+        $empresas = Empresa::get();
+        $selectedID = 0;
+
+        if($venta->estado == "EN CLIENTE"){
+            $proceso = $venta;
+            $proceso['proceso_flag'] = 1;
+            return view('traspaso.create')
+                ->with('empresas', $empresas)
+                ->with('selectedID', $selectedID)
+                ->with('proyectos', $proyectos)
+                ->with('proceso',  $proceso);
+        }else{
+            flash("No es posible traspasar este arriendo.", "danger");
+            return redirect()->back();
         }
     }
 
@@ -872,53 +1192,57 @@ class ActivoController extends Controller
             'proyecto_actual_id' => 'required|integer',
         ]);
         $input = $request->all();
-        
 
-        $arriendo = ArriendoActivo::where('id', $input['arriendo_id'])->first();
+        if(isset($input['arriendo_id'])){
+            $arriendo = ArriendoActivo::where('id', $input['arriendo_id'])->first();
+            $traspaso = Traspaso::create([
+                "arriendo_id" => $input['arriendo_id'],
+                "fecha_traspaso" => $input['fecha_traspaso'],
+                "monto_anterior" => $arriendo->monto,
+                "tipo_moneda_anterior" => $arriendo->tipo_moneda,
+                "proyecto_anterior_id" => $input['proyecto_anterior_id'],
+                "proyecto_actual_id" => $input['proyecto_actual_id'],
+            ]);
+    
+            // Actualizamos el arriendo
+            $arriendo->proyecto_id = $input['proyecto_actual_id'];
+            $arriendo->monto = $input['monto'];
+            $arriendo->tipo_moneda = $input['tipo_moneda'];
+            $arriendo->save();
+    
+            flash("El traspaso del arriendo se ha sido realizado correctamente", 'success');
 
-        // Manejo de imagen
-        /*
-        $file = null;
-        if($request->hasFile('cotizacion_venta')){
-            $file = $request->file('cotizacion_venta');
-        }
-        */
-
-        //dd($request->all());
-        $traspaso = Traspaso::create([
-            "arriendo_id" => $input['arriendo_id'],
-            "fecha_traspaso" => $input['fecha_traspaso'],
-            "monto_anterior" => $arriendo->monto,
-            "tipo_moneda_anterior" => $arriendo->tipo_moneda,
-            "proyecto_anterior_id" => $input['proyecto_anterior_id'],
-            "proyecto_actual_id" => $input['proyecto_actual_id'],
-        ]);
-
-        // Actualizamos el arriendo
-        $arriendo->proyecto_id = $input['proyecto_actual_id'];
-        $arriendo->monto = $input['monto'];
-        $arriendo->tipo_moneda = $input['tipo_moneda'];
-        $arriendo->save();
-
-        // Guardamos la imagen
-        /*
-        if($request->hasFile('cotizacion_venta'))
-        {
-            $type = $file->guessExtension();
-            $nombre = 'cotizacion_venta_'.$input['activo_id']."_".time().'.'.$type;
-
-            $ruta = public_path("storage/activos/".$input['activo_id'].'/'.$nombre);
-            copy($file,$ruta);
-
-            $venta->cotizacion_venta = $nombre;
+        }elseif(isset($input['venta_id'])){
+            $venta = Venta::where('id', $input['venta_id'])->first();
+            //dd($venta);
+            $traspaso = TraspasoVenta::create([
+                "venta_id" => $input['venta_id'],
+                "fecha_traspaso" => $input['fecha_traspaso'],
+                "precio_venta_anterior" => $venta->precio_venta,
+                "tipo_moneda_anterior" => $venta->tipo_moneda,
+                "proyecto_anterior_id" => $input['proyecto_anterior_id'],
+                "proyecto_actual_id" => $input['proyecto_actual_id'],
+            ]);
+    
+            // Actualizamos el arriendo
+            $venta->proyecto_id = $input['proyecto_actual_id'];
+            $venta->precio_venta = $input['precio_venta'];
+            $venta->tipo_moneda = $input['tipo_moneda'];
             $venta->save();
-        }
-        */
+    
+            flash("El traspaso de la venta se ha sido realizado correctamente", 'success');
 
-        flash("El traspaso del arriendo se ha sido realizado correctamente", 'success');
+        }else{
+            flash("Error: No hay concordancia en nuestros registros.", 'danger');
+            return back();
+        }
+
+
         $arriendos = ArriendoActivo::get();
+        $ventas = Venta::get();
 
         return redirect()->route('activo.trazabilidad')
+            ->with('ventas', $ventas)
             ->with('arriendos', $arriendos);
     }
 

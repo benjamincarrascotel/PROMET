@@ -34,19 +34,6 @@
                 <button class="btn btn-outline-primary"><i class="fe fe-download"></i>
                     Exportar Información
                 </button>
-                <!--
-                <a href="javascript:void(0);"  class="btn btn-primary btn-pill" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-calendar me-2 fs-14"></i> Search By Date</a>
-                <div class="dropdown-menu border-0">
-                        <a class="dropdown-item" href="javascript:void(0);">Today</a>
-                        <a class="dropdown-item" href="javascript:void(0);">Yesterday</a>
-                        <a class="dropdown-item active bg-primary text-white" href="javascript:void(0);">Last 7 days</a>
-                        <a class="dropdown-item" href="javascript:void(0);">Last 30 days</a>
-                        <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-                        <a class="dropdown-item" href="javascript:void(0);">Last 6 months</a>
-                        <a class="dropdown-item" href="javascript:void(0);">Last year</a>
-                </div>
-                -->
             </div>
         </div>
     </div>
@@ -67,49 +54,9 @@
                     <div class="pro-user">
                         <h3 class="pro-user-username  mb-1 fs-22">{{$arriendo->activo->marca." - ".$arriendo->activo->modelo}}</h3>
                         <h6 class="pro-user-desc text-muted">Estado: <b>{{$arriendo->estado}}</b></h6>
-                        <!--
-                        <div class="text-center mb-4">
-                            <span><i class="fa fa-star text-warning"></i></span>
-                            <span><i class="fa fa-star text-warning"></i></span>
-                            <span><i class="fa fa-star text-warning"></i></span>
-                            <span><i class="fa fa-star-half-o text-warning"></i></span>
-                            <span><i class="fa fa-star-o text-warning"></i></span>
-                        </div>
-                        <a href="javascript:void(0);" class="btn btn-primary mt-3">View Profile</a>
-                        -->
                     </div>
                 </div>
             </div>
-            <!--
-                <div class="card">
-                    <div class="card-header ">
-                        <div class="card-title">Edit Password</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="text-center mb-5">
-                            <div class="widget-user-image mx-auto mt-5 rounded-circle-container">
-                                <img alt="User Avatar" class="rounded-circle img-rounded" src="{{asset('assets/images/users/2.jpg')}}">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Change Password</label>
-                            <input type="password" class="form-control" value="password">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">New Password</label>
-                            <input type="password" class="form-control" value="password">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" value="password">
-                        </div>
-                    </div>
-                    <div class="card-footer text-end">
-                        <a href="javascript:void(0);" class="btn btn-success">Updated</a>
-                        <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
-                    </div>
-                </div>
-            -->
         </div>
         <div class="col-xl-9 col-lg-8">
             <div class="card">

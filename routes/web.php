@@ -69,6 +69,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/activo/show/{id}', 'ActivoController@show')->name('activo.show');
         Route::post('/activo/update/{id}', 'ActivoController@update')->name('activo.update');
         Route::get('/activo/trazabilidad', 'ActivoController@trazabilidad')->name('activo.trazabilidad');
+
+        Route::get('/trazabilidad/datatable', 'ActivoController@trazabilidad_datatable')->name('trazabilidad.datatable');
+
         Route::post('/activo/carga_masiva', 'ActivoController@carga_masiva')->name('activo.carga_masiva');
 
         //ARRIENDOS
@@ -80,6 +83,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         //TRASPASOS
         Route::get('/traspaso/{id}', 'ActivoController@traspaso_create')->name('traspaso.create');
+        Route::get('/traspaso_venta/{id}', 'ActivoController@traspaso_venta_create')->name('traspaso.create');
         Route::post('/traspaso/store', 'ActivoController@traspaso_store')->name('traspaso.store');
 
         //MANTENCIONES
@@ -118,6 +122,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/transporte', 'ActivoController@transporte')->name('arriendo.transporte');
         Route::post('/transporte/cambio_fase', 'ActivoController@cambio_fase')->name('transporte.cambio_fase');
         Route::get('/transporte/qr_reader/{id}', 'ActivoController@qr_reader')->name('transporte.qr_reader');
+        
+        Route::get('/transporte/datatable', 'ActivoController@transporte_datatable')->name('transporte.datatable');
 
         //INVENTARIO
         Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('transporte.cambio_fase_create');
