@@ -2458,9 +2458,43 @@ class Insertion extends Seeder
 
                     'estado' => 'ACTIVO',
                 ],
+
+                [
+                    'nombre' => 'Nombre',
+                    'empresa_id' => 2,
+
+                    'centro_costo' => 'centro_costos',
+
+                    'objeto_imputacion' => 'PEP',
+                    'area' => 'Operaciones Montajes',
+                    'sociedad_sap' => 'PMO',
+                    'codigo_sap' => 'V/PMO-MON-22-006-01',
+                    'nombre_sap' => 'Proyecto Rajo Inca',
+
+                    'estado' => 'ACTIVO',
+                ],
                 
             ]);
         }
+
+        //TODO por borrar
+        DB::table('proyectos')->insert([
+            [
+            'nombre' => 'Nombre',
+            'empresa_id' => 2,
+
+            'centro_costo' => 'centro_costos',
+
+            'objeto_imputacion' => 'PEP',
+            'area' => 'Operaciones Montajes',
+            'sociedad_sap' => 'PMO',
+            'codigo_sap' => 'V/PMO-MON-22-006-01',
+            'nombre_sap' => 'Proyecto Rajo Inca',
+
+            'estado' => 'ACTIVO',
+            ],
+        
+        ]);
 
 
     }

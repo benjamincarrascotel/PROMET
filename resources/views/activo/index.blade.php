@@ -119,7 +119,6 @@
                             <span class="btn-svg-text mt-1">Crear Activo</span>
                         </a>
 
-                        <!--
                         <a class="btn btn-outline-success btn-svgs btn-svg-white carga-masiva-btn" data-toggle="modal" data-target="#cargaMasivaModal">
                             <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 4a1 1 0 0 0-1-1h-3V2a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1H4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1ZM9 3h6v2H9Zm10 18H5V5h2v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5h2Zm-6-3a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h4a1 1 0 0 1 1 1Zm4-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Zm0-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Z"/></svg>
                             <span class="btn-svg-text mx-2 mt-1">Carga Masiva Activos</span>
@@ -129,7 +128,11 @@
                             <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 4a1 1 0 0 0-1-1h-3V2a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1H4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1ZM9 3h6v2H9Zm10 18H5V5h2v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5h2Zm-6-3a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h4a1 1 0 0 1 1 1Zm4-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Zm0-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Z"/></svg>
                             <span class="btn-svg-text mx-2 mt-1">Carga Masiva Arriendos</span>
                         </a>
-                        -->
+
+                        <a class="btn btn-outline-info btn-svgs btn-svg-white carga-masiva-venta-btn" data-toggle="modal" data-target="#cargaMasivaVentaModal">
+                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 4a1 1 0 0 0-1-1h-3V2a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1H4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1ZM9 3h6v2H9Zm10 18H5V5h2v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5h2Zm-6-3a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h4a1 1 0 0 1 1 1Zm4-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Zm0-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Z"/></svg>
+                            <span class="btn-svg-text mx-2 mt-1">Carga Masiva Ventas</span>
+                        </a>
 
 
                     </div>
@@ -183,7 +186,7 @@
                         <div class="modal-body">
                             <div class="">
                                 <label for="documento" class="form-label">Documento</label>
-                                <input type="file" class="dropify" id="documento" name="documento">
+                                <input type="file" class="dropify" id="documento" name="documento" required>
                             </div>
                             <div class="checkbox-container">
                                 <div class="material-switch">
@@ -217,7 +220,7 @@
                             @csrf
                             <div class="form-group">
                                 <label for="file">Seleccionar Archivo</label>
-                                <input type="file" class="dropify" id="documento" name="documento">
+                                <input type="file" class="dropify" id="documento" name="documento" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Subir Archivo</button>
                         </form>
@@ -240,7 +243,30 @@
                             @csrf
                             <div class="form-group">
                                 <label for="file">Seleccionar Archivo</label>
-                                <input type="file" class="dropify" id="documento" name="documento">
+                                <input type="file" class="dropify" id="documento" name="documento" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Subir Archivo</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="cargaMasivaVentaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Carga Masiva Ventas</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('venta.carga_masiva') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                <label for="file">Seleccionar Archivo</label>
+                                <input type="file" class="dropify" id="documento" name="documento" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Subir Archivo</button>
                         </form>
@@ -268,18 +294,22 @@
                     $('#cargaMasivaArriendoModal').modal('show'); // Muestra el modal
                 });
 
+                $('.carga-masiva-venta-btn').on('click', function () {
+                    $('#cargaMasivaVentaModal').modal('show'); // Muestra el modal
+                });
+
                 $(function () {
                     var table = $('.datatable').DataTable({
 
                         orderCellsTop: true,
                         fixedHeader: true,
-                        columnDefs: [
+                        /* columnDefs: [
                             {
                                 targets: [0], // El índice de la columna que quieres ocultar (cambia esto al índice de tu columna)
                                 visible: false, // Establece esta columna como no visible
                                 searchable: true // Opcional: permite buscar en esta columna
                             }
-                        ],
+                        ], */
 
                         processing: true,
                         serverSide: true,

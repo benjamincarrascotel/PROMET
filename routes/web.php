@@ -94,6 +94,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/venta/store', 'ActivoController@venta_store')->name('venta.store');
         Route::get('/venta/show/{id}', 'ActivoController@show_venta')->name('venta.show');
         Route::post('/venta/update/{id}', 'ActivoController@update_venta')->name('venta.update');
+        Route::post('/venta/carga_masiva', 'ActivoController@carga_masiva_venta')->name('venta.carga_masiva');
 
 
 

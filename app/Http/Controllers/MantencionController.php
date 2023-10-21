@@ -50,13 +50,14 @@ class MantencionController extends Controller
             $file = $request->file('cotizacion_mantencion');
         }
 
-        //dd($request->all());
+        $fecha_termino = null;
+        if(isset($input['fecha_termino'])) $fecha_termino = $input['fecha_termino'];
         $mantencion = Mantencion::create([
             "activo_id" => $input['activo_id'],
             "costo_mantencion" => $input['costo_mantencion'],
             "tipo_moneda" => $input['tipo_moneda'],
             "fecha_inicio" => $input['fecha_inicio'],
-            "fecha_termino" => $input['fecha_termino'],
+            "fecha_termino" => $fecha_termino,
             "rut_proveedor" => $input['rut_proveedor'],
             "nombre_proveedor" => $input['nombre_proveedor'],
             "contacto_proveedor" => $input['contacto_proveedor'],

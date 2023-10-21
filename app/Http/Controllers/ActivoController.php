@@ -54,22 +54,22 @@ class ActivoController extends Controller
                         //Operativo
                         if(! $row->inoperativo){
                             if($row->estado == "EN MANTENCION")
-                                return '<td class="text-nowrap align-middle"><span>EN PROCESO DE MANTENCION</span></td>';
+                                return '<td class="text-nowrap align-middle">EN PROCESO DE MANTENCION</td>';
                             elseif($row->arriendo_flag)
-                                return '<td class="text-nowrap align-middle"><span>EN PROCESO DE ARRIENDO</span></td>';
+                                return '<td class="text-nowrap align-middle">EN PROCESO DE ARRIENDO</td>';
                             elseif($row->venta_flag)
-                                return '<td class="text-nowrap align-middle"><span>EN PROCESO DE VENTA</span></td>';
+                                return '<td class="text-nowrap align-middle">EN PROCESO DE VENTA</td>';
                             elseif($row->estado == "DISPONIBLE")
-                                return '<td class="text-nowrap align-middle"><span>DISPONIBLE</span></td>';
+                                return '<td class="text-nowrap align-middle">DISPONIBLE</td>';
                         }
                         //Inoperativo
-                        return '<td class="text-nowrap align-middle"><span>INOPERATIVO</span></td>';
+                        return '<td class="text-nowrap align-middle">INOPERATIVO</td>';
                     })
 
                     ->addIndexColumn()
 
                     ->addColumn('elemento', function($row){
-                        return $row->marca." - ".$row->modelo." - ".$row->año;
+                        return $row->marca." - ".$row->modelo;
                     })
 
                     ->addColumn('codigo_interno', function($row){
@@ -91,7 +91,7 @@ class ActivoController extends Controller
                     })
 
                     ->addColumn('codigo_qr', function($row){
-                        $url = $_ENV['APP_URL']."/storage/activos/".$row->id.'/QR_CODE.svg';
+                        $url = $_ENV['APP_URL']."/storage/activos/".$row->id.'/QR_CODE_'.$row->id.'.svg';
                         return  
                             '<td class="align-middle text-center">
                                 <a data-toggle="tooltip" data-placement="top" title="DESCARGAR" download href="'.$url.'") }}">
@@ -200,6 +200,10 @@ class ActivoController extends Controller
                                 $search = $request->get('search');
                                 $w->orWhere('estado', 'LIKE', "%$search%")
                                 ->orWhere('marca', 'LIKE', "%$search%")
+                                ->orWhere('modelo', 'LIKE', "%$search%")
+                                ->orWhere('clasificacion', 'LIKE', "%$search%")
+                                ->orWhere('codigo_interno', 'LIKE', "%$search%")
+                                ->orWhere('numero_serie', 'LIKE', "%$search%")
                                 ->orWhere('id', 'LIKE', "%$search%");
                             });
                         }
@@ -272,8 +276,8 @@ class ActivoController extends Controller
         File::makeDirectory(public_path('storage/mantenciones/'.$activo->id));
 
         //Generamos QR
-        QrCode::generate($_ENV['APP_URL'].'/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE.svg'));
-        $activo->codigo_qr = 'QR_CODE.svg';
+        QrCode::generate($_ENV['APP_URL'].'/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE_'.$activo->id.'.svg'));
+        $activo->codigo_qr = 'QR_CODE_'.$activo->id.'.svg';
 
         // Guardamos la imagen
         if($request->hasFile('foto'))
@@ -494,7 +498,7 @@ class ActivoController extends Controller
                 ->addIndexColumn()
 
                 ->addColumn('activo', function($row){
-                    return $row->activo->marca." - ".$row->activo->modelo." - ".$row->activo->año;
+                    return $row->activo->marca." - ".$row->activo->modelo;
                 })
 
                 ->addColumn('codigo_interno', function($row){
@@ -553,9 +557,15 @@ class ActivoController extends Controller
                 })
 
                 ->addColumn('fecha_termino', function($row){
+                    if($row->fecha_termino != null){
+                        $fecha_termino = Carbon::parse($row->fecha_termino)->format('d-m-Y');
+                    }else{
+                        $fecha_termino = null;
+                    }
+
                     return 
                         '<div class="wrapper">
-                            <p class="mt-2 text-muted ">'.Carbon::parse($row->fecha_termino)->format('d-m-Y').'</p>
+                            <p class="mt-2 text-muted ">'.$fecha_termino.'</p>
                         </div>'
                     ;
                 })
@@ -641,14 +651,15 @@ class ActivoController extends Controller
         $activo = Activo::where('id', $input['activo_id'])->first();
         if($activo->estado == "DISPONIBLE" && !$activo->venta_flag && !$activo->arriendo_flag){           
 
-            //dd($request->all());
+            $fecha_termino = null;
+            if(isset($input['fecha_termino'])) $fecha_termino = $input['fecha_termino'];
             $arriendo = ArriendoActivo::create([
                 "activo_id" => $input['activo_id'],
                 "proyecto_id" => $input['proyecto_id'],
                 "monto" => $input['monto'],
                 "tipo_moneda" => $input['tipo_moneda'],
                 "fecha_inicio" => $input['fecha_inicio'],
-                "fecha_termino" => $input['fecha_termino'],
+                "fecha_termino" => $fecha_termino,
                 "encargado" => $input['encargado'],
                 "estado" => 'BODEGA',
             ]);
@@ -715,7 +726,7 @@ class ActivoController extends Controller
 
                     if($row->activo->arriendo_flag){
                         $formContent .= '<div class=" ms-3 text-white">
-                                <p>' . $row->activo->marca . ' -- ' . $row->activo->modelo . ' -- ' . $row->activo->año . '</p>
+                                <p class="mb-0 mt-1 fs-18 font-weight-semibold">' . $row->activo->marca . ' -- ' . $row->activo->modelo . ' -- ' . $row->activo->año . '</p>
                                 <small class="">ID ARRIENDO: ' . $row->id . '</small>
                                 <br>
                                 <small class="">ID ACTIVO: ' . $row->activo->id . '</small>
@@ -758,6 +769,12 @@ class ActivoController extends Controller
                         $estado = "BODEGA DE VUELTA";
                     }
 
+                    if($row->fecha_termino != null){
+                        $fecha_termino = Carbon::parse($row->fecha_termino)->format('d-m-Y');
+                    }else{
+                        $fecha_termino = null;
+                    }
+
                     $formContent .= '<p class="mt-2 text-info ">' . $estado . '</p>
                             </div>
                             <div class="wrapper">
@@ -770,7 +787,7 @@ class ActivoController extends Controller
                             </div>
                             <div class="wrapper">
                                 <p class="fs-14 font-weight-bold">Fecha Término :</p>
-                                <p class="mt-2 text-muted ">' . Carbon::parse($row->fecha_termino)->format('d-m-Y') . '</p>
+                                <p class="mt-2 text-muted ">' . $fecha_termino . '</p>
                             </div>
                             <div class="text-white text-center">';
 
@@ -1081,13 +1098,14 @@ class ActivoController extends Controller
             }
             */
 
-            //dd($request->all());
+            $fecha_termino = null;
+            if(isset($input['fecha_termino'])) $fecha_termino = $input['fecha_termino'];
             $venta = Venta::create([
                 "activo_id" => $input['activo_id'],
                 "precio_venta" => $input['precio_venta'],
                 "tipo_moneda" => $input['tipo_moneda'],
                 "fecha_inicio" => $input['fecha_inicio'],
-                "fecha_termino" => $input['fecha_termino'],
+                "fecha_termino" => $fecha_termino,
                 "proyecto_id" => $input['proyecto_id'],
                 "encargado" => $input['encargado'],
                 
@@ -1252,6 +1270,11 @@ class ActivoController extends Controller
 
     public function carga_masiva(Request $request)
     {
+        ini_set('max_execution_time', 300);
+
+        Activo::truncate(); //TODO por borrar
+
+
         $input = $request->all();
         $validator = Validator::make($input,[
             'documento' => 'required|mimes:xlsx,xls',
@@ -1281,8 +1304,8 @@ class ActivoController extends Controller
                 if($row[$columnas_ids['año']] != "NO DETALLA") $año = $row[$columnas_ids['año']];
                 else $año = 2000;
 
-                $activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]],
-                //$activo = Activo::create(
+                //$activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]], //TODO por borrar al pasar a prod
+                $activo = Activo::create(
                 [
                     "id" => $cont,
                     "sub_familia_id" => $row[$columnas_ids['sub_familia_id']],
@@ -1303,6 +1326,22 @@ class ActivoController extends Controller
                     "centro_costos" => $row[$columnas_ids['centro_costos']],
                     "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
                 ]);
+
+                if(!File::exists('storage/activos/'.$activo->id)) {
+                    //Creamos la ruta pública del activo
+                    File::makeDirectory(public_path('storage/activos/'.$activo->id));
+                    //Generamos QR
+                    QrCode::generate($_ENV['APP_URL'].'/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE_'.$activo->id.'.svg'));
+                    $activo->codigo_qr = 'QR_CODE_'.$activo->id.'.svg';
+                }
+
+                if(!File::exists('storage/mantenciones/'.$activo->id)) {
+                    //Creamos la ruta pública para mantenciones
+                    File::makeDirectory(public_path('storage/mantenciones/'.$activo->id));
+                }
+
+                $activo->save();
+
             }
             $cont +=1;
         }
@@ -1314,6 +1353,72 @@ class ActivoController extends Controller
 
     public function carga_masiva_arriendo(Request $request)
     {
+        ArriendoActivo::truncate(); //TODO por borrar
+
+        $input = $request->all();
+        $validator = Validator::make($input,[
+            'documento' => 'required|mimes:xlsx,xls',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $rows = Excel::toArray(new ImportExcel(), $request->file('documento'))[0];
+        
+        $column_list = $rows[0];
+
+        $indices = [0,1,2,3,4,5,6,7];
+        $columnas_ids = array_intersect_key($column_list, array_flip($indices));
+        // nombre_columna => posicion_excel
+        $columnas_ids = array_flip($columnas_ids);
+        
+        //dd($row[$columnas_ids['sub_familia_id']]);
+        $cont = 0;
+        foreach($rows as $row){
+            if($cont > 0 ){
+
+                $proyecto = Proyecto::where('codigo_sap', $row[$columnas_ids['codigo_sap']])->first();
+
+                $arriendo = ArriendoActivo::create(
+                [
+                    "id" => $cont, //TODO por borrar al pasar a prod
+                    "activo_id" => $row[$columnas_ids['activo_id']],
+                    "proyecto_id" => $proyecto->id,
+                    "monto" => $row[$columnas_ids['monto']],
+                    "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
+                    "fecha_inicio" => new Carbon('2023-10-1'),
+                    "fecha_termino" => null,
+                    "encargado" => $row[$columnas_ids['encargado']],
+                    "estado" => "EN CLIENTE",
+                ]);
+
+                $activo = Activo::where('id', $row[$columnas_ids['activo_id']])->first();
+                $activo->estado = "ARRENDADO";
+                $activo->arriendo_flag = true;
+                $activo->venta_flag = false;
+                $activo->inoperativo = false;
+                $activo->save();
+
+                if(!File::exists('storage/arriendos/'.$arriendo->id)) {
+                    //Creamos la ruta pública primero
+                    File::makeDirectory(public_path('storage/arriendos/'.$arriendo->id));
+                }
+
+
+            }
+            $cont +=1;
+        }
+
+        flash("Los datos se han registrado correctamente", "success");
+        return back();
+    }
+
+
+    public function carga_masiva_venta(Request $request)
+    {
+        Venta::truncate(); //TODO por borrar
+
         $input = $request->all();
         $validator = Validator::make($input,[
             'documento' => 'required|mimes:xlsx,xls',
@@ -1330,53 +1435,40 @@ class ActivoController extends Controller
         $columnas_ids = array_intersect_key($column_list, array_flip($indices));
         // nombre_columna => posicion_excel
         $columnas_ids = array_flip($columnas_ids);
-
-        $row = $rows[2];
-        $activo = Activo::where('id', $row[$columnas_ids['activo_id']])->first();
-
-        $delimiter = ' '; // The character to split the string by
-        $codigo_sap = explode($delimiter, $row[$columnas_ids['proyecto_id']])[0];
-        //dd($codigo_sap);
-
-        $proyecto = Proyecto::where('codigo_sap', $codigo_sap)->first();
-        dd($proyecto);
         
         //dd($row[$columnas_ids['sub_familia_id']]);
         $cont = 0;
         foreach($rows as $row){
             if($cont > 0 ){
 
-                /*
-                if($row[$columnas_ids['precio_compra']] != "SIN REGISTRO" && $row[$columnas_ids['precio_compra']] != "SIN COBRO" && $row[$columnas_ids['precio_compra']] != "NO DETALLA")
-                    $precio_compra = $row[$columnas_ids['precio_compra']];
-                else $precio_compra = 0;
+                $proyecto = Proyecto::where('codigo_sap', $row[$columnas_ids['codigo_sap']])->first();
 
-                if($row[$columnas_ids['año']] != "NO DETALLA") $año = $row[$columnas_ids['año']];
-                else $año = 2000;
-                */
-
-                $activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]],
-                //$activo = Activo::create(
+                $venta = Venta::create(
                 [
-                    "id" => $cont,
-                    "sub_familia_id" => $row[$columnas_ids['sub_familia_id']],
-                    "marca" => $row[$columnas_ids['marca']],
-                    "modelo" => $row[$columnas_ids['modelo']],
-                    "año" => $año,
-                    "clasificacion" => $row[$columnas_ids['clasificacion']],
-                    "codigo_interno" => $row[$columnas_ids['codigo_interno']],
-                    "numero_serie" => $row[$columnas_ids['numero_serie']],
-                    "horas_uso_promedio" => $row[$columnas_ids['horas_uso_promedio']],
-                    "precio_compra" => $precio_compra,
-                    "orden_compra" => $row[$columnas_ids['orden_compra']],
-                    "vida_util" => $row[$columnas_ids['vida_util']],
-                    "valor_residual" => $row[$columnas_ids['valor_residual']],
-                    "estado" => "DISPONIBLE",
-        
-                    "tiempo_uso_meses" => $row[$columnas_ids['tiempo_uso_meses']],
-                    "centro_costos" => $row[$columnas_ids['centro_costos']],
+                    "id" => $cont, //TODO por borrar al pasar a prod
+                    "activo_id" => $row[$columnas_ids['activo_id']],
+                    "proyecto_id" => $proyecto->id,
+                    "precio_venta" => $row[$columnas_ids['precio_venta']],
                     "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
+                    "fecha_inicio" => new Carbon('2023-10-1'),
+                    "fecha_termino" => null,
+                    "encargado" => $row[$columnas_ids['encargado']],
+                    "estado" => "EN CLIENTE",
                 ]);
+
+                $activo = Activo::where('id', $row[$columnas_ids['activo_id']])->first();
+                $activo->estado = "ARRENDADO";
+                $activo->arriendo_flag = false;
+                $activo->venta_flag = true;
+                $activo->inoperativo = false;
+                $activo->save();
+
+                if(!File::exists('storage/ventas/'.$venta->id)) {
+                    //Creamos la ruta pública primero
+                    File::makeDirectory(public_path('storage/ventas/'.$venta->id));
+                }
+
+
             }
             $cont +=1;
         }
@@ -1384,5 +1476,6 @@ class ActivoController extends Controller
         flash("Los datos se han registrado correctamente", "success");
         return back();
     }
+
 
 }

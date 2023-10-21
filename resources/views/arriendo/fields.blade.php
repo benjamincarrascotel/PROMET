@@ -69,8 +69,8 @@
             </div>
             
             <div class="col-md-6 col-lg-6 mb-4">
-                <label class="form-control-label">Fecha Término Arriendo: <span class="tx-danger">*</span></label>
-                <input class="form-control" id="fecha_termino" name="fecha_termino" placeholder="Ingrese la fecha de término" required="" type="date">
+                <label class="form-control-label">Fecha Término Arriendo: </label>
+                <input class="form-control" id="fecha_termino" name="fecha_termino" placeholder="Ingrese la fecha de término" type="date">
             </div>
 
             <div class="col-md-6 col-lg-6 mb-4">

@@ -102,7 +102,7 @@
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Fecha Término Arriendo:</label>
-                                    <input class="form-control" id="fecha_termino" name="fecha_termino" placeholder="Ingrese la fecha de término" required="" type="date" value="{{$arriendo->fecha_termino}}">
+                                    <input class="form-control" id="fecha_termino" name="fecha_termino" placeholder="Ingrese la fecha de término" type="date" value="{{$arriendo->fecha_termino}}">
                                 </div>
                             </div>
                         </div>
