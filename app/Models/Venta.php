@@ -35,6 +35,7 @@ class Venta extends Model
         'fecha_termino',
         'encargado', 
         'estado', 
+        'observaciones',
     ];
 
     /**

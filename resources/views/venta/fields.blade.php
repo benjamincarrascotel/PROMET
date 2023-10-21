@@ -63,6 +63,11 @@
     </div>
 </div>
 
+<div class="mb-3 row">
+    <label class="form-control-label">Observaciones: </label>
+    <textarea class="form-control mb-4 " name='observaciones' id="observaciones" placeholder="Observaciones" rows="3" maxlength="249" ></textarea>
+</div>
+
 <script type="text/javascript">
 
     document.addEventListener("DOMContentLoaded", function () {

@@ -36,6 +36,7 @@ class ArriendoActivo extends Model
         'fecha_termino',
         'encargado',
         'estado',
+        'observaciones',
     ];
 
     /**

@@ -52,6 +52,23 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Filtros de búsqueda</h4>
+                    <div class="btn-list flex-end">
+                        <a class="btn btn-success btn-svgs btn-svg-white" href="{{url('/activo/create')}}">
+                            <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                                <path d="M0 0h24v24H0V0z" fill="none"></path>
+                                <path d="M13 4H6v16h12V9h-5V4zm3 14H8v-2h8v2zm0-6v2H8v-2h8z" opacity=".3"></path>
+                                <path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"></path>
+                            </svg>                                
+                            <span class="btn-svg-text mt-1">Crear Activo</span>
+                        </a>
+
+                        <a class="btn btn-outline-success btn-svgs btn-svg-white carga-masiva-btn" data-toggle="modal" data-target="#cargaMasivaModal">
+                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 4a1 1 0 0 0-1-1h-3V2a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1H4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1ZM9 3h6v2H9Zm10 18H5V5h2v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5h2Zm-6-3a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h4a1 1 0 0 1 1 1Zm4-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Zm0-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Z"/></svg>
+                            <span class="btn-svg-text mx-2 mt-1">Carga Masiva Activos</span>
+                        </a>
+
+
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -109,33 +126,6 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Todos los Activos</h4>    
-                    <div class="btn-list flex-end">
-                        <a class="btn btn-success btn-svgs btn-svg-white" href="{{url('/activo/create')}}">
-                            <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-                                <path d="M0 0h24v24H0V0z" fill="none"></path>
-                                <path d="M13 4H6v16h12V9h-5V4zm3 14H8v-2h8v2zm0-6v2H8v-2h8z" opacity=".3"></path>
-                                <path d="M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"></path>
-                            </svg>                                
-                            <span class="btn-svg-text mt-1">Crear Activo</span>
-                        </a>
-
-                        <a class="btn btn-outline-success btn-svgs btn-svg-white carga-masiva-btn" data-toggle="modal" data-target="#cargaMasivaModal">
-                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 4a1 1 0 0 0-1-1h-3V2a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1H4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1ZM9 3h6v2H9Zm10 18H5V5h2v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5h2Zm-6-3a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h4a1 1 0 0 1 1 1Zm4-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Zm0-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Z"/></svg>
-                            <span class="btn-svg-text mx-2 mt-1">Carga Masiva Activos</span>
-                        </a>
-
-                        <a class="btn btn-outline-danger btn-svgs btn-svg-white carga-masiva-arriendo-btn" data-toggle="modal" data-target="#cargaMasivaArriendoModal">
-                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 4a1 1 0 0 0-1-1h-3V2a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1H4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1ZM9 3h6v2H9Zm10 18H5V5h2v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5h2Zm-6-3a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h4a1 1 0 0 1 1 1Zm4-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Zm0-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Z"/></svg>
-                            <span class="btn-svg-text mx-2 mt-1">Carga Masiva Arriendos</span>
-                        </a>
-
-                        <a class="btn btn-outline-info btn-svgs btn-svg-white carga-masiva-venta-btn" data-toggle="modal" data-target="#cargaMasivaVentaModal">
-                            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 4a1 1 0 0 0-1-1h-3V2a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1H4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1ZM9 3h6v2H9Zm10 18H5V5h2v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5h2Zm-6-3a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h4a1 1 0 0 1 1 1Zm4-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Zm0-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Z"/></svg>
-                            <span class="btn-svg-text mx-2 mt-1">Carga Masiva Ventas</span>
-                        </a>
-
-
-                    </div>
                 </div>
 
                 <!-- Row -->

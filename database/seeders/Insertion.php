@@ -976,6 +976,11 @@ class Insertion extends Seeder
                     'nombre' => 'VEHICULOS',
                     'acronimo' => 'VEH',
                 ],
+                [
+                    'id' => 4,
+                    'nombre' => 'Módulos y Contenedores',
+                    'acronimo' => 'MOD',
+                ],
             ]);
         }
 
@@ -1234,17 +1239,36 @@ class Insertion extends Seeder
                     'nombre' => 'BUS',
                     'acronimo' => 'BUS',
                 ],
-                /*TODO agregar sub_familia
                 [
                     'id' => 42,
-                    'familia_id' => 3,
+                    'familia_id' => 4,
                     'nombre' => 'Módulos y Contenedores',
                     'acronimo' => 'MOD',
                 ],
-                */
+                
 
             ]);
         }
+
+        //TODO por borrar
+        DB::table('familia_productos')->insert([
+            [
+                'id' => 4,
+                'nombre' => 'Módulos y Contenedores',
+                'acronimo' => 'MOD',
+            ],
+        ]);
+
+        DB::table('sub_familias')->insert([
+        
+            [
+                'id' => 42,
+                'familia_id' => 4,
+                'nombre' => 'Módulos y Contenedores',
+                'acronimo' => 'MOD',
+            ],
+        ]);
+       
 
         // EMPRESAS
         if(DB::table('empresas')->count() == 0){
@@ -2476,26 +2500,6 @@ class Insertion extends Seeder
                 
             ]);
         }
-
-        //TODO por borrar
-        DB::table('proyectos')->insert([
-            [
-            'nombre' => 'Nombre',
-            'empresa_id' => 2,
-
-            'centro_costo' => 'centro_costos',
-
-            'objeto_imputacion' => 'PEP',
-            'area' => 'Operaciones Montajes',
-            'sociedad_sap' => 'PMO',
-            'codigo_sap' => 'V/PMO-MON-22-006-01',
-            'nombre_sap' => 'Proyecto Rajo Inca',
-
-            'estado' => 'ACTIVO',
-            ],
-        
-        ]);
-
 
     }
 }

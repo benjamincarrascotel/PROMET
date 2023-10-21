@@ -77,6 +77,14 @@
                 <label class="form-label">Encargado: <span class="tx-danger">*</span></label>
                 <input type="text" id="encargado" name="encargado"  class="form-control" required="">
             </div>
+
+        </div>
+
+        <div class="row mt-4">
+            <div class="col">
+                <label class="form-control-label">Observaciones: </label>
+                <textarea class="form-control mb-4 " name='observaciones' id="observaciones" placeholder="Observaciones" rows="3" maxlength="249" ></textarea>
+            </div>
         </div>
 
 

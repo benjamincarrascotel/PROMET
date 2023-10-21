@@ -649,6 +649,10 @@ class ActivoController extends Controller
     {
         $input = $request->all();
         $activo = Activo::where('id', $input['activo_id'])->first();
+        $observaciones = null;
+        if(isset($input['observaciones'])){
+            $observaciones = $input['observaciones'];
+        }
         if($activo->estado == "DISPONIBLE" && !$activo->venta_flag && !$activo->arriendo_flag){           
 
             $fecha_termino = null;
@@ -662,6 +666,7 @@ class ActivoController extends Controller
                 "fecha_termino" => $fecha_termino,
                 "encargado" => $input['encargado'],
                 "estado" => 'BODEGA',
+                "observaciones" => $observaciones,
             ]);
 
             //Creamos la ruta pública primero
@@ -1100,6 +1105,13 @@ class ActivoController extends Controller
 
             $fecha_termino = null;
             if(isset($input['fecha_termino'])) $fecha_termino = $input['fecha_termino'];
+
+            $observaciones = null;
+            if(isset($input['observaciones'])){
+                $observaciones = $input['observaciones'];
+            }
+
+
             $venta = Venta::create([
                 "activo_id" => $input['activo_id'],
                 "precio_venta" => $input['precio_venta'],
@@ -1108,8 +1120,8 @@ class ActivoController extends Controller
                 "fecha_termino" => $fecha_termino,
                 "proyecto_id" => $input['proyecto_id'],
                 "encargado" => $input['encargado'],
-                
                 "estado" => "BODEGA",
+                "observaciones" => $observaciones,
             ]);
 
             //Creamos la ruta pública primero
@@ -1165,7 +1177,6 @@ class ActivoController extends Controller
     }
 
 
-    //TODO traspasos
     public function traspaso_create($id){
 
         $arriendo = ArriendoActivo::where('id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
@@ -1272,7 +1283,7 @@ class ActivoController extends Controller
     {
         ini_set('max_execution_time', 300);
 
-        Activo::truncate(); //TODO por borrar
+        //Activo::truncate();
 
 
         $input = $request->all();
@@ -1304,10 +1315,10 @@ class ActivoController extends Controller
                 if($row[$columnas_ids['año']] != "NO DETALLA") $año = $row[$columnas_ids['año']];
                 else $año = 2000;
 
-                //$activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]], //TODO por borrar al pasar a prod
-                $activo = Activo::create(
+                $activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]],
+                //$activo = Activo::create(
                 [
-                    "id" => $cont,
+                    //"id" => $cont,
                     "sub_familia_id" => $row[$columnas_ids['sub_familia_id']],
                     "marca" => $row[$columnas_ids['marca']],
                     "modelo" => $row[$columnas_ids['modelo']],
@@ -1353,7 +1364,7 @@ class ActivoController extends Controller
 
     public function carga_masiva_arriendo(Request $request)
     {
-        ArriendoActivo::truncate(); //TODO por borrar
+        ArriendoActivo::truncate();
 
         $input = $request->all();
         $validator = Validator::make($input,[
@@ -1382,7 +1393,7 @@ class ActivoController extends Controller
 
                 $arriendo = ArriendoActivo::create(
                 [
-                    "id" => $cont, //TODO por borrar al pasar a prod
+                    "id" => $cont,
                     "activo_id" => $row[$columnas_ids['activo_id']],
                     "proyecto_id" => $proyecto->id,
                     "monto" => $row[$columnas_ids['monto']],
@@ -1417,7 +1428,7 @@ class ActivoController extends Controller
 
     public function carga_masiva_venta(Request $request)
     {
-        Venta::truncate(); //TODO por borrar
+        Venta::truncate();
 
         $input = $request->all();
         $validator = Validator::make($input,[

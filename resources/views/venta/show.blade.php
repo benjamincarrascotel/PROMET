@@ -104,7 +104,7 @@
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Fecha Inicio:</label>
-                                    <input class="form-control" id="fecha_inicio" name="fecha_inicio" placeholder="Ingrese la fecha de inicio" required="" type="date" value="{{$venta->fecha_inicio}}" >
+                                    <input class="form-control" id="fecha_inicio" name="fecha_inicio" placeholder="Ingrese la fecha de inicio" required="" type="date" value="{{Carbon\Carbon::parse($venta->fecha_inicio)->format('Y-m-d')}}" >
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
@@ -116,7 +116,7 @@
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Fecha Término venta:</label>
-                                    <input class="form-control" id="fecha_termino" name="fecha_termino" placeholder="Ingrese la fecha de término" type="date" value="{{$venta->fecha_termino}}">
+                                    <input class="form-control" id="fecha_termino" name="fecha_termino" placeholder="Ingrese la fecha de término" type="date" @if($venta->fecha_termino) value="{{Carbon\Carbon::parse($venta->fecha_termino)->format('Y-m-d')}}" @endif>
                                 </div>
                             </div>
                         </div>
@@ -130,6 +130,15 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="row mt-4">
+                            <div class="col">
+                                <label class="form-control-label">Observaciones: </label>
+                                <textarea class="form-control mb-4 " name='observaciones' id="observaciones" placeholder="Observaciones" required rows="3" maxlength="249" >{{$venta->observaciones}}</textarea>
+                            </div>
+                        </div>
+
+
                     </form>
                 </div>
                 <div class="card-footer text-end">

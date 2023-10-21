@@ -60,7 +60,13 @@
     <div class="col-lg-4 col-sm-12">
         <input type="file" class="dropify" id='cotizacion_mantencion' name="cotizacion_mantencion" data-height="180"  />
     </div>
-        
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <label class="form-control-label">Observaciones: </label>
+        <textarea class="form-control mb-4 " name='observaciones' id="observaciones" placeholder="Observaciones" rows="3" maxlength="249" ></textarea>
+    </div>
 </div>
 
 

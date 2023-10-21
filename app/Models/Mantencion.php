@@ -31,6 +31,7 @@ class Mantencion extends Model
         'contacto_proveedor',   
         'estado', 
         'comprobante_termino', 
+        'observaciones',
     ];
 
     /**

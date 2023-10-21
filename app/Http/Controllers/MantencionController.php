@@ -52,6 +52,12 @@ class MantencionController extends Controller
 
         $fecha_termino = null;
         if(isset($input['fecha_termino'])) $fecha_termino = $input['fecha_termino'];
+
+        $observaciones = null;
+        if(isset($input['observaciones'])){
+            $observaciones = $input['observaciones'];
+        }
+
         $mantencion = Mantencion::create([
             "activo_id" => $input['activo_id'],
             "costo_mantencion" => $input['costo_mantencion'],
@@ -62,6 +68,7 @@ class MantencionController extends Controller
             "nombre_proveedor" => $input['nombre_proveedor'],
             "contacto_proveedor" => $input['contacto_proveedor'],
             "estado" => "EN PROCESO",
+            "observaciones" => $observaciones,
         ]);
 
         // Guardamos la imagen

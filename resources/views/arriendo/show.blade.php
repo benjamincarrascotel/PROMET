@@ -90,7 +90,7 @@
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Fecha Inicio:</label>
-                                    <input class="form-control" id="fecha_inicio" name="fecha_inicio" placeholder="Ingrese la fecha de inicio" required="" type="date" value="{{$arriendo->fecha_inicio}}" >
+                                    <input class="form-control" id="fecha_inicio" name="fecha_inicio" placeholder="Ingrese la fecha de inicio" required="" type="date" value="{{Carbon\Carbon::parse($arriendo->fecha_inicio)->format('Y-m-d')}}" >
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6">
@@ -102,7 +102,7 @@
                             <div class="col-sm-6 col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Fecha Término Arriendo:</label>
-                                    <input class="form-control" id="fecha_termino" name="fecha_termino" placeholder="Ingrese la fecha de término" type="date" value="{{$arriendo->fecha_termino}}">
+                                    <input class="form-control" id="fecha_termino" name="fecha_termino" placeholder="Ingrese la fecha de término" type="date" @if($arriendo->fecha_termino) value="{{Carbon\Carbon::parse($arriendo->fecha_termino)->format('Y-m-d')}}" @endif>
                                 </div>
                             </div>
                         </div>
@@ -114,6 +114,13 @@
                                         {{ "[ ".$arriendo->proyecto->codigo_sap." ] ".$arriendo->proyecto->nombre_sap." - "."Empresa: ".$arriendo->proyecto->empresa->nombre." - "."RUT: ".$arriendo->proyecto->empresa->rut}}
                                     </option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col">
+                                <label class="form-control-label">Observaciones: </label>
+                                <textarea class="form-control mb-4 " name='observaciones' id="observaciones" placeholder="Observaciones" required rows="3" maxlength="249" >{{$arriendo->observaciones}}</textarea>
                             </div>
                         </div>
                     </form>
