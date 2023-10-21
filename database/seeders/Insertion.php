@@ -1249,25 +1249,6 @@ class Insertion extends Seeder
 
             ]);
         }
-
-        //TODO por borrar
-        DB::table('familia_productos')->insert([
-            [
-                'id' => 4,
-                'nombre' => 'Módulos y Contenedores',
-                'acronimo' => 'MOD',
-            ],
-        ]);
-
-        DB::table('sub_familia_productos')->insert([
-        
-            [
-                'id' => 42,
-                'familia_id' => 4,
-                'nombre' => 'Módulos y Contenedores',
-                'acronimo' => 'MOD',
-            ],
-        ]);
        
 
         // EMPRESAS
