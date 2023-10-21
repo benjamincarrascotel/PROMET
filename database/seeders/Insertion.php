@@ -1259,7 +1259,7 @@ class Insertion extends Seeder
             ],
         ]);
 
-        DB::table('sub_familias')->insert([
+        DB::table('sub_familia_productos')->insert([
         
             [
                 'id' => 42,
