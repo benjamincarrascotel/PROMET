@@ -16,6 +16,8 @@ use App\Models\TraspasoVenta;
 use App\Models\Empresa;
 use App\Models\CambioFaseArriendo;
 use App\Models\CambioFaseVenta;
+use App\Models\BajaActivo;
+use App\Models\Mantencion;
 
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -127,7 +129,7 @@ class ActivoController extends Controller
 
                     ->addColumn('mantencion', function($row){
                         if($row->estado == "EN MANTENCION"){
-                            return 
+                            $content = 
                                 '<td class="align-middle text-center">
                                     <button id="terminar_mantencion" data-activo-id="'.$row->id.'" class="btn btn-sm btn-danger terminar-mantencion-btn" data-toggle="tooltip" data-placement="top" title="TERMINAR MANTENCIÓN" type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512" xml:space="preserve"><path d="m360.102 240.012 10.156-10.266s15.609-13.406 33.406-7.328c30.984 10.578 66.781-.875 91.609-25.734 7.063-7.063 15.641-21.234 15.641-21.234a5.596 5.596 0 0 0 .922-4.672l-1.922-7.906a5.671 5.671 0 0 0-2.625-3.531 5.566 5.566 0 0 0-4.344-.547l-60.984 16.969a5.648 5.648 0 0 1-6.063-2.109l-28.015-38.594a5.564 5.564 0 0 1-1.016-4.063l5.641-41a5.595 5.595 0 0 1 4.063-4.656l64.406-17.922c2.906-.813 4.672-3.813 3.953-6.766l-2.547-10.359a5.61 5.61 0 0 0-2.563-3.5s-5.047-3.344-8.719-5.234c-36.578-18.891-82.64-13.031-113.312 17.656-22.656 22.656-31.531 53.688-27.375 83.156 3.203 22.656 1.703 34.703-8.078 45.047-.891.922-3.703 3.734-8.047 8l45.813 44.593zm-148.719 55.406A183455.446 183455.446 0 0 1 68.461 433.715a13.135 13.135 0 0 0-4.047 9.313 13.092 13.092 0 0 0 3.813 9.375l31.938 31.938a13.071 13.071 0 0 0 9.391 3.813 13.018 13.018 0 0 0 9.281-4.031L258.165 343.17l-46.782-47.752zM501.43 451.371a13.008 13.008 0 0 0 3.813-9.375c-.031-3.516-1.5-6.859-4.031-9.297L227.415 166.246l-43.953 43.969L450.805 483.09c2.438 2.547 5.781 4 9.297 4.047s6.891-1.344 9.391-3.828l31.937-31.938zM254.196 32.621c-32.969-12.859-86.281-14.719-117.156 16.141a472188.334 472188.334 0 0 0-59.875 59.891c-12.672 12.656-.906 25.219-10.266 34.563-9.359 9.359-24.313 0-32.734 8.422L3.29 182.527c-4.391 4.375-4.391 11.5 0 15.891l43.016 43.016c4.391 4.391 11.516 4.391 15.906 0l30.875-30.875c8.438-8.422-.938-23.375 8.438-32.719 12.609-12.625 26.375-10.484 34.328-2.547l15.891 15.891 17.219 4.531 43.953-43.953-5.063-16.688c-14.016-14.031-16.016-30.266-7.234-39.047 13.594-13.594 36.047-33.234 57.078-41.656 13.405-5.359 9.358-18.703-3.501-21.75zm-59.625 70.859c-.063.047 5.859-7.281 5.969-7.375l-5.969 7.375z" style="fill:#000"/></svg>                                                                    
@@ -139,7 +141,7 @@ class ActivoController extends Controller
                             ($row->estado == "RECIBIDO" && ($row->arriendo_flag || $row->venta_flag)))
                         {
                             $url = $_ENV['APP_URL'].'/mantencion/create/'.$row->id;
-                            return 
+                            $content = 
                                 '<td class="align-middle text-center">
                                     <a href="'.$url.'">
                                         <button id="iniciar_mantencion" class="btn btn-sm btn-success" type="button" data-toggle="tooltip" data-placement="top" title="INICIAR MANTENCIÓN">
@@ -148,7 +150,7 @@ class ActivoController extends Controller
                                 </td>'
                             ;
                         }else{
-                            return 
+                            $content = 
                                 '<td class="align-middle text-center">
                                     <a href="#">
                                         <button disabled class="btn btn-sm btn-success" type="button" data-toggle="tooltip" data-placement="top" title="INICIAR MANTENCIÓN">
@@ -157,6 +159,25 @@ class ActivoController extends Controller
                                 </td>'
                             ;
                         }
+                        if(!$row->inoperativo){
+                            $baja_url = $_ENV['APP_URL'].'/activo/baja_activo/'.$row->id;
+                            $content .= 
+                                    '<a class="ml-2" href="'.$baja_url.'">
+                                        <button id="baja_activo" class="btn btn-sm btn-danger" type="button" data-toggle="tooltip" data-placement="top" title="DAR DE BAJA">
+                                        <svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#000" fill="none"><path d="m39.75 19-4.92-3.68 4.79-2.84-4.24-4.74h16.78V43.4L40.21 56.26H14.55V7.74h12.13l3.7 4-3.27 3.91 4.54 4-3.84 9.25a.1.1 0 0 0 .14.13Z" stroke-linecap="round"/><path d="m40.19 56.26.02-12.86h11.95"/></svg>                                
+                                    </a>'
+                            ;
+                        }else{
+                            $baja_url = $_ENV['APP_URL'].'/activo/baja_activo/'.$row->id;
+                            $content .= 
+                                    '<a class="ml-2 disabled" href="'.$baja_url.'">
+                                        <button disabled id="baja_activo" class="btn btn-sm btn-danger" type="button" data-toggle="tooltip" data-placement="top" title="ACTUALMENTE INOPERATIVO">
+                                        <svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#000" fill="none"><path d="m39.75 19-4.92-3.68 4.79-2.84-4.24-4.74h16.78V43.4L40.21 56.26H14.55V7.74h12.13l3.7 4-3.27 3.91 4.54 4-3.84 9.25a.1.1 0 0 0 .14.13Z" stroke-linecap="round"/><path d="m40.19 56.26.02-12.86h11.95"/></svg>                                
+                                    </a>'
+                            ;
+                        }
+
+                        return $content;
                     })
 
                     ->addColumn('venta', function($row){
@@ -195,6 +216,14 @@ class ActivoController extends Controller
                                 $instance->where('venta_flag', true);
                             
                         }
+                        if ($request->get('familia')) {
+                            $familiaId = $request->get('familia');
+                            $sub_familias = SubFamiliaProducto::where('familia_id', $familiaId)->pluck('id')->toArray();
+                            $instance->whereIn('sub_familia_id', $sub_familias);
+                        }
+                        if ($request->get('sub_familia') && $request->get('sub_familia') != "null") {
+                            $instance->where('sub_familia_id', $request->get('sub_familia'));
+                        }
                         if (!empty($request->get('search'))) {
                              $instance->where(function($w) use($request){
                                 $search = $request->get('search');
@@ -214,8 +243,13 @@ class ActivoController extends Controller
         }
         
 
+        $familias = FamiliaProducto::get();
+        $sub_familias = SubFamiliaProducto::get()->groupBy('familia_id');
+        $selectedID = 0;
 
-        return view('activo.index');
+        return view('activo.index')
+            ->with('familias', $familias)
+            ->with('sub_familias', $sub_familias);
     }
 
     /**
@@ -351,10 +385,18 @@ class ActivoController extends Controller
         $activo = Activo::where('id', $id)->first();
         $familias = FamiliaProducto::get();
         $sub_familias = SubFamiliaProducto::get()->groupBy('familia_id');
+        $mantenciones = Mantencion::where('activo_id', $id)->get();
+
+        $cont = 1;
+        foreach($mantenciones as $mantencion){
+            $mantencion['n'] = $cont;
+            $cont += 1;
+        }
 
         $n_arriendos = ArriendoActivo::where('activo_id', $id)->get()->count();
         return view('activo.show')
                 ->with('familias', $familias)
+                ->with('mantenciones', $mantenciones)
                 ->with('sub_familias', $sub_familias)
                 ->with('n_arriendos', $n_arriendos)
                 ->with('activo', $activo);
@@ -585,13 +627,13 @@ class ActivoController extends Controller
                     $formContent .= '<button class="btn btn-sm btn-danger flex-fill" type="button"><i class="fe fe-trash-2"></i></button>';
 
                     if ($row->estado == "EN CLIENTE" && $row->activo->estado == "ARRENDADO") {
-                        $formContent .= '<button class="btn btn-sm btn-success flex-fill mb-1" type="submit"><i class="fe fe-check-square"></i> Disponibilizar para retiro</button>';
+                        $formContent .= '<button class="btn btn-sm btn-success flex-fill mb-1 confirm-submit" type="submit"><i class="fe fe-check-square"></i> Disponibilizar para retiro</button>';
                         if(isset($row->monto))
                             $formContent .= '<a class="btn btn-sm btn-primary flex-fill mb-1" type="button" href="' . route('traspaso.create', [$row->id]) . '"><i class="fe fe-truck"></i> Traspasar</a>';
                         elseif(isset($row->precio_venta))
                             $formContent .= '<a class="btn btn-sm btn-primary flex-fill mb-1" type="button" href="' . route('traspaso_venta.create', [$row->id]) . '"><i class="fe fe-truck"></i> Traspasar</a>';
                     } elseif ($row->estado == "BODEGA DE VUELTA" && $row->activo->estado != "EN MANTENCION") {
-                        $formContent .= '<button class="btn btn-sm btn-success flex-fill mb-1" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Confirmación FINAL</button>';
+                        $formContent .= '<button class="btn btn-sm btn-success flex-fill mb-1 confirm-submit" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Confirmación FINAL</button>';
                     }
 
                     $formContent .= '</form>';
@@ -610,14 +652,29 @@ class ActivoController extends Controller
                     if ($request->get('estado')) {
                             $instance->where('estado', $request->get('estado'));
                     }
+                    if ($request->get('empresa') && $request->get('empresa') != "null") {
+                        // Obtén el ID de la empresa desde la solicitud
+                        $empresaId = $request->get('empresa');
+                    
+                        // Consulta Eloquent para obtener los proyectos de la empresa
+                        $proyectos = Proyecto::where('empresa_id', $empresaId)->pluck('id')->toArray();
+                    
+                        // Filtra los registros de activos que pertenecen a los proyectos de la empresa
+                        $instance->whereIn('proyecto_id', $proyectos);
+                    }
                     if ($request->get('proyecto') && $request->get('proyecto') != "null") {
                         $instance->where('proyecto_id', $request->get('proyecto'));
                     }
-                    //TODO filtrar por empresa
                     if (!empty($request->get('search'))) {
                         $instance->where(function($w) use($request){
                             $search = $request->get('search');
-                            $w->orWhere('activo_id', 'LIKE', "%$search%")
+                            $w->orWhereHas('activo', function($q) use($search) {
+                                $q->where('codigo_interno', 'LIKE', "%$search%")
+                                ->orWhere('marca', 'LIKE', "%$search%")
+                                ->orWhere('modelo', 'LIKE', "%$search%")
+                                ->orWhere('numero_serie', 'LIKE', "%$search%")
+                                ->orWhere('id', 'LIKE', "%$search%");
+                            })
                             ->orWhere('id', 'LIKE', "%$search%");
                         });
                     }
@@ -731,7 +788,7 @@ class ActivoController extends Controller
 
                     if($row->activo->arriendo_flag){
                         $formContent .= '<div class=" ms-3 text-white">
-                                <p class="mb-0 mt-1 fs-18 font-weight-semibold">' . $row->activo->marca . ' -- ' . $row->activo->modelo . ' -- ' . $row->activo->año . '</p>
+                                <p class="mb-0 mt-1 fs-18 font-weight-semibold">' . $row->activo->marca . ' -- ' . $row->activo->modelo . '</p>
                                 <small class="">ID ARRIENDO: ' . $row->id . '</small>
                                 <br>
                                 <small class="">ID ACTIVO: ' . $row->activo->id . '</small>
@@ -742,7 +799,7 @@ class ActivoController extends Controller
                                 <p class="fs-14 font-weight-bold">ESTADO ARRIENDO :</p>';
                     }elseif($row->activo->venta_flag){
                         $formContent .= '<div class=" ms-3 text-white">
-                                    <p class="mb-0 mt-1 fs-18 font-weight-semibold">' . $row->activo->marca . ' -- ' . $row->activo->modelo . ' -- ' . $row->activo->año . '</p>
+                                    <p class="mb-0 mt-1 fs-18 font-weight-semibold">' . $row->activo->marca . ' -- ' . $row->activo->modelo . '</p>
                                     <small class="">ID VENTA: ' . $row->id . '</small>
                                     <br>
                                     <small class="">ID ACTIVO: ' . $row->activo->id . '</small>
@@ -800,7 +857,7 @@ class ActivoController extends Controller
                         $formContent .= '<form method="GET" action="' . route('transporte.qr_reader', [$row->activo->id]) . '">
                             <td class="align-middle">';
 
-                        $formContent .= '<button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>';
+                        $formContent .= '<button class="btn btn-xl btn-success me-2 confirm-submit" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>';
                         $formContent .= '<input type="hidden" name="_token" value="' . $csrfToken . '">';
 
                         $formContent .= '</td>
@@ -813,17 +870,17 @@ class ActivoController extends Controller
                             <td class="align-middle">';
 
                         if ($row->estado == "EN CAMINO IDA") {
-                            $formContent .= '<button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>';
+                            $formContent .= '<button class="btn btn-xl btn-success me-2 confirm-submit" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>';
                         } elseif ($row->estado == "EN CLIENTE" && $row->activo->estado == "ARRENDADO") {
-                            $formContent .= '<button class="btn btn-xl btn-danger me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Disponibilizar para retiro</button>';
+                            $formContent .= '<button class="btn btn-xl btn-danger me-2 confirm-submit" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Disponibilizar para retiro</button>';
                         } elseif ($row->estado == "EN CLIENTE" && $row->activo->estado == "PARA RETIRO") {
-                            $formContent .= '<button class="btn btn-xl btn-success me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>';
+                            $formContent .= '<button class="btn btn-xl btn-success me-2 confirm-submit" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">Cambiar de fase</button>';
                         }
 
                         $formContent .= '</td>
                             </form>';
                     } else {
-                        $formContent .= '<button disabled class="btn btn-xl btn-warning me-2" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">(ESPERANDO CONFIRMACIÓN)</button>';
+                        $formContent .= '<button disabled class="btn btn-xl btn-warning me-2 confirm-submit" type="submit" data-bs-toggle="" data-bs-target="#user-form-modal">(ESPERANDO CONFIRMACIÓN)</button>';
                     }
 
                     $formContent .= '</div>
@@ -844,14 +901,29 @@ class ActivoController extends Controller
                     if ($request->get('estado')) {
                             $instance->where('estado', $request->get('estado'));
                     }
+                    if ($request->get('empresa') && $request->get('empresa') != "null") {
+                        // Obtén el ID de la empresa desde la solicitud
+                        $empresaId = $request->get('empresa');
+                    
+                        // Consulta Eloquent para obtener los proyectos de la empresa
+                        $proyectos = Proyecto::where('empresa_id', $empresaId)->pluck('id')->toArray();
+                    
+                        // Filtra los registros de activos que pertenecen a los proyectos de la empresa
+                        $instance->whereIn('proyecto_id', $proyectos);
+                    }
                     if ($request->get('proyecto') && $request->get('proyecto') != "null") {
                         $instance->where('proyecto_id', $request->get('proyecto'));
                     }
-                    //TODO filtrar por empresa
                     if (!empty($request->get('search'))) {
                         $instance->where(function($w) use($request){
                             $search = $request->get('search');
-                            $w->orWhere('activo_id', 'LIKE', "%$search%")
+                            $w->orWhereHas('activo', function($q) use($search) {
+                                $q->where('codigo_interno', 'LIKE', "%$search%")
+                                ->orWhere('marca', 'LIKE', "%$search%")
+                                ->orWhere('modelo', 'LIKE', "%$search%")
+                                ->orWhere('numero_serie', 'LIKE', "%$search%")
+                                ->orWhere('id', 'LIKE', "%$search%");
+                            })
                             ->orWhere('id', 'LIKE', "%$search%");
                         });
                     }
@@ -1047,10 +1119,12 @@ class ActivoController extends Controller
     {
         $arriendo = ArriendoActivo::where('id', $id)->first();
         $traspasos = Traspaso::where('arriendo_id', $id)->get();
+        $cambios_fases = CambioFaseArriendo::where('arriendo_id', $arriendo->id)->get()->groupBy('etapa');
 
         return view('arriendo.show')
-                ->with('traspasos', $traspasos)
-                ->with('arriendo', $arriendo);
+            ->with('cambios_fases', $cambios_fases)
+            ->with('traspasos', $traspasos)
+            ->with('arriendo', $arriendo);
     }
 
     public function update_arriendo(Request $request, $id)
@@ -1156,10 +1230,12 @@ class ActivoController extends Controller
     {
         $venta = Venta::where('id', $id)->first();
         $traspasos = TraspasoVenta::where('venta_id', $id)->get();
+        $cambios_fases = CambioFaseVenta::where('venta_id', $venta->id)->get()->groupBy('etapa');
 
         return view('venta.show')
-                ->with('traspasos', $traspasos)
-                ->with('venta', $venta);
+            ->with('cambios_fases', $cambios_fases)
+            ->with('traspasos', $traspasos)
+            ->with('venta', $venta);
     }
 
     public function update_venta(Request $request, $id)
@@ -1486,6 +1562,96 @@ class ActivoController extends Controller
 
         flash("Los datos se han registrado correctamente", "success");
         return back();
+    }
+
+
+    public function baja_activo_create($id)
+    {
+        $activo = Activo::where('id', $id)->first();
+        if($activo){
+            $empresas = Empresa::get();
+            $proyectos = Proyecto::get()->groupBy('empresa_id');
+
+            return view('baja_activo.create')
+                ->with('empresas', $empresas)
+                ->with('proyectos', $proyectos)
+                ->with('activo', $activo);
+        }else{
+            flash("El activo que intentas dar de baja no existe.", "danger");
+            return redirect()->route('activo.index');
+        }
+    }
+
+
+    public function baja_activo_store(Request $request): RedirectResponse
+    {
+        $input = $request->all();
+
+        $activo = Activo::where('id', $input['activo_id'])->first();
+
+        if(!$activo->inoperativo){
+            $activo->inoperativo = true;
+            $baja_activo = BajaActivo::create([
+                "activo_id" => $input['activo_id'],
+                "fecha" => $input['fecha'],
+                "proyecto_id" => $input['proyecto_id'],
+                "observaciones" => $input['observaciones'],
+            ]);
+    
+    
+            // Guardamos los archivos
+            if($request->hasFile('archivo1'))
+            {
+                $archivo1 = $request->file('archivo1');
+                $type = $archivo1->guessExtension();
+                $nombre = 'archivo1_'.$activo->id.time().'.'.$type;
+    
+                $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
+                copy($archivo1,$ruta);
+    
+                $baja_activo->archivo1 = $nombre;
+            }
+    
+            if($request->hasFile('archivo2'))
+            {
+                $archivo2 = $request->file('archivo2');
+                $type = $archivo2->guessExtension();
+                $nombre = 'archivo2_'.$activo->id.time().'.'.$type;
+    
+                $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
+                copy($archivo2,$ruta);
+    
+                $baja_activo->archivo2 = $nombre;
+            }
+    
+            if($request->hasFile('archivo3'))
+            {
+                $archivo3 = $request->file('archivo3');
+                $type = $archivo3->guessExtension();
+                $nombre = 'archivo3_'.$activo->id.time().'.'.$type;
+    
+                $ruta = public_path("storage/activos/".$activo->id.'/'.$nombre);
+                copy($archivo3,$ruta);
+    
+                $baja_activo->archivo3 = $nombre;
+            }
+    
+            $activo->save();
+            $baja_activo->save();
+            
+    
+            $activos = Activo::get();
+    
+            flash("El activo se ha dado de baja correctamente", "success");
+    
+            return redirect()->route('activo.index');
+
+        }else{
+            flash("El activo ya ha sido dado de baja.", "danger");
+            return redirect()->route('activo.index');
+        }
+        
+
     }
 
 

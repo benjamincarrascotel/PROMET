@@ -311,8 +311,123 @@
                 </div>
             </div>
         </div>
+
+        <div class="card">
+            <div class="card-header ">
+                <div class="card-title">Historial de Mantenciones</div>
+            </div>
+            <div class="card-body">
+                @if(count($mantenciones) > 0 )
+                    @foreach($mantenciones as $mantencion)
+                        <div class="offer offer-warning">
+                            <div class="shape">
+                                <div class="shape-text">
+                                    N°{{$mantencion->n}}
+                                </div>
+                            </div>
+                            <div class="offer-content">
+                                <h3 class="lead font-weight-semibold">
+                                    Proveedor: {{$mantencion->nombre_proveedor." / ".$mantencion->rut_proveedor." / ".$mantencion->contacto_proveedor}}
+                                </h3>
+                                <div class="panel panel-primary">
+                                    <div class=" tab-menu-heading p-0 bg-light">
+                                        <div class="tabs-menu1 ">
+                                            <!-- Tabs -->
+                                            <ul class="nav panel-tabs">
+                                                <li class=""><a href="#tab_{{$mantencion->id}}_1" class="active" data-bs-toggle="tab">Información General</a></li>
+                                                <li><a href="#tab_{{$mantencion->id}}_2" data-bs-toggle="tab">Observaciones</a></li>
+                                                <li><a href="#tab_{{$mantencion->id}}_3" data-bs-toggle="tab">Documentos</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body tabs-menu-body">
+                                        <div class="tab-content">
+                                            <div class="tab-pane active " id="tab_{{$mantencion->id}}_1">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <p class="fs-14 font-weight-bold">ESTADO: <b>{{$mantencion->estado}}</b></p>
+
+                                                        <p class="fs-14 font-weight-bold">Costo: <b>{{$mantencion->costo_mantencion." [".$mantencion->tipo_moneda."]"}}</b></p>
+                                                        
+                                                    </div>
+                                                    <div class="col">
+                                                        <p class="fs-14 font-weight-bold">Fecha de inicio: <b>{{Carbon\Carbon::parse($mantencion->fecha_inicio)->format('d-m-Y')}}</b></p>
+                                                        <p class="fs-14 font-weight-bold">Fecha de término: 
+                                                            <b>
+                                                                @if($mantencion->fecha_termino)
+                                                                    {{Carbon\Carbon::parse($mantencion->fecha_termino)->format('d-m-Y')}}
+                                                                @else
+                                                                    NO REGISTRADA
+                                                                @endif
+                                                            </b>
+                                                        </p>                                                        
+                                                    </div>
+                                                    <div class="col">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane " id="tab_{{$mantencion->id}}_2">
+                                                @if($mantencion->observaciones)
+                                                    <p>{{'"'.$mantencion->observaciones.'"'}}</p>
+                                                @else
+                                                    <p>NO SE REGISTRAN OBSERVACIONES</p>
+                                                @endif
+                                            </div>
+                                            <div class="tab-pane " id="tab_{{$mantencion->id}}_3">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <p class="fs-14 font-weight-bold">Cotización: </p>
+                                                    </div>
+                                                    <div class="col">
+                                                        @if($mantencion->cotizacion_mantencion)
+                                                            <a target="_blank" href="{{ $_ENV['APP_URL'].'/storage/mantenciones/'.$mantencion->activo->id.'/'.$mantencion->cotizacion_mantencion }}">
+                                                                <svg width="70%" height="22" viewBox="0 -0.5 17 17" xmlns="http://www.w3.org/2000/svg" class="si-glyph si-glyph-checked"><path d="M3.432 6.189a1 1 0 0 1 1.415 0L6.968 8.31l6.179-6.179a.99.99 0 0 1 1.401.013l2.122 2.122a.991.991 0 0 1 .014 1.4l-9.022 9.021a.99.99 0 0 1-1.401-.014l-4.95-4.95a.998.998 0 0 1 0-1.413l2.121-2.121Z" fill="#eb970a" fill="#434343"  class="si-glyph-fill" fill-rule="evenodd"/></svg>
+                                                            </a>
+                                                        @else
+                                                            <svg width="70%" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999" xml:space="preserve"><path style="fill:#ff6465" d="m384.955 256 120.28-120.28c9.019-9.019 9.019-23.642 0-32.66L408.94 6.765c-9.019-9.019-23.642-9.019-32.66 0L256 127.045 135.718 6.765c-9.019-9.019-23.642-9.019-32.66 0L6.764 103.058c-9.019 9.019-9.019 23.642 0 32.66l120.28 120.28L6.764 376.28c-9.019 9.019-9.019 23.642 0 32.66l96.295 96.294c9.019 9.019 23.642 9.019 32.66 0l120.28-120.28 120.28 120.28c9.019 9.019 23.642 9.019 32.66 0l96.295-96.294c9.019-9.019 9.019-23.642 0-32.66L384.955 256z"/></svg>                                        
+                                                        @endif
+                                                    </div>
+                                                    <div class="col">
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <p class="fs-14 font-weight-bold">Comprobante de término: </p>
+                                                    </div>
+                                                    <div class="col">
+                                                        @if($mantencion->comprobante_termino)
+                                                        <a target="_blank" href="{{ $_ENV['APP_URL'].'/storage/mantenciones/'.$mantencion->activo->id.'/'.$mantencion->comprobante_termino }}">
+                                                                <svg width="70%" height="22" viewBox="0 -0.5 17 17" xmlns="http://www.w3.org/2000/svg" class="si-glyph si-glyph-checked"><path d="M3.432 6.189a1 1 0 0 1 1.415 0L6.968 8.31l6.179-6.179a.99.99 0 0 1 1.401.013l2.122 2.122a.991.991 0 0 1 .014 1.4l-9.022 9.021a.99.99 0 0 1-1.401-.014l-4.95-4.95a.998.998 0 0 1 0-1.413l2.121-2.121Z" fill="#eb970a" fill="#434343"  class="si-glyph-fill" fill-rule="evenodd"/></svg>
+                                                            </a>
+                                                        @else
+                                                            <svg width="70%" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999" xml:space="preserve"><path style="fill:#ff6465" d="m384.955 256 120.28-120.28c9.019-9.019 9.019-23.642 0-32.66L408.94 6.765c-9.019-9.019-23.642-9.019-32.66 0L256 127.045 135.718 6.765c-9.019-9.019-23.642-9.019-32.66 0L6.764 103.058c-9.019 9.019-9.019 23.642 0 32.66l120.28 120.28L6.764 376.28c-9.019 9.019-9.019 23.642 0 32.66l96.295 96.294c9.019 9.019 23.642 9.019 32.66 0l120.28-120.28 120.28 120.28c9.019 9.019 23.642 9.019 32.66 0l96.295-96.294c9.019-9.019 9.019-23.642 0-32.66L384.955 256z"/></svg>                                        
+                                                        @endif
+                                                    </div>
+                                                    <div class="col">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="alert alert-danger">
+                        <ul>
+                            <h4 class="text-center mt-4"><b><i class="fa fa-ban text-white"></i> ESTE ACTIVO NO REGISTRA MANTENCIONES  <i class="fa fa-ban text-white"></i></b></h4>
+                        </ul>
+                    </div>
+                @endif
+            </div>
+        </div>
+
     </div>
     <!-- End Row-->
+
+    
 
     
 

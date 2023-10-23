@@ -7,6 +7,8 @@ use App\Models\Activo;
 use App\Models\Mantencion;
 use App\Models\ArriendoActivo;
 use App\Models\Venta;
+use App\Models\Empresa;
+use App\Models\Proyecto;
 
 use Illuminate\Support\Facades\File;
 
@@ -75,7 +77,7 @@ class MantencionController extends Controller
         if($request->hasFile('cotizacion_mantencion'))
         {
             $type = $file->guessExtension();
-            $nombre = 'activo_'.$input['activo_id']."_".time().'.'.$type;
+            $nombre = 'cotizacion_mantencion_'.$input['activo_id']."_".time().'.'.$type;
 
             $ruta = public_path("storage/mantenciones/".$input['activo_id'].'/'.$nombre);
             copy($file,$ruta);
@@ -177,17 +179,20 @@ class MantencionController extends Controller
         }else{
             $activo->estado = "DISPONIBLE";
         }
-
-        if(isset($input['estado-checkbox'])){
-            $activo->inoperativo = 1;
-        }
-        
         $activo->save();
-
-        $activos = Activo::get();
 
         flash("Se ha terminado la mantención correctamente.", "success");
 
-        return redirect()->back()->with('activos', $activos);
+        if(isset($input['estado-checkbox'])){
+            $empresas = Empresa::get();
+            $proyectos = Proyecto::get()->groupBy('empresa_id');
+
+            return view('baja_activo.create')
+                ->with('empresas', $empresas)
+                ->with('proyectos', $proyectos)
+                ->with('activo', $activo);
+        }
+
+        return redirect()->back();
     }
 }

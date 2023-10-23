@@ -120,7 +120,7 @@
                         <div class="row mt-4">
                             <div class="col">
                                 <label class="form-control-label">Observaciones: </label>
-                                <textarea class="form-control mb-4 " name='observaciones' id="observaciones" placeholder="Observaciones" required rows="3" maxlength="249" >{{$arriendo->observaciones}}</textarea>
+                                <textarea class="form-control mb-4 " name='observaciones' id="observaciones" placeholder="Observaciones" rows="3" maxlength="249" >{{$arriendo->observaciones}}</textarea>
                             </div>
                         </div>
                     </form>
@@ -133,6 +133,228 @@
         </div>
     </div>
     <!-- End Row-->
+
+    <div class="row">
+        <div class="card">
+            <div class="card-header ">
+                <div class="card-title">Cambios de Fases</div>
+            </div>
+            <div class="card-body">
+                <div class="offer offer-warning">
+                    <div class="shape">
+                        <div class="shape-text">
+                            
+                        </div>
+                    </div>
+                    <div class="offer-content">
+                        <h3 class="lead font-weight-semibold">
+                            @if($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "ARRENDADO")
+                                Etapa Actual: EN CLIENTE (ARRENDADO)
+                            @elseif($arriendo->estado == "EN CLIENTE" && $arriendo->activo->estado == "PARA RETIRO")
+                                Etapa Actual: EN CLIENTE (PARA RETIRO)
+                            @else
+                                Etapa Actual: {{$arriendo->estado}}
+                            @endif
+                        </h3>
+                        <div class="panel panel-primary">
+                            <div class=" tab-menu-heading p-0 bg-light">
+                                <div class="tabs-menu1 ">
+                                    <!-- Tabs -->
+                                    <ul class="nav panel-tabs">
+                                        <li class=""><a href="#tab_1" class="active" data-bs-toggle="tab">EN CAMINO IDA</a></li>
+                                        <li><a href="#tab_2" data-bs-toggle="tab">EN CLIENTE (ARRENDADO)</a></li>
+                                        <li><a href="#tab_3" data-bs-toggle="tab">EN CLIENTE (PARA RETIRO)</a></li>
+                                        <li><a href="#tab_4" data-bs-toggle="tab">EN CAMINO VUELTA</a></li>
+                                        <li><a href="#tab_5" data-bs-toggle="tab">BODEGA DE VUELTA</a></li>
+                                        <li><a href="#tab_6" data-bs-toggle="tab">TERMINADO</a></li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="panel-body tabs-menu-body">
+                                <div class="tab-content">
+                                    <div class="tab-pane active " id="tab_1">
+                                        @if(isset($cambios_fases[1]))
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Etapa anterior: <b>{{$cambios_fases[1][0]->fase_anterior}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Fecha: <b>{{Carbon\Carbon::parse($cambios_fases[1][0]->fecha)->format('d-m-Y')}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Encargado: <b>{{$cambios_fases[1][0]->encargado}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Firma: 
+                                                        @if($cambios_fases[1][0]->firma)
+                                                            <a target="_blank" href="{{ $_ENV['APP_URL'].'/storage/arriendos/'.$arriendo->id.'/'.$cambios_fases[1][0]->firma }}">
+                                                                <svg width="70%" height="22" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg" class="si-glyph si-glyph-checked"><path d="M3.432 6.189a1 1 0 0 1 1.415 0L6.968 8.31l6.179-6.179a.99.99 0 0 1 1.401.013l2.122 2.122a.991.991 0 0 1 .014 1.4l-9.022 9.021a.99.99 0 0 1-1.401-.014l-4.95-4.95a.998.998 0 0 1 0-1.413l2.121-2.121Z" fill="#eb970a" fill="#434343"  class="si-glyph-fill" fill-rule="evenodd"/></svg>
+                                                            </a>
+                                                        @else
+                                                            <svg width="70%" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999" xml:space="preserve"><path style="fill:#ff6465" d="m384.955 256 120.28-120.28c9.019-9.019 9.019-23.642 0-32.66L408.94 6.765c-9.019-9.019-23.642-9.019-32.66 0L256 127.045 135.718 6.765c-9.019-9.019-23.642-9.019-32.66 0L6.764 103.058c-9.019 9.019-9.019 23.642 0 32.66l120.28 120.28L6.764 376.28c-9.019 9.019-9.019 23.642 0 32.66l96.295 96.294c9.019 9.019 23.642 9.019 32.66 0l120.28-120.28 120.28 120.28c9.019 9.019 23.642 9.019 32.66 0l96.295-96.294c9.019-9.019 9.019-23.642 0-32.66L384.955 256z"/></svg>                                        
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        @else
+                                            NO EXISTEN REGISTROS DE ESTA ETAPA
+                                        @endif
+                                    </div>
+
+                                    <div class="tab-pane" id="tab_2">
+                                        @if(isset($cambios_fases[2]))
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Etapa anterior: <b>{{$cambios_fases[2][0]->fase_anterior}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Fecha: <b>{{Carbon\Carbon::parse($cambios_fases[2][0]->fecha)->format('d-m-Y')}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Encargado: <b>{{$cambios_fases[2][0]->encargado}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Firma: 
+                                                        @if($cambios_fases[2][0]->firma)
+                                                            <a target="_blank" href="{{ $_ENV['APP_URL'].'/storage/arriendos/'.$arriendo->id.'/'.$cambios_fases[2][0]->firma }}">
+                                                                <svg width="70%" height="22" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg" class="si-glyph si-glyph-checked"><path d="M3.432 6.189a1 1 0 0 1 1.415 0L6.968 8.31l6.179-6.179a.99.99 0 0 1 1.401.013l2.122 2.122a.991.991 0 0 1 .014 1.4l-9.022 9.021a.99.99 0 0 1-1.401-.014l-4.95-4.95a.998.998 0 0 1 0-1.413l2.121-2.121Z" fill="#eb970a" fill="#434343"  class="si-glyph-fill" fill-rule="evenodd"/></svg>
+                                                            </a>
+                                                        @else
+                                                            <svg width="70%" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999" xml:space="preserve"><path style="fill:#ff6465" d="m384.955 256 120.28-120.28c9.019-9.019 9.019-23.642 0-32.66L408.94 6.765c-9.019-9.019-23.642-9.019-32.66 0L256 127.045 135.718 6.765c-9.019-9.019-23.642-9.019-32.66 0L6.764 103.058c-9.019 9.019-9.019 23.642 0 32.66l120.28 120.28L6.764 376.28c-9.019 9.019-9.019 23.642 0 32.66l96.295 96.294c9.019 9.019 23.642 9.019 32.66 0l120.28-120.28 120.28 120.28c9.019 9.019 23.642 9.019 32.66 0l96.295-96.294c9.019-9.019 9.019-23.642 0-32.66L384.955 256z"/></svg>                                        
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        @else
+                                            NO EXISTEN REGISTROS DE ESTA ETAPA
+                                        @endif
+                                    </div>
+
+                                    <div class="tab-pane" id="tab_3">
+                                        @if(isset($cambios_fases[3]))
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Etapa anterior: <b>EN CLIENTE (ARRENDADO)</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Fecha: <b>{{Carbon\Carbon::parse($cambios_fases[3][0]->fecha)->format('d-m-Y')}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Encargado: <b>{{$cambios_fases[3][0]->encargado}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Firma: 
+                                                        @if($cambios_fases[3][0]->firma)
+                                                            <a target="_blank" href="{{ $_ENV['APP_URL'].'/storage/arriendos/'.$arriendo->id.'/'.$cambios_fases[3][0]->firma }}">
+                                                                <svg width="70%" height="22" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg" class="si-glyph si-glyph-checked"><path d="M3.432 6.189a1 1 0 0 1 1.415 0L6.968 8.31l6.179-6.179a.99.99 0 0 1 1.401.013l2.122 2.122a.991.991 0 0 1 .014 1.4l-9.022 9.021a.99.99 0 0 1-1.401-.014l-4.95-4.95a.998.998 0 0 1 0-1.413l2.121-2.121Z" fill="#eb970a" fill="#434343"  class="si-glyph-fill" fill-rule="evenodd"/></svg>
+                                                            </a>
+                                                        @else
+                                                            <svg width="70%" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999" xml:space="preserve"><path style="fill:#ff6465" d="m384.955 256 120.28-120.28c9.019-9.019 9.019-23.642 0-32.66L408.94 6.765c-9.019-9.019-23.642-9.019-32.66 0L256 127.045 135.718 6.765c-9.019-9.019-23.642-9.019-32.66 0L6.764 103.058c-9.019 9.019-9.019 23.642 0 32.66l120.28 120.28L6.764 376.28c-9.019 9.019-9.019 23.642 0 32.66l96.295 96.294c9.019 9.019 23.642 9.019 32.66 0l120.28-120.28 120.28 120.28c9.019 9.019 23.642 9.019 32.66 0l96.295-96.294c9.019-9.019 9.019-23.642 0-32.66L384.955 256z"/></svg>                                        
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        @else
+                                            NO EXISTEN REGISTROS DE ESTA ETAPA
+                                        @endif
+                                    </div>
+
+                                    <div class="tab-pane" id="tab_4">
+                                        @if(isset($cambios_fases[4]))
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Etapa anterior: <b>EN CLIENTE (PARA RETIRO)</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Fecha: <b>{{Carbon\Carbon::parse($cambios_fases[4][0]->fecha)->format('d-m-Y')}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Encargado: <b>{{$cambios_fases[4][0]->encargado}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Firma: 
+                                                        @if($cambios_fases[4][0]->firma)
+                                                            <a target="_blank" href="{{ $_ENV['APP_URL'].'/storage/arriendos/'.$arriendo->id.'/'.$cambios_fases[4][0]->firma }}">
+                                                                <svg width="70%" height="22" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg" class="si-glyph si-glyph-checked"><path d="M3.432 6.189a1 1 0 0 1 1.415 0L6.968 8.31l6.179-6.179a.99.99 0 0 1 1.401.013l2.122 2.122a.991.991 0 0 1 .014 1.4l-9.022 9.021a.99.99 0 0 1-1.401-.014l-4.95-4.95a.998.998 0 0 1 0-1.413l2.121-2.121Z" fill="#eb970a" fill="#434343"  class="si-glyph-fill" fill-rule="evenodd"/></svg>
+                                                            </a>
+                                                        @else
+                                                            <svg width="70%" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999" xml:space="preserve"><path style="fill:#ff6465" d="m384.955 256 120.28-120.28c9.019-9.019 9.019-23.642 0-32.66L408.94 6.765c-9.019-9.019-23.642-9.019-32.66 0L256 127.045 135.718 6.765c-9.019-9.019-23.642-9.019-32.66 0L6.764 103.058c-9.019 9.019-9.019 23.642 0 32.66l120.28 120.28L6.764 376.28c-9.019 9.019-9.019 23.642 0 32.66l96.295 96.294c9.019 9.019 23.642 9.019 32.66 0l120.28-120.28 120.28 120.28c9.019 9.019 23.642 9.019 32.66 0l96.295-96.294c9.019-9.019 9.019-23.642 0-32.66L384.955 256z"/></svg>                                        
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        @else
+                                            NO EXISTEN REGISTROS DE ESTA ETAPA
+                                        @endif
+                                    </div>
+
+                                    <div class="tab-pane" id="tab_5">
+                                        @if(isset($cambios_fases[5]))
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Etapa anterior: <b>{{$cambios_fases[5][0]->fase_anterior}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Fecha: <b>{{Carbon\Carbon::parse($cambios_fases[5][0]->fecha)->format('d-m-Y')}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Encargado: <b>{{$cambios_fases[5][0]->encargado}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Firma: 
+                                                        @if($cambios_fases[5][0]->firma)
+                                                            <a target="_blank" href="{{ $_ENV['APP_URL'].'/storage/arriendos/'.$arriendo->id.'/'.$cambios_fases[5][0]->firma }}">
+                                                                <svg width="70%" height="22" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg" class="si-glyph si-glyph-checked"><path d="M3.432 6.189a1 1 0 0 1 1.415 0L6.968 8.31l6.179-6.179a.99.99 0 0 1 1.401.013l2.122 2.122a.991.991 0 0 1 .014 1.4l-9.022 9.021a.99.99 0 0 1-1.401-.014l-4.95-4.95a.998.998 0 0 1 0-1.413l2.121-2.121Z" fill="#eb970a" fill="#434343"  class="si-glyph-fill" fill-rule="evenodd"/></svg>
+                                                            </a>
+                                                        @else
+                                                            <svg width="70%" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999" xml:space="preserve"><path style="fill:#ff6465" d="m384.955 256 120.28-120.28c9.019-9.019 9.019-23.642 0-32.66L408.94 6.765c-9.019-9.019-23.642-9.019-32.66 0L256 127.045 135.718 6.765c-9.019-9.019-23.642-9.019-32.66 0L6.764 103.058c-9.019 9.019-9.019 23.642 0 32.66l120.28 120.28L6.764 376.28c-9.019 9.019-9.019 23.642 0 32.66l96.295 96.294c9.019 9.019 23.642 9.019 32.66 0l120.28-120.28 120.28 120.28c9.019 9.019 23.642 9.019 32.66 0l96.295-96.294c9.019-9.019 9.019-23.642 0-32.66L384.955 256z"/></svg>                                        
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        @else
+                                            NO EXISTEN REGISTROS DE ESTA ETAPA
+                                        @endif
+                                    </div>
+
+                                    <div class="tab-pane" id="tab_6">
+                                        @if(isset($cambios_fases[6]))
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Etapa anterior: <b>{{$cambios_fases[6][0]->fase_anterior}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Fecha: <b>{{Carbon\Carbon::parse($cambios_fases[6][0]->fecha)->format('d-m-Y')}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Encargado: <b>{{$cambios_fases[6][0]->encargado}}</b></p>
+                                                </div>
+                                                <div class="col">
+                                                    <p class="fs-14 font-weight-bold">Firma: 
+                                                        @if($cambios_fases[6][0]->firma)
+                                                            <a target="_blank" href="{{ $_ENV['APP_URL'].'/storage/arriendos/'.$arriendo->id.'/'.$cambios_fases[6][0]->firma }}">
+                                                                <svg width="70%" height="22" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg" class="si-glyph si-glyph-checked"><path d="M3.432 6.189a1 1 0 0 1 1.415 0L6.968 8.31l6.179-6.179a.99.99 0 0 1 1.401.013l2.122 2.122a.991.991 0 0 1 .014 1.4l-9.022 9.021a.99.99 0 0 1-1.401-.014l-4.95-4.95a.998.998 0 0 1 0-1.413l2.121-2.121Z" fill="#eb970a" fill="#434343"  class="si-glyph-fill" fill-rule="evenodd"/></svg>
+                                                            </a>
+                                                        @else
+                                                            <svg width="70%" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999" xml:space="preserve"><path style="fill:#ff6465" d="m384.955 256 120.28-120.28c9.019-9.019 9.019-23.642 0-32.66L408.94 6.765c-9.019-9.019-23.642-9.019-32.66 0L256 127.045 135.718 6.765c-9.019-9.019-23.642-9.019-32.66 0L6.764 103.058c-9.019 9.019-9.019 23.642 0 32.66l120.28 120.28L6.764 376.28c-9.019 9.019-9.019 23.642 0 32.66l96.295 96.294c9.019 9.019 23.642 9.019 32.66 0l120.28-120.28 120.28 120.28c9.019 9.019 23.642 9.019 32.66 0l96.295-96.294c9.019-9.019 9.019-23.642 0-32.66L384.955 256z"/></svg>                                        
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        @else
+                                            NO EXISTEN REGISTROS DE ESTA ETAPA
+                                        @endif
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="card mt-4">

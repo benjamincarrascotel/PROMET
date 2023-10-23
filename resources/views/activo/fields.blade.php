@@ -49,7 +49,7 @@
 
         <div class="row">
             <div class="col-md-6 col-lg-6 mb-4">
-                <label for="familia_id" class="form-label">Familia de Productos: </label>
+                <label for="familia_id" class="form-label">Familia de Productos: <span class="tx-danger">*</span></label>
                 <select id="familia_id" class="form-control block mt-1 w-full" name="familia_id" required>
                     <option value={{null}}>Seleccione alguna de las opciones</option>
                     @foreach ($familias as $value)
@@ -61,7 +61,7 @@
             </div>
         
             <div class="col-md-6 col-lg-6 mb-4">
-                <label for="sub_familia_id" class="form-label">Sub Familia de Productos: </label>
+                <label for="sub_familia_id" class="form-label">Sub Familia de Productos: <span class="tx-danger">*</span></label>
                 <select id="sub_familia_id" class="form-control block mt-1 w-full" name="sub_familia_id" required>
                     <option value={{null}} selected >Seleccione alguna de las opciones</option>
                 </select>

@@ -6,16 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Mantencion extends Model
+class BajaActivo extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    public $table = 'mantenciones';
-
-    public function activo(){
-        return $this->belongsTo('App\Models\Activo','activo_id','id');
-    }
+    public $table = 'baja_activos';
 
     /**
      * The attributes that are mass assignable.
@@ -23,19 +19,15 @@ class Mantencion extends Model
      * @var array
      */
     protected $fillable = [
+        'id',
         'activo_id',
-        'costo_mantencion',
-        'tipo_moneda',
-        'cotizacion_mantencion',
-        'fecha_inicio',
-        'fecha_termino',
-
-        'rut_proveedor',
-        'nombre_proveedor',
-        'contacto_proveedor',   
-        'estado', 
-        'comprobante_termino', 
+        'fecha',
+        'proyecto_id',
         'observaciones',
+        'archivo1',
+        'archivo2',
+        'archivo3',
+
     ];
 
     /**
@@ -45,7 +37,6 @@ class Mantencion extends Model
      */
     protected $casts = [
         'created_at' => 'datetime:Y-m-d H:i:s',
-
         // 'fecha' => 'datetime:Y-m-d H:i:s'
     ];
 }

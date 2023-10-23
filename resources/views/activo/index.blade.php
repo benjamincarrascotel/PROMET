@@ -74,6 +74,22 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <form class="form-horizontal">
+                                
+                                
+                                <div class="form-group row">
+                                    <label for="familia" class="col-md-3 form-label mt-2">Familia: </label>
+                                    <div class="col-md-9">
+                                        <select id="familia" class="form-control block mt-1 w-full" name="familia">
+                                            <option value={{null}}>Seleccione alguna de las opciones</option>
+                                            @foreach ($familias as $value)
+                                                <option value="{{ $value->id }}">
+                                                    {{ "[ ".$value->id." ] - ".$value->acronimo." - ".$value->nombre }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div class="form-group row">
                                     <label class="col-md-3 form-label mt-2">Estado del activo: </label>
                                     <div class="col-md-9">
@@ -88,24 +104,20 @@
                                     </div>
                                 </div>
                                 
-                                <!--
+                                
+                            </form>
+                        </div>
+
+                        <div class="col-lg-6 col-md-12">
+                            <form class="form-horizontal">                                
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-label">Subido</label>
-                                    
+                                    <label for="sub_familia" class="col-md-3 form-label mt-2">Sub Familia: </label>
                                     <div class="col-md-9">
-                                        <div class="dropdown">
-                                            <select class="form-control " id="subido" name="tipo_elemento" >
-                                                    <option value="{{null}}">Todos los documentos</option>
-                                                    <option value="subido">Subido</option>
-                                                    <option value="pendiente">Pendiente</option>
-                                                    <option value="no aplica">No aplica</option>
-                                            </select>
-                                        </div>
+                                        <select id="sub_familia" class="form-control block mt-1 w-full" name="sub_familia">
+                                            <option value={{null}}>Seleccione alguna de las opciones</option>
+                                        </select>
                                     </div>
                                 </div>
-                                -->
-                                
-                                
                             </form>
                         </div>
                         
@@ -176,7 +188,7 @@
                         <div class="modal-body">
                             <div class="">
                                 <label for="documento" class="form-label">Documento</label>
-                                <input type="file" class="dropify" id="documento" name="documento" required>
+                                <input type="file" class="dropify" id="documento" name="documento">
                             </div>
                             <div class="checkbox-container">
                                 <div class="material-switch">
@@ -270,6 +282,42 @@
         <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
         <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
 
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var familiaSelect = document.getElementById("familia");
+                var subFamiliaSelect = document.getElementById("sub_familia");
+                var subFamilias = {!! $sub_familias->toJson() !!}; // Convierte la colección de sub_familias a un array JavaScript
+                
+                // Función para actualizar las opciones del input de sub_familias
+                function actualizarSubFamilias() {
+                    var selectedFamiliaId = familiaSelect.value;
+
+                    // Limpiar las opciones actuales
+                    subFamiliaSelect.innerHTML = '';
+
+                    // Agregar la opción predeterminada
+                    var defaultOption = document.createElement("option");
+                    defaultOption.value = null;
+                    defaultOption.text = "Seleccione alguna de las opciones";
+                    subFamiliaSelect.appendChild(defaultOption);
+
+                    // Agregar las sub_familias correspondientes a la familia seleccionada
+                    subFamilias[selectedFamiliaId].forEach(function (subFamilia) {
+                        var option = document.createElement("option");
+                        option.value = subFamilia.id;
+                        option.text = "[ "+subFamilia.id+" ] - "+subFamilia.acronimo+" - "+subFamilia.nombre ;
+                        subFamiliaSelect.appendChild(option);
+                    });
+                }
+
+                // Asignar el evento change al input de familias
+                familiaSelect.addEventListener("change", function () {
+                    actualizarSubFamilias();
+                });
+
+            });
+        </script>
+
 
         <script type="text/javascript">
             $(document).ready(function () {
@@ -307,6 +355,8 @@
                         url: "{{ route('activo.index') }}",
                         data: function (d) {
                                 d.estado = $('#estado').val(),
+                                d.familia = $('#familia').val(),
+                                d.sub_familia = $('#sub_familia').val(),
                                 d.search = $('input[type="search"]').val()
                             }
                         },
@@ -330,9 +380,18 @@
                             $('#activo_id').val(activoId); // Establece el valor en el campo activo_id del formulario
                             $('#terminarMantencionModal').modal('show'); // Muestra el modal
                         });
+
                     });
                 
                     $('#estado').change(function(){
+                        table.draw();
+                    });
+
+                    $('#familia').change(function(){
+                        table.draw();
+                    });
+
+                    $('#sub_familia').change(function(){
                         table.draw();
                     });
                   

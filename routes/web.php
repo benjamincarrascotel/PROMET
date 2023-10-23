@@ -69,6 +69,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/activo/show/{id}', 'ActivoController@show')->name('activo.show');
         Route::post('/activo/update/{id}', 'ActivoController@update')->name('activo.update');
         Route::get('/activo/trazabilidad', 'ActivoController@trazabilidad')->name('activo.trazabilidad');
+        Route::get('/activo/baja_activo/{id}', 'ActivoController@baja_activo_create')->name('activo.baja_activo_create');
+        Route::post('/activo/baja_activo_store', 'ActivoController@baja_activo_store')->name('activo.baja_activo_store');
 
         Route::get('/trazabilidad/datatable', 'ActivoController@trazabilidad_datatable')->name('trazabilidad.datatable');
 

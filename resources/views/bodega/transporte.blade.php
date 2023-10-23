@@ -371,6 +371,7 @@
                         data: function (d) {
                                 d.tipo_proceso = $('#tipo_proceso').val(),
                                 d.estado = $('#estado').val(),
+                                d.empresa = $('#empresa').val(),
                                 d.proyecto = $('#proyecto').val(),
                                 d.search = $('input[type="search"]').val()
                             }
@@ -378,6 +379,16 @@
                     columns: [
                         {data: 'detalles', name: 'detalles'},
                     ]
+                });
+
+                table.on('draw.dt', function() {
+
+                    $('.confirm-submit').on('click', function (event) {
+                        if (!confirm('¿Estás seguro de realizar el cambio de fase?')) {
+                            event.preventDefault(); // Detiene el envío del formulario si el usuario hace clic en "Cancelar".
+                        }
+                    });
+
                 });
 
                 $('#tipo_proceso').change(function(){

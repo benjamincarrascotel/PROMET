@@ -98,7 +98,7 @@
                                             <select class="form-control " id="empresa" name="empresa" placeholder="Buscar por empresa.">
                                                 <option value="{{null}}">Todas las empresas</option>
                                                 @foreach ($empresas as $value)
-                                                    <option value="{{ $value->id }}" {{ $value->id == $selectedID ? 'selected' : '' }}>
+                                                    <option value="{{ $value->id }}">
                                                         {{ $value->nombre." - ".$value->rut}}
                                                     </option>
                                                 @endforeach
@@ -262,6 +262,7 @@
                         data: function (d) {
                                 d.tipo_proceso = $('#tipo_proceso').val(),
                                 d.estado = $('#estado').val(),
+                                d.empresa = $('#empresa').val(),
                                 d.proyecto = $('#proyecto').val(),
                                 d.search = $('input[type="search"]').val()
                             }
@@ -275,6 +276,16 @@
                         {data: 'fecha_termino', name: 'fecha_termino'},
                         {data: 'acciones', name: 'acciones'},
                     ]
+                });
+
+                table.on('draw.dt', function() {
+
+                    $('.confirm-submit').on('click', function (event) {
+                        if (!confirm('¿Estás seguro de realizar el cambio de fase?')) {
+                            event.preventDefault(); // Detiene el envío del formulario si el usuario hace clic en "Cancelar".
+                        }
+                    });
+
                 });
 
                 $('#tipo_proceso').change(function(){
@@ -291,6 +302,7 @@
 
                 $('#empresa').change(function(){
                     table.draw();
+                    
                 });
 
                 $('#proyecto').change(function(){
