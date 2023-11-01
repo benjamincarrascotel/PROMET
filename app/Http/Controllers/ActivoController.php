@@ -1102,12 +1102,19 @@ class ActivoController extends Controller
             return view('bodega.cambio_fase')
                 ->with('proceso',  $proceso);
         }else{
-            //dd("entra");
-            $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get();
+            $empresas = Empresa::get();
+            $proyectos = Proyecto::get()->groupBy('empresa_id');
+            $selectedID = 0;
+
+            $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get()->reverse();
+            $ventas = Venta::whereNotIn('estado', ["TERMINADO"])->get()->reverse();
             return view('bodega.transporte')
+                ->with('empresas', $empresas)
+                ->with('proyectos', $proyectos)
+                ->with('selectedID', $selectedID)
+                ->with('ventas', $ventas)
                 ->with('arriendos', $arriendos);
-            //Casos en que se pueda cambiar directamente de fase (REDIRECT A OTRA RUTA POST)
-        }
+            }
     }
 
     public function qr_reader(){
