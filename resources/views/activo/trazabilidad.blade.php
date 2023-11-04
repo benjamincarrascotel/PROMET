@@ -44,6 +44,16 @@
 
 @section('content')
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     @section('title')
     &nbsp;
     <h3>
@@ -59,12 +69,12 @@
                     <h4 class="card-title">Filtros de búsqueda</h4>
                     <div class="btn-list flex-end">
 
-                        <a class="disabled btn btn-info btn-svgs btn-svg-white carga-masiva-arriendo-btn" data-toggle="modal" data-target="#cargaMasivaArriendoModal">
+                        <a class="btn btn-info btn-svgs btn-svg-white carga-masiva-arriendo-btn" data-toggle="modal" data-target="#cargaMasivaArriendoModal">
                             <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 4a1 1 0 0 0-1-1h-3V2a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1H4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1ZM9 3h6v2H9Zm10 18H5V5h2v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5h2Zm-6-3a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h4a1 1 0 0 1 1 1Zm4-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Zm0-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Z"/></svg>
                             <span class="btn-svg-text mx-2 mt-1">Carga Masiva Arriendos</span>
                         </a>
 
-                        <a class="disabled btn btn-danger btn-svgs btn-svg-white carga-masiva-venta-btn" data-toggle="modal" data-target="#cargaMasivaVentaModal">
+                        <a class="btn btn-danger btn-svgs btn-svg-white carga-masiva-venta-btn" data-toggle="modal" data-target="#cargaMasivaVentaModal">
                             <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 4a1 1 0 0 0-1-1h-3V2a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1H4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1ZM9 3h6v2H9Zm10 18H5V5h2v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5h2Zm-6-3a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h4a1 1 0 0 1 1 1Zm4-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Zm0-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Z"/></svg>
                             <span class="btn-svg-text mx-2 mt-1">Carga Masiva Ventas</span>
                         </a>
@@ -162,38 +172,83 @@
                 </div>
             </div>
 
-                <!-- Row -->
-                <div class="row flex-lg-nowrap">
-                    <div class="col-12">
-                        <div class="row flex-lg-nowrap">
-                            <div class="col-12 mb-3">
-                                <div class="e-panel card">
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class='table table-bordered data-table-global datatable'>
-                                                <thead>
-                                                    <tr>
-                                                        <th >ARRIENDO ID</th>
-                                                        <th >Activo</th>
-                                                        <th >Código Interno</th>
-                                                        <th style="width: 40%">Estado Arriendo</th>
-                                                        <th >Fecha Inicio</th>
-                                                        <th >Fecha Término</th>
-                                                        <th >Acciones</th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
+            <!-- Row -->
+            <div class="row flex-lg-nowrap">
+                <div class="col-12">
+                    <div class="row flex-lg-nowrap">
+                        <div class="col-12 mb-3">
+                            <div class="e-panel card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class='table table-bordered data-table-global datatable'>
+                                            <thead>
+                                                <tr>
+                                                    <th >ARRIENDO ID</th>
+                                                    <th >Activo</th>
+                                                    <th >Código Interno</th>
+                                                    <th style="width: 40%">Estado Arriendo</th>
+                                                    <th >Fecha Inicio</th>
+                                                    <th >Fecha Término</th>
+                                                    <th >Acciones</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- End Row -->
+            </div>
+            
+            <!-- End Row -->
+        </div>
+
+        <div class="modal fade" id="cargaMasivaArriendoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Carga Masiva Arriendos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('arriendo.carga_masiva') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                <label for="file">Seleccionar Archivo</label>
+                                <input type="file" class="dropify" id="documento" name="documento" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Subir Archivo</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div class="modal fade" id="cargaMasivaVentaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Carga Masiva Ventas</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('venta.carga_masiva') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                <label for="file">Seleccionar Archivo</label>
+                                <input type="file" class="dropify" id="documento" name="documento" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Subir Archivo</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>  
 
 
         @overwrite
@@ -201,6 +256,9 @@
     @endpush
 
     <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <script src="{{ asset('dropify/js/dropify.js' )}}"></script>
+    <!-- INTERNAL File Uploads css-->
+    <link href="{{asset('assets/plugins/fileupload/css/fileupload.css')}}" rel="stylesheet" type="text/css" />
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -240,6 +298,21 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+
+            //Inicializamos DROPIFY
+            $('.dropify').dropify();
+
+            $('.carga-masiva-btn').on('click', function () {
+                $('#cargaMasivaModal').modal('show'); // Muestra el modal
+            });
+
+            $('.carga-masiva-arriendo-btn').on('click', function () {
+                $('#cargaMasivaArriendoModal').modal('show'); // Muestra el modal
+            });
+
+            $('.carga-masiva-venta-btn').on('click', function () {
+                $('#cargaMasivaVentaModal').modal('show'); // Muestra el modal
+            });
 
 
             $(function () {

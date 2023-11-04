@@ -39,6 +39,16 @@
 
 @section('content')
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     @section('title')
     &nbsp;
     <h3>
@@ -224,7 +234,14 @@
                                 <label for="file">Seleccionar Archivo</label>
                                 <input type="file" class="dropify" id="documento" name="documento" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Subir Archivo</button>
+                            <div class="checkbox-container">
+                                <div class="material-switch">
+                                    <input class="estado-checkbox_carga" name="estado-checkbox_carga" type="checkbox" id="estado-checkbox_carga"/>
+                                    <label for="estado-checkbox_carga" class="label-danger"></label>
+                                </div>
+                                <h5>BORRAR REGISTROS ANTERIORES</h5>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-2">Subir Archivo</button>
                         </form>
                     </div>
                 </div>

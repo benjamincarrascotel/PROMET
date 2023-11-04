@@ -1365,210 +1365,246 @@ class ActivoController extends Controller
     public function carga_masiva(Request $request)
     {
         ini_set('max_execution_time', 300);
-
-        //Activo::truncate();
-
-
-        $input = $request->all();
-        $validator = Validator::make($input,[
+        
+        $validated = $request->validate([
             'documento' => 'required|mimes:xlsx,xls',
         ]);
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
+        try {
+            $input = $request->all();
 
-        $rows = Excel::toArray(new ImportExcel(), $request->file('documento'))[0];
-        $column_list = $rows[0];
-        $indices = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,18];
-        $columnas_ids = array_intersect_key($column_list, array_flip($indices));
-        // nombre_columna => posicion_excel
-        $columnas_ids = array_flip($columnas_ids);
+            $rows = Excel::toArray(new ImportExcel(), $request->file('documento'))[0];
+            $column_list = $rows[0];
+            $indices = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,18];
+            $columnas_ids = array_intersect_key($column_list, array_flip($indices));
+            // nombre_columna => posicion_excel
+            $columnas_ids = array_flip($columnas_ids);
 
-        $row = $rows[1];
-        //dd($row[$columnas_ids['sub_familia_id']]);
-        $cont = 0;
-        foreach($rows as $row){
-            if($cont > 0 ){
+            $row = $rows[1];
+            //dd($row[$columnas_ids['sub_familia_id']]);
+            $cont = 0;
 
-                if($row[$columnas_ids['precio_compra']] != "SIN REGISTRO" && $row[$columnas_ids['precio_compra']] != "SIN COBRO" && $row[$columnas_ids['precio_compra']] != "NO DETALLA")
-                    $precio_compra = $row[$columnas_ids['precio_compra']];
-                else $precio_compra = 0;
-
-                if($row[$columnas_ids['año']] != "NO DETALLA") $año = $row[$columnas_ids['año']];
-                else $año = 2000;
-
-                $activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]],
-                //$activo = Activo::create(
-                [
-                    //"id" => $cont,
-                    "sub_familia_id" => $row[$columnas_ids['sub_familia_id']],
-                    "marca" => $row[$columnas_ids['marca']],
-                    "modelo" => $row[$columnas_ids['modelo']],
-                    "año" => $año,
-                    "clasificacion" => $row[$columnas_ids['clasificacion']],
-                    "codigo_interno" => $row[$columnas_ids['codigo_interno']],
-                    "numero_serie" => $row[$columnas_ids['numero_serie']],
-                    "horas_uso_promedio" => $row[$columnas_ids['horas_uso_promedio']],
-                    "precio_compra" => $precio_compra,
-                    "orden_compra" => $row[$columnas_ids['orden_compra']],
-                    "vida_util" => $row[$columnas_ids['vida_util']],
-                    "valor_residual" => $row[$columnas_ids['valor_residual']],
-                    "estado" => "DISPONIBLE",
-        
-                    "tiempo_uso_meses" => $row[$columnas_ids['tiempo_uso_meses']],
-                    "centro_costos" => $row[$columnas_ids['centro_costos']],
-                    "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
-                ]);
-
-                if(!File::exists('storage/activos/'.$activo->id)) {
-                    //Creamos la ruta pública del activo
-                    File::makeDirectory(public_path('storage/activos/'.$activo->id));
-                    //Generamos QR
-                    QrCode::generate($_ENV['APP_URL'].'/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE_'.$activo->id.'.svg'));
-                    $activo->codigo_qr = 'QR_CODE_'.$activo->id.'.svg';
-                }
-
-                if(!File::exists('storage/mantenciones/'.$activo->id)) {
-                    //Creamos la ruta pública para mantenciones
-                    File::makeDirectory(public_path('storage/mantenciones/'.$activo->id));
-                }
-
-                $activo->save();
-
+            if(isset($input['estado-checkbox_carga'])){
+                Activo::truncate();
+                ArriendoActivo::truncate();
+                Venta::truncate();
             }
-            $cont +=1;
-        }
+            foreach($rows as $row){
+                if($cont > 0 ){
 
-        flash("Los datos se han registrado correctamente", "success");
-        return back();
+                    if($row[$columnas_ids['precio_compra']] != "SIN REGISTRO" && $row[$columnas_ids['precio_compra']] != "SIN COBRO" && $row[$columnas_ids['precio_compra']] != "NO DETALLA")
+                        $precio_compra = $row[$columnas_ids['precio_compra']];
+                    else $precio_compra = 0;
+
+                    if($row[$columnas_ids['año']] != "NO DETALLA") $año = $row[$columnas_ids['año']];
+                    else $año = 2000;
+
+                    if(isset($input['estado-checkbox_carga'])){
+                        $activo = Activo::create(
+                        [
+                            "id" => $cont,
+                            "sub_familia_id" => $row[$columnas_ids['sub_familia_id']],
+                            "marca" => $row[$columnas_ids['marca']],
+                            "modelo" => $row[$columnas_ids['modelo']],
+                            "año" => $año,
+                            "clasificacion" => $row[$columnas_ids['clasificacion']],
+                            "codigo_interno" => $row[$columnas_ids['codigo_interno']],
+                            "numero_serie" => $row[$columnas_ids['numero_serie']],
+                            "horas_uso_promedio" => $row[$columnas_ids['horas_uso_promedio']],
+                            "precio_compra" => $precio_compra,
+                            "orden_compra" => $row[$columnas_ids['orden_compra']],
+                            "vida_util" => $row[$columnas_ids['vida_util']],
+                            "valor_residual" => $row[$columnas_ids['valor_residual']],
+                            "estado" => "DISPONIBLE",
+                
+                            "tiempo_uso_meses" => $row[$columnas_ids['tiempo_uso_meses']],
+                            "centro_costos" => $row[$columnas_ids['centro_costos']],
+                            "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
+                        ]);
+
+                    }else{
+
+                        $activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]],
+                        //$activo = Activo::create(
+                        [
+                            //"id" => $cont,
+                            "sub_familia_id" => $row[$columnas_ids['sub_familia_id']],
+                            "marca" => $row[$columnas_ids['marca']],
+                            "modelo" => $row[$columnas_ids['modelo']],
+                            "año" => $año,
+                            "clasificacion" => $row[$columnas_ids['clasificacion']],
+                            "codigo_interno" => $row[$columnas_ids['codigo_interno']],
+                            "numero_serie" => $row[$columnas_ids['numero_serie']],
+                            "horas_uso_promedio" => $row[$columnas_ids['horas_uso_promedio']],
+                            "precio_compra" => $precio_compra,
+                            "orden_compra" => $row[$columnas_ids['orden_compra']],
+                            "vida_util" => $row[$columnas_ids['vida_util']],
+                            "valor_residual" => $row[$columnas_ids['valor_residual']],
+                            "estado" => "DISPONIBLE",
+                
+                            "tiempo_uso_meses" => $row[$columnas_ids['tiempo_uso_meses']],
+                            "centro_costos" => $row[$columnas_ids['centro_costos']],
+                            "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
+                        ]);
+                    }
+
+                    if(!File::exists('storage/activos/'.$activo->id)) {
+                        //Creamos la ruta pública del activo
+                        File::makeDirectory(public_path('storage/activos/'.$activo->id));
+                        //Generamos QR
+                        QrCode::generate($_ENV['APP_URL'].'/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE_'.$activo->id.'.svg'));
+                        $activo->codigo_qr = 'QR_CODE_'.$activo->id.'.svg';
+                    }
+    
+                    if(!File::exists('storage/mantenciones/'.$activo->id)) {
+                        //Creamos la ruta pública para mantenciones
+                        File::makeDirectory(public_path('storage/mantenciones/'.$activo->id));
+                    }
+    
+                    $activo->save();
+
+                }
+                $cont +=1;
+            }
+
+            flash("Los datos se han registrado correctamente", "success");
+            return back();
+        }catch (Exception $e) {
+            return response()->json(['message' => 'Something went wrong. Please try again later.'], 500);
+        }
     }
 
 
     public function carga_masiva_arriendo(Request $request)
     {
-        ArriendoActivo::truncate();
-
-        $input = $request->all();
-        $validator = Validator::make($input,[
+        
+        $validated = $request->validate([
             'documento' => 'required|mimes:xlsx,xls',
         ]);
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
+        try {
 
-        $rows = Excel::toArray(new ImportExcel(), $request->file('documento'))[0];
-        
-        $column_list = $rows[0];
+            ArriendoActivo::truncate();
 
-        $indices = [0,1,2,3,4,5,6,7];
-        $columnas_ids = array_intersect_key($column_list, array_flip($indices));
-        // nombre_columna => posicion_excel
-        $columnas_ids = array_flip($columnas_ids);
-        
-        //dd($row[$columnas_ids['sub_familia_id']]);
-        $cont = 0;
-        foreach($rows as $row){
-            if($cont > 0 ){
+            $input = $request->all();
 
-                $proyecto = Proyecto::where('codigo_sap', $row[$columnas_ids['codigo_sap']])->first();
+            $rows = Excel::toArray(new ImportExcel(), $request->file('documento'))[0];
+            
+            $column_list = $rows[0];
 
-                $arriendo = ArriendoActivo::create(
-                [
-                    "id" => $cont,
-                    "activo_id" => $row[$columnas_ids['activo_id']],
-                    "proyecto_id" => $proyecto->id,
-                    "monto" => $row[$columnas_ids['monto']],
-                    "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
-                    "fecha_inicio" => new Carbon('2023-10-1'),
-                    "fecha_termino" => null,
-                    "encargado" => $row[$columnas_ids['encargado']],
-                    "estado" => "EN CLIENTE",
-                ]);
+            $indices = [0,1,2,3,4,5,6,7];
+            $columnas_ids = array_intersect_key($column_list, array_flip($indices));
+            // nombre_columna => posicion_excel
+            $columnas_ids = array_flip($columnas_ids);
+            
+            //dd($row[$columnas_ids['sub_familia_id']]);
+            $cont = 0;
+            foreach($rows as $row){
+                if($cont > 0 ){
 
-                $activo = Activo::where('id', $row[$columnas_ids['activo_id']])->first();
-                $activo->estado = "ARRENDADO";
-                $activo->arriendo_flag = true;
-                $activo->venta_flag = false;
-                $activo->inoperativo = false;
-                $activo->save();
+                    $proyecto = Proyecto::where('codigo_sap', $row[$columnas_ids['codigo_sap']])->first();
 
-                if(!File::exists('storage/arriendos/'.$arriendo->id)) {
-                    //Creamos la ruta pública primero
-                    File::makeDirectory(public_path('storage/arriendos/'.$arriendo->id));
+                    $arriendo = ArriendoActivo::firstOrCreate(['activo_id' => $row[$columnas_ids['activo_id']]],
+                    [
+                        "id" => $cont,
+                        "activo_id" => $row[$columnas_ids['activo_id']],
+                        "proyecto_id" => $proyecto->id,
+                        "monto" => $row[$columnas_ids['monto']],
+                        "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
+                        "fecha_inicio" => new Carbon('2023-10-1'),
+                        "fecha_termino" => null,
+                        "encargado" => $row[$columnas_ids['encargado']],
+                        "estado" => "EN CLIENTE",
+                    ]);
+
+                    $activo = Activo::where('id', $row[$columnas_ids['activo_id']])->first();
+                    $activo->estado = "ARRENDADO";
+                    $activo->arriendo_flag = true;
+                    $activo->venta_flag = false;
+                    $activo->inoperativo = false;
+                    $activo->save();
+
+                    if(!File::exists('storage/arriendos/'.$arriendo->id)) {
+                        //Creamos la ruta pública primero
+                        File::makeDirectory(public_path('storage/arriendos/'.$arriendo->id));
+                    }
+
+
                 }
-
-
+                $cont +=1;
             }
-            $cont +=1;
-        }
 
-        flash("Los datos se han registrado correctamente", "success");
-        return back();
+            flash("Los datos se han registrado correctamente", "success");
+            return back();
+        }catch (Exception $e) {
+            return response()->json(['message' => 'Something went wrong. Please try again later.'], 500);
+        }
     }
 
 
     public function carga_masiva_venta(Request $request)
     {
-        Venta::truncate();
 
-        $input = $request->all();
-        $validator = Validator::make($input,[
+        $validated = $request->validate([
             'documento' => 'required|mimes:xlsx,xls',
         ]);
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
+        try{
 
-        $rows = Excel::toArray(new ImportExcel(), $request->file('documento'))[0];
-        $column_list = $rows[0];
+            Venta::truncate();
 
-        $indices = [0,1,2,3,4,5,6,7];
-        $columnas_ids = array_intersect_key($column_list, array_flip($indices));
-        // nombre_columna => posicion_excel
-        $columnas_ids = array_flip($columnas_ids);
-        
-        //dd($row[$columnas_ids['sub_familia_id']]);
-        $cont = 0;
-        foreach($rows as $row){
-            if($cont > 0 ){
+            $input = $request->all();
 
-                $proyecto = Proyecto::where('codigo_sap', $row[$columnas_ids['codigo_sap']])->first();
+            $rows = Excel::toArray(new ImportExcel(), $request->file('documento'))[0];
+            $column_list = $rows[0];
 
-                $venta = Venta::create(
-                [
-                    "id" => $cont, //TODO por borrar al pasar a prod
-                    "activo_id" => $row[$columnas_ids['activo_id']],
-                    "proyecto_id" => $proyecto->id,
-                    "precio_venta" => $row[$columnas_ids['precio_venta']],
-                    "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
-                    "fecha_inicio" => new Carbon('2023-10-1'),
-                    "fecha_termino" => null,
-                    "encargado" => $row[$columnas_ids['encargado']],
-                    "estado" => "EN CLIENTE",
-                ]);
+            $indices = [0,1,2,3,4,5,6,7];
+            $columnas_ids = array_intersect_key($column_list, array_flip($indices));
+            // nombre_columna => posicion_excel
+            $columnas_ids = array_flip($columnas_ids);
+            
+            //dd($row[$columnas_ids['sub_familia_id']]);
+            $cont = 0;
+            foreach($rows as $row){
+                if($cont > 0 ){
 
-                $activo = Activo::where('id', $row[$columnas_ids['activo_id']])->first();
-                $activo->estado = "ARRENDADO";
-                $activo->arriendo_flag = false;
-                $activo->venta_flag = true;
-                $activo->inoperativo = false;
-                $activo->save();
+                    $proyecto = Proyecto::where('codigo_sap', $row[$columnas_ids['codigo_sap']])->first();
 
-                if(!File::exists('storage/ventas/'.$venta->id)) {
-                    //Creamos la ruta pública primero
-                    File::makeDirectory(public_path('storage/ventas/'.$venta->id));
+                    $venta = Venta::firstOrCreate(['activo_id' => $row[$columnas_ids['activo_id']]],
+                    [
+                        "id" => $cont,
+                        "activo_id" => $row[$columnas_ids['activo_id']],
+                        "proyecto_id" => $proyecto->id,
+                        "precio_venta" => $row[$columnas_ids['precio_venta']],
+                        "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
+                        "fecha_inicio" => new Carbon('2023-10-1'),
+                        "fecha_termino" => null,
+                        "encargado" => $row[$columnas_ids['encargado']],
+                        "estado" => "EN CLIENTE",
+                    ]);
+
+                    $activo = Activo::where('id', $row[$columnas_ids['activo_id']])->first();
+                    $activo->estado = "ARRENDADO";
+                    $activo->arriendo_flag = false;
+                    $activo->venta_flag = true;
+                    $activo->inoperativo = false;
+                    $activo->save();
+
+                    if(!File::exists('storage/ventas/'.$venta->id)) {
+                        //Creamos la ruta pública primero
+                        File::makeDirectory(public_path('storage/ventas/'.$venta->id));
+                    }
+
+
                 }
-
-
+                $cont +=1;
             }
-            $cont +=1;
-        }
 
-        flash("Los datos se han registrado correctamente", "success");
-        return back();
+            flash("Los datos se han registrado correctamente", "success");
+            return back();
+        }catch (Exception $e) {
+            return response()->json(['message' => 'Something went wrong. Please try again later.'], 500);
+        }
     }
 
 
