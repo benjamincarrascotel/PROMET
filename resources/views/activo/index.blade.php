@@ -234,13 +234,16 @@
                                 <label for="file">Seleccionar Archivo</label>
                                 <input type="file" class="dropify" id="documento" name="documento" required>
                             </div>
+                            <!--
                             <div class="checkbox-container">
+                                
                                 <div class="material-switch">
                                     <input class="estado-checkbox_carga" name="estado-checkbox_carga" type="checkbox" id="estado-checkbox_carga"/>
                                     <label for="estado-checkbox_carga" class="label-danger"></label>
                                 </div>
                                 <h5>BORRAR REGISTROS ANTERIORES</h5>
                             </div>
+                            -->
                             <button type="submit" class="btn btn-primary mt-2">Subir Archivo</button>
                         </form>
                     </div>
@@ -248,51 +251,6 @@
             </div>
         </div>
 
-        <div class="modal fade" id="cargaMasivaArriendoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Carga Masiva Arriendos</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('arriendo.carga_masiva') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <label for="file">Seleccionar Archivo</label>
-                                <input type="file" class="dropify" id="documento" name="documento" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Subir Archivo</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="cargaMasivaVentaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Carga Masiva Ventas</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('venta.carga_masiva') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <label for="file">Seleccionar Archivo</label>
-                                <input type="file" class="dropify" id="documento" name="documento" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Subir Archivo</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Debo colocar el script dentro de la "section" para que logre acceder al input "foto" -->
         <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>

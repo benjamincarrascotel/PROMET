@@ -1384,11 +1384,14 @@ class ActivoController extends Controller
             //dd($row[$columnas_ids['sub_familia_id']]);
             $cont = 0;
 
+            /*
             if(isset($input['estado-checkbox_carga'])){
                 Activo::truncate();
                 ArriendoActivo::truncate();
                 Venta::truncate();
             }
+            */
+             
             foreach($rows as $row){
                 if($cont > 0 ){
 
