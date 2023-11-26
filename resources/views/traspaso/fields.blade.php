@@ -80,6 +80,31 @@
     </div>
 </div>
 
+<div class="mt-4 row">
+    @if(!$proceso->proceso_flag)
+        <label for="fecha_traspaso" class="col-sm-2 col-form-label">Cambio de proceso:<br>(ARRIENDO->VENTA)</label>
+    @else
+        <label for="fecha_traspaso" class="col-sm-2 col-form-label">Cambio de proceso:<br>(VENTA->ARRIENDO)</label>
+    @endif
+    <div class="col-sm-10">
+        <div class="row">
+            <div class="col-1">
+                <div class="checkbox-container mt-5" style="margin-left: 20%;">
+                    <div class="material-switch">
+                        <input class="estado-checkbox_traspaso" name="estado-checkbox_traspaso" type="checkbox" id="estado-checkbox_traspaso"/>
+                        <label for="estado-checkbox_traspaso" class="label-danger"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="col mt-4">
+                <h5 style="color:red">(ACTIVANDO ESTA OPCIÓN HARÁ UN CAMBIO DE TIPO DE PROCESO)</h5>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var empresaSelect = document.getElementById("empresa_id");

@@ -137,6 +137,7 @@
                                             <option value="EN CAMINO VUELTA">EN CAMINO VUELTA</option>
                                             <option value="BODEGA DE VUELTA">BODEGA DE VUELTA</option>
                                             <option value="TERMINADO">TERMINADO</option>
+                                            <option value="CAMBIO DE PROCESO">CAMBIO DE PROCESO</option>
                                         </select>
                                     </div>
                                 </div>
@@ -187,7 +188,7 @@
                                         <table class='table table-bordered data-table-global datatable'>
                                             <thead>
                                                 <tr>
-                                                    <th >ARRIENDO ID</th>
+                                                    <th >PROCESO ID</th>
                                                     <th >Activo</th>
                                                     <th >Código Interno</th>
                                                     <th style="width: 40%">Estado Arriendo</th>

@@ -27,6 +27,8 @@ class TraspasoVenta extends Model
      * @var array
      */
     protected $fillable = [
+        'proceso_cambio_flag',
+        'proceso_anterior_id',
         'venta_id',
         'fecha_traspaso',
         'precio_venta_anterior',

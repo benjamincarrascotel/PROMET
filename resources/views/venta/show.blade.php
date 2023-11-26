@@ -27,14 +27,14 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Vista de Venta [ {{"ID : ".$venta->id}} ]</h4>
+            <h4 class="page-title mb-0 text-primary">Vista de Venta [ {{"ID : ".$venta->id}} ]  -  [ {{"ACTIVO ID : ".$venta->activo->id}} ]  -  [ {{"COD. INTERNO : ".$venta->activo->codigo_interno}} ]</h4></h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
+                <!--
                 <button class="btn btn-outline-primary"><i class="fe fe-download"></i>
                     Exportar Información
                 </button>
-                <!--
                 <a href="javascript:void(0);"  class="btn btn-primary btn-pill" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-calendar me-2 fs-14"></i> Search By Date</a>
                 <div class="dropdown-menu border-0">
@@ -375,13 +375,18 @@
     <div class="row">
         <div class="card mt-4">
             <div class="card-header ">
-                <div class="card-title">Registro de traspasos del venta</div>
+                <div class="card-title">Registro de traspasos de la venta</div>
             </div>
             @if(count($traspasos))
                 @foreach ($traspasos as $traspaso)
                     <div class="card overflow-hidden">
+                    @if($traspaso->proceso_cambio_flag)
+                        <div class="card-header bg-success ">
+                            <h3 class="card-title text-white">{{"REGISTRO DE CAMBIO DE TIPO DE PROCESO:  [ ".$traspaso->anterior->codigo_sap." ] ".$traspaso->anterior->nombre_sap}} <i class="fa fa-arrow-right text-white"></i> {{"[ ".$traspaso->actual->codigo_sap." ] ".$traspaso->actual->nombre_sap}}</h3>
+                    @else
                         <div class="card-header bg-primary ">
                             <h3 class="card-title text-white">{{"[ ".$traspaso->anterior->codigo_sap." ] ".$traspaso->anterior->nombre_sap}} <i class="fa fa-arrow-right text-white"></i> {{"[ ".$traspaso->actual->codigo_sap." ] ".$traspaso->actual->nombre_sap}}</h3>
+                    @endif
                             <div class="card-options ">
                                 <a href="javascript:void(0);" class="card-options-collapse me-2" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up text-white"></i></a>
                                 <a href="javascript:void(0);" class="card-options-remove" data-bs-toggle="card-remove"><i class="fe fe-x text-white"></i></a>
@@ -389,8 +394,11 @@
                         </div>
                         <div class="card-body">
                             <h3 class="card-title text-black"><i class="fa fa-calendar text-black"></i> FECHA: {{Carbon\Carbon::parse($traspaso->fecha_traspaso)->format('d-m-Y')}}</h3>
+                        @if($traspaso->proceso_cambio_flag)
+                            <h3 class="card-title text-black"><i class="fa fa-money text-black"></i> MONTO ANTERIOR: {{$traspaso->precio_venta_anterior}} [{{$traspaso->tipo_moneda_anterior}}]</h3>
+                        @else
                             <h3 class="card-title text-black"><i class="fa fa-money text-black"></i> PRECIO VENTA ANTERIOR: {{$traspaso->precio_venta_anterior}} [{{$traspaso->tipo_moneda_anterior}}]</h3>
-
+                        @endif
 
                         </div>
                     </div>

@@ -23,14 +23,10 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
-
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ImportExcel;
 
 use DataTables;
-
-
-
 
 use Illuminate\Support\Facades\File;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -554,6 +550,12 @@ class ActivoController extends Controller
                                 <h6 class="mb-0 font-weight-bold">TERMINADO</h6>
                             </td>'
                         ;
+                    }elseif($row->estado == "CAMBIO DE PROCESO"){
+                        return
+                            '<td class="align-middle">
+                                <h6 class="mb-0 font-weight-bold">CAMBIO DE PROCESO</h6>
+                            </td>'
+                        ;
                     }else{
                         if($row->estado == "BODEGA")
                             return
@@ -685,65 +687,6 @@ class ActivoController extends Controller
             ;
         }
         
-    }
-
-
-    public function ingresar_arriendo_create($id)
-    {
-        $selectedID = $id;
-        $activos = Activo::where('estado', "DISPONIBLE")->where('inoperativo', 0)->get();
-        $empresas = Empresa::get();
-        $proyectos = Proyecto::where('estado', 'ACTIVO')->get()->groupBy('empresa_id');
-
-        return view('arriendo.create')
-            ->with('empresas', $empresas)
-            ->with('proyectos', $proyectos)
-            ->with('activos', $activos)
-            ->with('selectedID', $selectedID);
-    }
-
-    public function ingresar_arriendo_store(Request $request)
-    {
-        $input = $request->all();
-        $activo = Activo::where('id', $input['activo_id'])->first();
-        $observaciones = null;
-        if(isset($input['observaciones'])){
-            $observaciones = $input['observaciones'];
-        }
-        if($activo->estado == "DISPONIBLE" && !$activo->venta_flag && !$activo->arriendo_flag){           
-
-            $fecha_termino = null;
-            if(isset($input['fecha_termino'])) $fecha_termino = $input['fecha_termino'];
-            $arriendo = ArriendoActivo::create([
-                "activo_id" => $input['activo_id'],
-                "proyecto_id" => $input['proyecto_id'],
-                "monto" => $input['monto'],
-                "tipo_moneda" => $input['tipo_moneda'],
-                "fecha_inicio" => $input['fecha_inicio'],
-                "fecha_termino" => $fecha_termino,
-                "encargado" => $input['encargado'],
-                "estado" => 'BODEGA',
-                "observaciones" => $observaciones,
-            ]);
-
-            //Creamos la ruta pública primero
-            File::makeDirectory(public_path('storage/arriendos/'.$arriendo->id));
-
-            $activo->estado = 'PARA RETIRO';
-            $activo->arriendo_flag = true;
-            $activo->save();
-
-            flash('Arriendo registrado correctamente.', 'success');
-
-            $activos = Activo::get();
-
-            return redirect()->route('activo.index')
-                ->with('activos', $activos);
-        }else{
-
-            flash("El activo ya está en un proceso de arriendo o venta.", "danger");
-            return redirect()->back();
-        }
     }
 
     public function transporte()
@@ -1121,46 +1064,6 @@ class ActivoController extends Controller
         return view('bodega.qr_reader');
     }
 
-
-    public function show_arriendo($id)
-    {
-        $arriendo = ArriendoActivo::where('id', $id)->first();
-        $traspasos = Traspaso::where('arriendo_id', $id)->get();
-        $cambios_fases = CambioFaseArriendo::where('arriendo_id', $arriendo->id)->get()->groupBy('etapa');
-
-        return view('arriendo.show')
-            ->with('cambios_fases', $cambios_fases)
-            ->with('traspasos', $traspasos)
-            ->with('arriendo', $arriendo);
-    }
-
-    public function update_arriendo(Request $request, $id)
-    {
-        $request->request->remove('_token');
-        $input = $request->all();
-        $arriendo = ArriendoActivo::where('id', $id)->update($request->all());
-        $arriendo = ArriendoActivo::where('id', $id)->first();
-
-        flash("Los datos se han actualizado correctamente", "success");
-
-        return redirect()->back();
-        
-
-    }
-
-    public function venta_create($id)
-    {
-        $activo = Activo::where('id', $id)->first();
-        $empresas = Empresa::get();
-        $proyectos = Proyecto::where('estado', 'ACTIVO')->get()->groupBy('empresa_id');
-        $selectedID = 0;
-        return view('venta.create')
-            ->with('empresas', $empresas)
-            ->with('selectedID', $selectedID)
-            ->with('proyectos', $proyectos)
-            ->with('activo', $activo);
-    }
-
     public function venta_store(Request $request)
     {
         $input = $request->all();
@@ -1233,33 +1136,6 @@ class ActivoController extends Controller
         }
     }
 
-    public function show_venta($id)
-    {
-        $venta = Venta::where('id', $id)->first();
-        $traspasos = TraspasoVenta::where('venta_id', $id)->get();
-        $cambios_fases = CambioFaseVenta::where('venta_id', $venta->id)->get()->groupBy('etapa');
-
-        return view('venta.show')
-            ->with('cambios_fases', $cambios_fases)
-            ->with('traspasos', $traspasos)
-            ->with('venta', $venta);
-    }
-
-    public function update_venta(Request $request, $id)
-    {
-        $request->request->remove('_token');
-        $input = $request->all();
-        $venta = Venta::where('id', $id)->update($request->all());
-        $venta = Venta::where('id', $id)->first();
-
-        flash("Los datos se han actualizado correctamente", "success");
-
-        return redirect()->back();
-        
-
-    }
-
-
     public function traspaso_create($id){
 
         $arriendo = ArriendoActivo::where('id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
@@ -1307,59 +1183,162 @@ class ActivoController extends Controller
         $validated = $request->validate([
             'proyecto_actual_id' => 'required|integer',
         ]);
+
         $input = $request->all();
 
-        if(isset($input['arriendo_id'])){
-            $arriendo = ArriendoActivo::where('id', $input['arriendo_id'])->first();
-            $traspaso = Traspaso::create([
-                "arriendo_id" => $input['arriendo_id'],
-                "fecha_traspaso" => $input['fecha_traspaso'],
-                "monto_anterior" => $arriendo->monto,
-                "tipo_moneda_anterior" => $arriendo->tipo_moneda,
-                "proyecto_anterior_id" => $input['proyecto_anterior_id'],
-                "proyecto_actual_id" => $input['proyecto_actual_id'],
-            ]);
-    
-            // Actualizamos el arriendo
-            $arriendo->proyecto_id = $input['proyecto_actual_id'];
-            $arriendo->monto = $input['monto'];
-            $arriendo->tipo_moneda = $input['tipo_moneda'];
-            $arriendo->save();
-    
-            flash("El traspaso del arriendo se ha sido realizado correctamente", 'success');
+        if(isset($input['estado-checkbox_traspaso'])){
 
-        }elseif(isset($input['venta_id'])){
-            $venta = Venta::where('id', $input['venta_id'])->first();
-            //dd($venta);
-            $traspaso = TraspasoVenta::create([
-                "venta_id" => $input['venta_id'],
-                "fecha_traspaso" => $input['fecha_traspaso'],
-                "precio_venta_anterior" => $venta->precio_venta,
-                "tipo_moneda_anterior" => $venta->tipo_moneda,
-                "proyecto_anterior_id" => $input['proyecto_anterior_id'],
-                "proyecto_actual_id" => $input['proyecto_actual_id'],
-            ]);
+            // Determinamos que tipo de proceso es
+            if(isset($input['arriendo_id'])){
+                
+
+                $arriendo = ArriendoActivo::where('id', $input['arriendo_id'])->first();
+
+                // Creamos una nueva venta
+                $venta = Venta::create([
+                    "activo_id" => $arriendo['activo_id'],
+                    "precio_venta" => $input['monto'],
+                    "tipo_moneda" => $input['tipo_moneda'],
+                    "fecha_inicio" => $arriendo['fecha_inicio'],
+                    "fecha_termino" => $arriendo['fecha_termino'],
+                    "proyecto_id" => $input['proyecto_actual_id'],
+                    "encargado" => $arriendo['encargado'],
+                    "estado" => $arriendo['estado'],
+                    "observaciones" => $arriendo['observaciones'],
+                ]);
     
-            // Actualizamos el arriendo
-            $venta->proyecto_id = $input['proyecto_actual_id'];
-            $venta->precio_venta = $input['precio_venta'];
-            $venta->tipo_moneda = $input['tipo_moneda'];
-            $venta->save();
+                if(!File::exists('storage/ventas/'.$venta->id)) {
+                    // Creamos la ruta pública primero
+                    File::makeDirectory(public_path('storage/ventas/'.$venta->id));
+                }
+
+                // Registramos traspaso
+
+                $traspaso = TraspasoVenta::create([
+                    "venta_id" => $venta->id,
+                    "fecha_traspaso" => $input['fecha_traspaso'],
+                    "precio_venta_anterior" => $arriendo->monto,
+                    "tipo_moneda_anterior" => $arriendo->tipo_moneda,
+                    "proyecto_anterior_id" => $input['proyecto_anterior_id'],
+                    "proyecto_actual_id" => $input['proyecto_actual_id'],
+                    "proceso_cambio_flag" => true,
+                    "proceso_anterior_id" => $arriendo['id'],
+                ]);
+
+                // Actualizamos el Activo
+                $activo = Activo::where('id', $arriendo->activo_id)->first();
+                $activo->arriendo_flag = false;
+                $activo->venta_flag = true;
+                $activo->save();
+
+                // Cambiamos de estado el arriendo anterior
+                $arriendo->estado = "CAMBIO DE PROCESO";
+                $arriendo->save();
+        
+                flash("El traspaso desde el ARRIENDO [ID:".$arriendo->id."] a la VENTA [ID:".$venta->id."] se ha realizado correctamente", 'success');
+
+            }elseif(isset($input['venta_id'])){
+
+                $venta = Venta::where('id', $input['venta_id'])->first();
+
+                // Creamos un nuevo arriendo
+                $arriendo = ArriendoActivo::create([
+                    "activo_id" => $venta['activo_id'],
+                    "monto" => $input['precio_venta'],
+                    "tipo_moneda" => $input['tipo_moneda'],
+                    "fecha_inicio" => $venta['fecha_inicio'],
+                    "fecha_termino" => $venta['fecha_termino'],
+                    "proyecto_id" => $input['proyecto_actual_id'],
+                    "encargado" => $venta['encargado'],
+                    "estado" => $venta['estado'],
+                    "observaciones" => $venta['observaciones'],
+                ]);
     
-            flash("El traspaso de la venta se ha sido realizado correctamente", 'success');
+
+                if(!File::exists('storage/arriendos/'.$arriendo->id)) {
+                    // Creamos la ruta pública primero
+                    File::makeDirectory(public_path('storage/arriendos/'.$arriendo->id));
+                }
+
+                // Registramos traspaso
+                $traspaso = Traspaso::create([
+                    "arriendo_id" => $arriendo->id,
+                    "fecha_traspaso" => $input['fecha_traspaso'],
+                    "monto_anterior" => $venta->precio_venta,
+                    "tipo_moneda_anterior" => $venta->tipo_moneda,
+                    "proyecto_anterior_id" => $input['proyecto_anterior_id'],
+                    "proyecto_actual_id" => $input['proyecto_actual_id'],
+                    "proceso_cambio_flag" => true,
+                    "proceso_anterior_id" => $venta['id'],
+                ]);
+
+                // Actualizamos el Activo
+                $activo = Activo::where('id', $venta->activo_id)->first();
+                $activo->arriendo_flag = true;
+                $activo->venta_flag = false;
+                $activo->save();
+
+                // Cambiamos de estado de la venta anterior
+                $venta->estado = "CAMBIO DE PROCESO";
+                $venta->save();
+        
+                flash("El traspaso desde la VENTA [ID:".$venta->id."] al ARRIENDO [ID:".$arriendo->id."] se ha realizado correctamente", 'success');
+
+            }else{
+                flash("Error: No hay concordancia en nuestros registros.", 'danger');
+                return back();
+            }
+
 
         }else{
-            flash("Error: No hay concordancia en nuestros registros.", 'danger');
-            return back();
+
+            if(isset($input['arriendo_id'])){
+                $arriendo = ArriendoActivo::where('id', $input['arriendo_id'])->first();
+                $traspaso = Traspaso::create([
+                    "arriendo_id" => $input['arriendo_id'],
+                    "fecha_traspaso" => $input['fecha_traspaso'],
+                    "monto_anterior" => $arriendo->monto,
+                    "tipo_moneda_anterior" => $arriendo->tipo_moneda,
+                    "proyecto_anterior_id" => $input['proyecto_anterior_id'],
+                    "proyecto_actual_id" => $input['proyecto_actual_id'],
+                ]);
+        
+                // Actualizamos el arriendo
+                $arriendo->proyecto_id = $input['proyecto_actual_id'];
+                $arriendo->monto = $input['monto'];
+                $arriendo->tipo_moneda = $input['tipo_moneda'];
+                $arriendo->save();
+        
+                flash("El traspaso del arriendo ha sido realizado correctamente", 'success');
+    
+            }elseif(isset($input['venta_id'])){
+                $venta = Venta::where('id', $input['venta_id'])->first();
+                //dd($venta);
+                $traspaso = TraspasoVenta::create([
+                    "venta_id" => $input['venta_id'],
+                    "fecha_traspaso" => $input['fecha_traspaso'],
+                    "precio_venta_anterior" => $venta->precio_venta,
+                    "tipo_moneda_anterior" => $venta->tipo_moneda,
+                    "proyecto_anterior_id" => $input['proyecto_anterior_id'],
+                    "proyecto_actual_id" => $input['proyecto_actual_id'],
+                ]);
+        
+                // Actualizamos el arriendo
+                $venta->proyecto_id = $input['proyecto_actual_id'];
+                $venta->precio_venta = $input['precio_venta'];
+                $venta->tipo_moneda = $input['tipo_moneda'];
+                $venta->save();
+        
+                flash("El traspaso de la venta ha sido realizado correctamente", 'success');
+    
+            }else{
+                flash("Error: No hay concordancia en nuestros registros.", 'danger');
+                return back();
+            }
+
         }
 
-
-        $arriendos = ArriendoActivo::get();
-        $ventas = Venta::get();
-
-        return redirect()->route('activo.trazabilidad')
-            ->with('ventas', $ventas)
-            ->with('arriendos', $arriendos);
+        return redirect()->route('activo.trazabilidad');
     }
 
     public function carga_masiva(Request $request)
@@ -1465,139 +1444,6 @@ class ActivoController extends Controller
                     }
     
                     $activo->save();
-
-                }
-                $cont +=1;
-            }
-
-            flash("Los datos se han registrado correctamente", "success");
-            return back();
-        }catch (Exception $e) {
-            return response()->json(['message' => 'Something went wrong. Please try again later.'], 500);
-        }
-    }
-
-
-    public function carga_masiva_arriendo(Request $request)
-    {
-        
-        $validated = $request->validate([
-            'documento' => 'required|mimes:xlsx,xls',
-        ]);
-
-        try {
-
-            ArriendoActivo::truncate();
-
-            $input = $request->all();
-
-            $rows = Excel::toArray(new ImportExcel(), $request->file('documento'))[0];
-            
-            $column_list = $rows[0];
-
-            $indices = [0,1,2,3,4,5,6,7];
-            $columnas_ids = array_intersect_key($column_list, array_flip($indices));
-            // nombre_columna => posicion_excel
-            $columnas_ids = array_flip($columnas_ids);
-            
-            //dd($row[$columnas_ids['sub_familia_id']]);
-            $cont = 0;
-            foreach($rows as $row){
-                if($cont > 0 ){
-
-                    $proyecto = Proyecto::where('codigo_sap', $row[$columnas_ids['codigo_sap']])->first();
-
-                    $arriendo = ArriendoActivo::firstOrCreate(['activo_id' => $row[$columnas_ids['activo_id']]],
-                    [
-                        "id" => $cont,
-                        "activo_id" => $row[$columnas_ids['activo_id']],
-                        "proyecto_id" => $proyecto->id,
-                        "monto" => $row[$columnas_ids['monto']],
-                        "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
-                        "fecha_inicio" => new Carbon('2023-10-1'),
-                        "fecha_termino" => null,
-                        "encargado" => $row[$columnas_ids['encargado']],
-                        "estado" => "EN CLIENTE",
-                    ]);
-
-                    $activo = Activo::where('id', $row[$columnas_ids['activo_id']])->first();
-                    $activo->estado = "ARRENDADO";
-                    $activo->arriendo_flag = true;
-                    $activo->venta_flag = false;
-                    $activo->inoperativo = false;
-                    $activo->save();
-
-                    if(!File::exists('storage/arriendos/'.$arriendo->id)) {
-                        //Creamos la ruta pública primero
-                        File::makeDirectory(public_path('storage/arriendos/'.$arriendo->id));
-                    }
-
-
-                }
-                $cont +=1;
-            }
-
-            flash("Los datos se han registrado correctamente", "success");
-            return back();
-        }catch (Exception $e) {
-            return response()->json(['message' => 'Something went wrong. Please try again later.'], 500);
-        }
-    }
-
-
-    public function carga_masiva_venta(Request $request)
-    {
-
-        $validated = $request->validate([
-            'documento' => 'required|mimes:xlsx,xls',
-        ]);
-
-        try{
-
-            Venta::truncate();
-
-            $input = $request->all();
-
-            $rows = Excel::toArray(new ImportExcel(), $request->file('documento'))[0];
-            $column_list = $rows[0];
-
-            $indices = [0,1,2,3,4,5,6,7];
-            $columnas_ids = array_intersect_key($column_list, array_flip($indices));
-            // nombre_columna => posicion_excel
-            $columnas_ids = array_flip($columnas_ids);
-            
-            //dd($row[$columnas_ids['sub_familia_id']]);
-            $cont = 0;
-            foreach($rows as $row){
-                if($cont > 0 ){
-
-                    $proyecto = Proyecto::where('codigo_sap', $row[$columnas_ids['codigo_sap']])->first();
-
-                    $venta = Venta::firstOrCreate(['activo_id' => $row[$columnas_ids['activo_id']]],
-                    [
-                        "id" => $cont,
-                        "activo_id" => $row[$columnas_ids['activo_id']],
-                        "proyecto_id" => $proyecto->id,
-                        "precio_venta" => $row[$columnas_ids['precio_venta']],
-                        "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
-                        "fecha_inicio" => new Carbon('2023-10-1'),
-                        "fecha_termino" => null,
-                        "encargado" => $row[$columnas_ids['encargado']],
-                        "estado" => "EN CLIENTE",
-                    ]);
-
-                    $activo = Activo::where('id', $row[$columnas_ids['activo_id']])->first();
-                    $activo->estado = "ARRENDADO";
-                    $activo->arriendo_flag = false;
-                    $activo->venta_flag = true;
-                    $activo->inoperativo = false;
-                    $activo->save();
-
-                    if(!File::exists('storage/ventas/'.$venta->id)) {
-                        //Creamos la ruta pública primero
-                        File::makeDirectory(public_path('storage/ventas/'.$venta->id));
-                    }
-
 
                 }
                 $cont +=1;

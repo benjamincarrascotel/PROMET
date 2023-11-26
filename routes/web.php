@@ -63,11 +63,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/usuarios/store', 'UserController@store')->name('usuarios.store');
 
         //ACTIVOS
-        Route::get('/activo/index', 'ActivoController@index')->name('activo.index');
-        Route::get('/activo/create', 'ActivoController@create')->name('activo.create');
-        Route::post('/activo/store', 'ActivoController@store')->name('activo.store');
-        Route::get('/activo/show/{id}', 'ActivoController@show')->name('activo.show');
-        Route::post('/activo/update/{id}', 'ActivoController@update')->name('activo.update');
         Route::get('/activo/trazabilidad', 'ActivoController@trazabilidad')->name('activo.trazabilidad');
         Route::get('/activo/baja_activo/{id}', 'ActivoController@baja_activo_create')->name('activo.baja_activo_create');
         Route::post('/activo/baja_activo_store', 'ActivoController@baja_activo_store')->name('activo.baja_activo_store');
@@ -77,11 +72,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/activo/carga_masiva', 'ActivoController@carga_masiva')->name('activo.carga_masiva');
 
         //ARRIENDOS
-        Route::get('/arriendo/create/{id}', 'ActivoController@ingresar_arriendo_create')->name('arriendo.create');
-        Route::post('/arriendo/store', 'ActivoController@ingresar_arriendo_store')->name('arriendo.store');
-        Route::get('/arriendo/show/{id}', 'ActivoController@show_arriendo')->name('arriendo.show');
-        Route::post('/arriendo/update/{id}', 'ActivoController@update_arriendo')->name('arriendo.update');
-        Route::post('/arriendo/carga_masiva', 'ActivoController@carga_masiva_arriendo')->name('arriendo.carga_masiva');
+        Route::get('/arriendo/create/{id}', 'ArriendoController@create')->name('arriendo.create');
+        Route::post('/arriendo/store', 'ArriendoController@store')->name('arriendo.store');
+        Route::get('/arriendo/show/{id}', 'ArriendoController@show')->name('arriendo.show');
+        Route::post('/arriendo/update/{id}', 'ArriendoController@update')->name('arriendo.update');
+        Route::post('/arriendo/carga_masiva', 'ArriendoController@carga_masiva')->name('arriendo.carga_masiva');
 
         //TRASPASOS
         Route::get('/traspaso/{id}', 'ActivoController@traspaso_create')->name('traspaso.create');
@@ -92,14 +87,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/mantencion/finish', 'MantencionController@finish')->name('mantencion.finish');
 
         //VENTAS
-        Route::get('/venta/create/{id}', 'ActivoController@venta_create')->name('venta.create');
-        Route::post('/venta/store', 'ActivoController@venta_store')->name('venta.store');
-        Route::get('/venta/show/{id}', 'ActivoController@show_venta')->name('venta.show');
-        Route::post('/venta/update/{id}', 'ActivoController@update_venta')->name('venta.update');
-        Route::post('/venta/carga_masiva', 'ActivoController@carga_masiva_venta')->name('venta.carga_masiva');
-
-
-
+        Route::get('/venta/create/{id}', 'VentaController@create')->name('venta.create');
+        Route::post('/venta/store', 'VentaController@store')->name('venta.store');
+        Route::get('/venta/show/{id}', 'VentaController@show')->name('venta.show');
+        Route::post('/venta/update/{id}', 'VentaController@update')->name('venta.update');
+        Route::post('/venta/carga_masiva', 'VentaController@carga_masiva')->name('venta.carga_masiva');
 
         //PROYECTOS
         Route::get('/proyecto/index', 'ProyectoController@index')->name('proyecto.index');
@@ -125,7 +117,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/transporte', 'ActivoController@transporte')->name('arriendo.transporte');
         Route::post('/transporte/cambio_fase', 'ActivoController@cambio_fase')->name('transporte.cambio_fase');
         Route::get('/transporte/qr_reader/{id}', 'ActivoController@qr_reader')->name('transporte.qr_reader');
-        
         Route::get('/transporte/datatable', 'ActivoController@transporte_datatable')->name('transporte.datatable');
 
         //INVENTARIO
