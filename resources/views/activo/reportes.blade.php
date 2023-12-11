@@ -79,7 +79,7 @@
                             <span class="btn-svg-text mx-2 mt-1">Exportar Excel</span>
                         </a>
 
-                        <a class="btn btn-danger btn-svgs btn-svg-white exportar_pdf" id="exportar_pdf" >
+                        <a class="btn btn-danger btn-svgs btn-svg-white exportar_pdf disabled" id="exportar_pdf" >
                             <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 4a1 1 0 0 0-1-1h-3V2a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v1H4a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1ZM9 3h6v2H9Zm10 18H5V5h2v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5h2Zm-6-3a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h4a1 1 0 0 1 1 1Zm4-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Zm0-4a1 1 0 0 1-1 1H8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1Z"/></svg>
                             <span class="btn-svg-text mx-2 mt-1">Exportar PDF</span>
                         </a>
@@ -450,7 +450,7 @@
 
                     table.draw();
                 });
-
+                /* 
                 $('#tipo_proceso').change(function(){
                     if ($.inArray('Ventas', $(this).val()) !== -1) {
                         $('#exportar_pdf').addClass('disabled');
@@ -471,7 +471,7 @@
                         });
                     }
                 });
-
+                */
                 
 
             });
