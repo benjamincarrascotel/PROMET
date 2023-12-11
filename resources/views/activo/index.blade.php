@@ -234,16 +234,6 @@
                                 <label for="file">Seleccionar Archivo</label>
                                 <input type="file" class="dropify" id="documento" name="documento" required>
                             </div>
-                            <!--
-                            <div class="checkbox-container">
-                                
-                                <div class="material-switch">
-                                    <input class="estado-checkbox_carga" name="estado-checkbox_carga" type="checkbox" id="estado-checkbox_carga"/>
-                                    <label for="estado-checkbox_carga" class="label-danger"></label>
-                                </div>
-                                <h5>BORRAR REGISTROS ANTERIORES</h5>
-                            </div>
-                            -->
                             <button type="submit" class="btn btn-primary mt-2">Subir Archivo</button>
                         </form>
                     </div>

@@ -1718,54 +1718,28 @@ class ActivoController extends Controller
                     if($row[$columnas_ids['año']] != "NO DETALLA") $año = $row[$columnas_ids['año']];
                     else $año = 2000;
 
-                    if(isset($input['estado-checkbox_carga'])){
-                        $activo = Activo::create(
-                        [
-                            "id" => $cont,
-                            "sub_familia_id" => $row[$columnas_ids['sub_familia_id']],
-                            "marca" => $row[$columnas_ids['marca']],
-                            "modelo" => $row[$columnas_ids['modelo']],
-                            "año" => $año,
-                            "clasificacion" => $row[$columnas_ids['clasificacion']],
-                            "codigo_interno" => $row[$columnas_ids['codigo_interno']],
-                            "numero_serie" => $row[$columnas_ids['numero_serie']],
-                            "horas_uso_promedio" => $row[$columnas_ids['horas_uso_promedio']],
-                            "precio_compra" => $precio_compra,
-                            "orden_compra" => $row[$columnas_ids['orden_compra']],
-                            "vida_util" => $row[$columnas_ids['vida_util']],
-                            "valor_residual" => $row[$columnas_ids['valor_residual']],
-                            "estado" => "DISPONIBLE",
-                
-                            "tiempo_uso_meses" => $row[$columnas_ids['tiempo_uso_meses']],
-                            "centro_costos" => $row[$columnas_ids['centro_costos']],
-                            "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
-                        ]);
-
-                    }else{
-
-                        $activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]],
-                        //$activo = Activo::create(
-                        [
-                            //"id" => $cont,
-                            "sub_familia_id" => $row[$columnas_ids['sub_familia_id']],
-                            "marca" => $row[$columnas_ids['marca']],
-                            "modelo" => $row[$columnas_ids['modelo']],
-                            "año" => $año,
-                            "clasificacion" => $row[$columnas_ids['clasificacion']],
-                            "codigo_interno" => $row[$columnas_ids['codigo_interno']],
-                            "numero_serie" => $row[$columnas_ids['numero_serie']],
-                            "horas_uso_promedio" => $row[$columnas_ids['horas_uso_promedio']],
-                            "precio_compra" => $precio_compra,
-                            "orden_compra" => $row[$columnas_ids['orden_compra']],
-                            "vida_util" => $row[$columnas_ids['vida_util']],
-                            "valor_residual" => $row[$columnas_ids['valor_residual']],
-                            "estado" => "DISPONIBLE",
-                
-                            "tiempo_uso_meses" => $row[$columnas_ids['tiempo_uso_meses']],
-                            "centro_costos" => $row[$columnas_ids['centro_costos']],
-                            "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
-                        ]);
-                    }
+                    $activo = Activo::firstOrCreate(['codigo_interno' => $row[$columnas_ids['codigo_interno']]],
+                    //$activo = Activo::create(
+                    [
+                        //"id" => $cont,
+                        "sub_familia_id" => $row[$columnas_ids['sub_familia_id']],
+                        "marca" => $row[$columnas_ids['marca']],
+                        "modelo" => $row[$columnas_ids['modelo']],
+                        "año" => $año,
+                        "clasificacion" => $row[$columnas_ids['clasificacion']],
+                        "codigo_interno" => $row[$columnas_ids['codigo_interno']],
+                        "numero_serie" => $row[$columnas_ids['numero_serie']],
+                        "horas_uso_promedio" => $row[$columnas_ids['horas_uso_promedio']],
+                        "precio_compra" => $precio_compra,
+                        "orden_compra" => $row[$columnas_ids['orden_compra']],
+                        "vida_util" => $row[$columnas_ids['vida_util']],
+                        "valor_residual" => $row[$columnas_ids['valor_residual']],
+                        "estado" => "DISPONIBLE",
+            
+                        "tiempo_uso_meses" => $row[$columnas_ids['tiempo_uso_meses']],
+                        "centro_costos" => $row[$columnas_ids['centro_costos']],
+                        "tipo_moneda" => $row[$columnas_ids['tipo_moneda']],
+                    ]);
 
                     if(!File::exists('storage/activos/'.$activo->id)) {
                         //Creamos la ruta pública del activo
