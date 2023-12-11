@@ -66,10 +66,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/activo/trazabilidad', 'ActivoController@trazabilidad')->name('activo.trazabilidad');
         Route::get('/activo/baja_activo/{id}', 'ActivoController@baja_activo_create')->name('activo.baja_activo_create');
         Route::post('/activo/baja_activo_store', 'ActivoController@baja_activo_store')->name('activo.baja_activo_store');
+        Route::get('/activo/reportes', 'ActivoController@reportes')->name('activo.reportes');
+        Route::post('/activo/carga_masiva', 'ActivoController@carga_masiva')->name('activo.carga_masiva');
 
         Route::get('/trazabilidad/datatable', 'ActivoController@trazabilidad_datatable')->name('trazabilidad.datatable');
+        Route::get('/reportes/datatable', 'ActivoController@reportes_datatable')->name('reportes.datatable');
 
-        Route::post('/activo/carga_masiva', 'ActivoController@carga_masiva')->name('activo.carga_masiva');
+        Route::post('/reportes/exportar', 'ActivoController@reportes_exportar')->name('reportes.exportar');
+
 
         //ARRIENDOS
         Route::get('/arriendo/create/{id}', 'ArriendoController@create')->name('arriendo.create');

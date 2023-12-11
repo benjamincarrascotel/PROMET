@@ -28,9 +28,9 @@ class Venta extends Model
      */
     protected $fillable = [
         'activo_id',
+        'proyecto_id',
         'precio_venta',
         'tipo_moneda',
-        'proyecto_id',
         'fecha_inicio',
         'fecha_termino',
         'encargado', 

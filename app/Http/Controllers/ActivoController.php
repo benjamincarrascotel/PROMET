@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Schema;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
@@ -25,11 +27,14 @@ use Illuminate\Support\Facades\Storage;
 
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ImportExcel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use DataTables;
 
 use Illuminate\Support\Facades\File;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
+use App\Exports\ProcesosExport;
 
 
 use Validator;
@@ -687,6 +692,338 @@ class ActivoController extends Controller
             ;
         }
         
+    }
+
+
+    public function reportes()
+    {
+        $arriendos = ArriendoActivo::get()->reverse();
+        $ventas = Venta::get()->reverse();
+        $empresas = Empresa::get();
+        $proyectos = Proyecto::get()->groupBy('empresa_id');
+        $selectedID = 0;
+        return view('activo.reportes')
+            ->with('selectedID', $selectedID)
+            ->with('empresas', $empresas)
+            ->with("proyectos", $proyectos)
+            ->with("ventas", $ventas)
+            ->with('arriendos', $arriendos);
+    }
+
+    public function reportes_datatable(Request $request)
+    {
+        if ($request->ajax()) {
+
+            if(!$request->get('tipo_proceso')){
+                $data = [];
+            }elseif(count($request->get('tipo_proceso')) == 1){
+                if($request->get('tipo_proceso')[0] == "Arriendos"){
+                    $data = ArriendoActivo::select('*');
+                }elseif($request->get('tipo_proceso')[0] == "Ventas"){
+                    $data = Venta::select('*');
+                }
+                
+                // Filtramos (CASO: ARRIENDO || VENTA)
+
+                if (!is_null($request->get('estado')) && !is_null($request->get('estado')[0])) {
+                    $data->whereIn('estado', $request->get('estado'));
+                }
+                
+                if (!is_null($request->get('empresa'))) {
+                    // Obtén el ID de la empresa desde la solicitud
+                    $empresaId = $request->get('empresa');
+                
+                    // Consulta Eloquent para obtener los proyectos de la empresa
+                    $proyectos = Proyecto::where('empresa_id', $empresaId)->pluck('id')->toArray();
+                
+                    // Filtra los registros de activos que pertenecen a los proyectos de la empresa
+                    $data->whereIn('proyecto_id', $proyectos);
+                }
+
+                if (!is_null($request->get('proyecto')) && $request->get('proyecto')[0] != "null" && $request->get('proyecto')[0] != null) {
+                    $data->whereIn('proyecto_id', $request->get('proyecto'));
+                }
+
+            }elseif(count($request->get('tipo_proceso')) == 2){
+                $arriendos = ArriendoActivo::select(['id', 'activo_id', 'proyecto_id', 'monto', 'tipo_moneda', 'fecha_inicio', 'fecha_termino', 'encargado', 'estado', 'observaciones']);
+                $data = collect();
+                // Filtramos ARRIENDOS
+
+                if (!is_null($request->get('estado')) && !is_null($request->get('estado')[0])) {
+                    $arriendos->whereIn('estado', $request->get('estado'));
+                }
+                
+                if (!is_null($request->get('empresa'))) {
+                    // Obtén el ID de la empresa desde la solicitud
+                    $empresaId = $request->get('empresa');
+                
+                    // Consulta Eloquent para obtener los proyectos de la empresa
+                    $proyectos = Proyecto::where('empresa_id', $empresaId)->pluck('id')->toArray();
+                
+                    // Filtra los registros de activos que pertenecen a los proyectos de la empresa
+                    $arriendos->whereIn('proyecto_id', $proyectos);
+                }
+                
+                if (!is_null($request->get('proyecto')) && $request->get('proyecto')[0] != "null" && $request->get('proyecto')[0] != null) {
+                    $arriendos->whereIn('proyecto_id', $request->get('proyecto'));
+                }
+
+                $arriendos = $arriendos->get();
+                $arriendos = $arriendos->map(function ($item) {
+                    $item['tipo_proceso'] = 'ARRIENDO';
+                    return $item;
+                });
+
+                $ventas = Venta::select(['id', 'activo_id', 'proyecto_id', 'precio_venta', 'tipo_moneda', 'fecha_inicio', 'fecha_termino', 'encargado', 'estado', 'observaciones']);
+
+                // Filtramos VENTAS
+
+                if (!is_null($request->get('estado')) && !is_null($request->get('estado')[0])) {
+                    $ventas->whereIn('estado', $request->get('estado'));
+                }
+                
+                if (!is_null($request->get('empresa'))) {
+                    // Obtén el ID de la empresa desde la solicitud
+                    $empresaId = $request->get('empresa');
+                
+                    // Consulta Eloquent para obtener los proyectos de la empresa
+                    $proyectos = Proyecto::where('empresa_id', $empresaId)->pluck('id')->toArray();
+                
+                    // Filtra los registros de activos que pertenecen a los proyectos de la empresa
+                    $ventas->whereIn('proyecto_id', $proyectos);
+                }
+                
+                if (!is_null($request->get('proyecto')) && $request->get('proyecto')[0] != "null" && $request->get('proyecto')[0] != null) {
+                    $ventas->whereIn('proyecto_id', $request->get('proyecto'));
+                }
+
+                $ventas = $ventas->get();
+                $ventas = $ventas->map(function ($item) {
+                    $item['tipo_proceso'] = 'VENTA';
+                    return $item;
+                });
+
+                // UNIMOS ARRIENDOS Y VENTAS
+                foreach($arriendos as $arriendo){
+                    $data->push($arriendo);
+                }
+                foreach($ventas as $venta){
+                    $data->push($venta);
+                }
+                //$data = $arriendos->union($ventas);
+
+            }
+            
+            return Datatables::of($data)
+
+                ->addColumn('tipo', function($row){
+                    if(intval($row->monto)){
+                        return "ARRIENDO";
+                    }else{
+                        return "VENTA";
+                    }
+                })
+
+                ->addColumn('estado', function($row){
+                    return $row->estado;
+                })
+                ->addIndexColumn()
+
+                ->addColumn('activo_id', function($row){
+                    return $row->activo->id;
+                })
+
+                ->addColumn('activo', function($row){
+                    return $row->activo->marca." - ".$row->activo->modelo;
+                })
+
+                ->addColumn('codigo_interno', function($row){
+                    return $row->activo->codigo_interno;
+                })
+
+                ->addColumn('fecha_inicio', function($row){
+                    return 
+                        '<div class="wrapper">
+                            <p class="mt-2 text-muted ">'.Carbon::parse($row->fecha_inicio)->format('d-m-Y').'</p>
+                        </div>'
+                    ;
+                })
+
+                ->addColumn('fecha_termino', function($row){
+                    if($row->fecha_termino != null){
+                        $fecha_termino = Carbon::parse($row->fecha_termino)->format('d-m-Y');
+                    }else{
+                        $fecha_termino = null;
+                    }
+
+                    return 
+                        '<div class="wrapper">
+                            <p class="mt-2 text-muted ">'.$fecha_termino.'</p>
+                        </div>'
+                    ;
+                })
+
+                ->rawColumns(['tipo', 'estado', 'id', 'activo_id', 'activo', 'codigo_interno', 'fecha_inicio', 'fecha_termino'])
+                ->escapeColumns([])
+                ->make(true)
+            ;
+        }
+        
+    }
+
+    public function reportes_exportar(Request $request){
+        
+        $input = $request->all();
+        //dd($input);
+        // Parámetros de la consulta
+        $exportar_flag = $input['exportar_flag'];
+        $tipo_proceso = explode(',', $input['tipo_proceso']);
+        $empresa = explode(',', $input['empresa']);
+        $estado = explode(',', $input['estado']);
+        $proyecto = explode(',', $input['proyecto']);
+
+        // Obtenemos los datos
+        if($tipo_proceso[0] == ""){
+            $data = collect();
+        }elseif(count($tipo_proceso) == 1){
+            if($tipo_proceso[0] == "Arriendos"){
+                $data = ArriendoActivo::select(['id', 'activo_id', 'proyecto_id', 'monto', 'tipo_moneda', 'fecha_inicio', 'fecha_termino', 'encargado', 'estado', 'observaciones']);
+            }elseif($tipo_proceso[0] == "Ventas"){
+                $data = Venta::select(['id', 'activo_id', 'proyecto_id', 'precio_venta', 'tipo_moneda', 'fecha_inicio', 'fecha_termino', 'encargado', 'estado', 'observaciones']);
+            }
+            
+            // Filtramos (CASO: ARRIENDO || VENTA)
+
+            if ($estado[0] != "") {
+                $data->whereIn('estado', $estado);
+            }
+            
+            if ($empresa[0] != "") {
+                // Obtén el ID de la empresa desde la solicitud
+                $empresaId = $empresa[0];
+            
+                // Consulta Eloquent para obtener los proyectos de la empresa
+                $proyectos = Proyecto::where('empresa_id', $empresaId)->pluck('id')->toArray();
+            
+                // Filtra los registros de activos que pertenecen a los proyectos de la empresa
+                $data->whereIn('proyecto_id', $proyectos);
+            }
+
+            if ($proyecto[0] != "" &&  $proyecto[0] != "null") {
+                $data->whereIn('proyecto_id', $proyecto);
+            }
+
+            $data = $data->get();
+
+            if($tipo_proceso[0] == "Arriendos"){
+                $data = $data->map(function ($item) {
+                    $item['tipo_proceso'] = 'ARRIENDO';
+                return $item;
+                });
+            }elseif($tipo_proceso[0] == "Ventas"){
+                $data = $data->map(function ($item) {
+                    $item['tipo_proceso'] = 'VENTA';
+                return $item;
+                });
+            }
+
+        }elseif(count($tipo_proceso) == 2){
+            $arriendos = ArriendoActivo::select('*');
+            $data = collect();
+            // Filtramos ARRIENDOS
+
+            if ($estado[0] != "") {
+                $arriendos->whereIn('estado', $estado);
+            }
+            
+            if ($empresa[0] != "") {
+                // Obtén el ID de la empresa desde la solicitud
+                $empresaId = $empresa[0];
+            
+                // Consulta Eloquent para obtener los proyectos de la empresa
+                $proyectos = Proyecto::where('empresa_id', $empresaId)->pluck('id')->toArray();
+            
+                // Filtra los registros de activos que pertenecen a los proyectos de la empresa
+                $arriendos->whereIn('proyecto_id', $proyectos);
+            }
+            
+            if ($proyecto[0] != "" &&  $proyecto[0] != "null") {
+                $arriendos->whereIn('proyecto_id', $proyecto);
+            }
+
+            $arriendos = $arriendos->get();
+
+            $arriendos = $arriendos->map(function ($item) {
+                $item['tipo_proceso'] = 'ARRIENDO';
+                return $item;
+            });
+
+            $ventas = Venta::select('*');
+
+            // Filtramos VENTAS
+
+            if ($estado[0] != "") {
+                $ventas->whereIn('estado', $estado);
+            }
+            
+            if ($empresa[0] != "") {
+                // Obtén el ID de la empresa desde la solicitud
+                $empresaId = $empresa[0];
+            
+                // Consulta Eloquent para obtener los proyectos de la empresa
+                $proyectos = Proyecto::where('empresa_id', $empresaId)->pluck('id')->toArray();
+            
+                // Filtra los registros de activos que pertenecen a los proyectos de la empresa
+                $ventas->whereIn('proyecto_id', $proyectos);
+            }
+            
+            if ($proyecto[0] != "" &&  $proyecto[0] != "null") {
+                $ventas->whereIn('proyecto_id', $proyecto);
+            }
+
+            $ventas = $ventas->get();
+
+            $ventas = $ventas->map(function ($item) {
+                    $item['tipo_proceso'] = 'VENTA';
+                return $item;
+            });
+
+            // UNIMOS ARRIENDOS Y VENTAS
+            foreach($arriendos as $arriendo){
+                $data->push($arriendo);
+            }
+            foreach($ventas as $venta){
+                $data->push($venta);
+            }
+
+        }
+
+        if($data->count() == 0){
+            flash("No hay datos para exportar", "danger");
+            return redirect()->back();
+        }else{
+            // Eliminamos las columnas que no queremos exportar
+            $columns_to_delete = ['created_at', 'updated_at', 'deleted_at'];
+            $data = $data->map(function ($item) use ($columns_to_delete) {
+                // Use the except method to exclude specified columns
+                return collect($item)->except($columns_to_delete)->all();
+            });
+
+            // CASO EXCEL
+            if($exportar_flag == 1){
+                $filename = 'exportacion_'.Carbon::now()->format('d-m-Y_H:i:s').'.xlsx';
+                return Excel::download(new ProcesosExport($data), $filename);
+            }else{ // CASO PDF
+
+                $filename = 'exportacion_'.Carbon::now()->format('d-m-Y_H:i:s').'.pdf';
+                // Create a PDF using laravel-dompdf
+                $pdf = Pdf::loadView('pdf.exportacion_procesos', ['data' => $data])
+                    ->setOptions(['enable_php' => true])
+                    ->setPaper('letter', 'landscape');
+                // Download the PDF
+                return $pdf->download($filename);
+            }
+        }
     }
 
     public function transporte()
