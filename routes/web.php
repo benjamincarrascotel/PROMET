@@ -36,6 +36,32 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/proveedor/index', 'ProveedorController@index')->name('proveedor.index');
     Route::get('/proveedor/{id}', 'ProveedorController@show')->name('proveedor.show');
 
+    Route::group(['middleware' => ['bodega']], function () {
+
+
+        //TRANSPORTE
+        Route::get('/transporte', 'TransporteController@transporte')->name('arriendo.transporte');
+        Route::post('/transporte/cambio_fase', 'TransporteController@cambio_fase')->name('transporte.cambio_fase');
+        Route::get('/transporte/qr_reader/{id}', 'TransporteController@qr_reader')->name('transporte.qr_reader');
+        Route::get('/transporte/datatable', 'TransporteController@transporte_datatable')->name('transporte.datatable');
+
+        //ACTIVOS
+        Route::get('/activo/create', 'ActivoController@create')->name('activo.create');
+        Route::post('/activo/store', 'ActivoController@store')->name('activo.store');
+        Route::post('/activo/update/{id}', 'ActivoController@update')->name('activo.update');
+        Route::get('/activo/index', 'ActivoController@index')->name('activo.index');
+        Route::get('/activo/show/{id}', 'ActivoController@show')->name('activo.show');
+
+        //MANTENCIONES
+        Route::get('/mantencion/create/{id}', 'MantencionController@create')->name('mantencion.create');
+        Route::post('/mantencion/store', 'MantencionController@store')->name('mantencion.store');
+
+        //INVENTARIO
+        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('inventario.cambio_fase_create'); 
+
+
+    });
+
     Route::group(['middleware' => ['superadmin']], function () {
 
         //DASHBOARD
@@ -68,10 +94,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/activo/baja_activo/{id}', 'ActivoController@baja_activo_create')->name('activo.baja_activo_create');
         Route::post('/activo/baja_activo_store', 'ActivoController@baja_activo_store')->name('activo.baja_activo_store');
         Route::get('/activo/reportes', 'ActivoController@reportes')->name('activo.reportes');
-        Route::post('/activo/carga_masiva', 'ActivoController@carga_masiva')->name('activo.carga_masiva');
-
-        //INVENTARIO
-        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create_view')->name('inventario.cambio_fase_create');  
+        Route::post('/activo/carga_masiva', 'ActivoController@carga_masiva')->name('activo.carga_masiva'); 
 
         Route::get('/trazabilidad/datatable', 'ActivoController@trazabilidad_datatable')->name('trazabilidad.datatable');
         Route::get('/reportes/datatable', 'ActivoController@reportes_datatable')->name('reportes.datatable');
@@ -115,31 +138,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 
         
-    });
-
-    
-
-    Route::group(['middleware' => ['bodega']], function () {
-
-
-        //TRANSPORTE
-        Route::get('/transporte', 'TransporteController@transporte')->name('arriendo.transporte');
-        Route::post('/transporte/cambio_fase', 'TransporteController@cambio_fase')->name('transporte.cambio_fase');
-        Route::get('/transporte/qr_reader/{id}', 'TransporteController@qr_reader')->name('transporte.qr_reader');
-        Route::get('/transporte/datatable', 'TransporteController@transporte_datatable')->name('transporte.datatable');
-
-        //ACTIVOS
-        Route::get('/activo/create', 'ActivoController@create')->name('activo.create');
-        Route::post('/activo/store', 'ActivoController@store')->name('activo.store');
-        Route::post('/activo/update/{id}', 'ActivoController@update')->name('activo.update');
-        Route::get('/activo/index', 'ActivoController@index')->name('activo.index');
-        Route::get('/activo/show/{id}', 'ActivoController@show')->name('activo.show');
-
-        //MANTENCIONES
-        Route::get('/mantencion/create/{id}', 'MantencionController@create')->name('mantencion.create');
-        Route::post('/mantencion/store', 'MantencionController@store')->name('mantencion.store');
-
-
     });
 
     
