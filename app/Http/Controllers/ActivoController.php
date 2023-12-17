@@ -1161,7 +1161,7 @@ class ActivoController extends Controller
     }
 
 
-    public function cambio_fase_create($id){
+    public function cambio_fase_create_view($id){
 
         //EN TODOS LOS CASOS "TRANSPORTE" DEBE INGRESAR DATOS PARA EL CAMBIO DE FASE
         //[FIRMA EL QUE PASA y RECIBE] (BODEGA), (EN CAMINO IDA) (FIRMA BODEGA Y CLIENTE)
