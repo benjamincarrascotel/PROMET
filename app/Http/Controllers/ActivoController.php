@@ -1166,7 +1166,7 @@ class ActivoController extends Controller
         //EN TODOS LOS CASOS "TRANSPORTE" DEBE INGRESAR DATOS PARA EL CAMBIO DE FASE
         //[FIRMA EL QUE PASA y RECIBE] (BODEGA), (EN CAMINO IDA) (FIRMA BODEGA Y CLIENTE)
         //[FIRMA EL QUE PASA y RECIBE] (EN CLIENTE y PARA RETIRO), (EN CAMINO VUELTA) (FIRMA CLIENTE Y BODEGA)
-
+        dd("entra");
         //Verificación de proceso actual
         $activo = Activo::where('id', $id)->first();
         if($activo->arriendo_flag && !$activo->venta_flag)
