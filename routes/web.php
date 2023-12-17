@@ -23,6 +23,9 @@ Route::get('/proveedor/create', 'ProveedorController@create')->name('proveedor.c
 Route::post('/proveedor/store', 'ProveedorController@store')->name('proveedor.store');
 Route::post('/proveedor/store2', 'ProveedorController@store2')->name('proveedor.store2');
 
+//INVENTARIO
+Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->middleware(['bodega'])->name('transporte.cambio_fase_create');
+
 
 Route::group(['middleware' => ['auth']], function () {
 
@@ -83,9 +86,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/arriendo/carga_masiva', 'ArriendoController@carga_masiva')->name('arriendo.carga_masiva');
 
         //TRASPASOS
-        Route::get('/traspaso/{id}', 'ActivoController@traspaso_create')->name('traspaso.create');
-        Route::get('/traspaso_venta/{id}', 'ActivoController@traspaso_venta_create')->name('traspaso_venta.create');
-        Route::post('/traspaso/store', 'ActivoController@traspaso_store')->name('traspaso.store');
+        Route::get('/traspaso/{id}', 'TraspasoController@traspaso_arriendo_create')->name('traspaso.create');
+        Route::get('/traspaso_venta/{id}', 'TraspasoController@traspaso_venta_create')->name('traspaso_venta.create');
+        Route::post('/traspaso/store', 'TraspasoController@traspaso_store')->name('traspaso.store');
 
         //MANTENCIONES
         Route::post('/mantencion/finish', 'MantencionController@finish')->name('mantencion.finish');
@@ -118,13 +121,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['bodega']], function () {
 
         //TRANSPORTE
-        Route::get('/transporte', 'ActivoController@transporte')->name('arriendo.transporte');
-        Route::post('/transporte/cambio_fase', 'ActivoController@cambio_fase')->name('transporte.cambio_fase');
-        Route::get('/transporte/qr_reader/{id}', 'ActivoController@qr_reader')->name('transporte.qr_reader');
-        Route::get('/transporte/datatable', 'ActivoController@transporte_datatable')->name('transporte.datatable');
-
-        //INVENTARIO
-        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('transporte.cambio_fase_create');
+        Route::get('/transporte', 'TransporteController@transporte')->name('arriendo.transporte');
+        Route::post('/transporte/cambio_fase', 'TransporteController@cambio_fase')->name('transporte.cambio_fase');
+        Route::get('/transporte/qr_reader/{id}', 'TransporteController@qr_reader')->name('transporte.qr_reader');
+        Route::get('/transporte/datatable', 'TransporteController@transporte_datatable')->name('transporte.datatable');
 
         //ACTIVOS
         Route::get('/activo/create', 'ActivoController@create')->name('activo.create');
