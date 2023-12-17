@@ -105,8 +105,10 @@ class VentaController extends Controller
                 "observaciones" => $observaciones,
             ]);
 
-            //Creamos la ruta pública primero
-            File::makeDirectory(public_path('storage/ventas/'.$venta->id));
+            if(!File::exists('storage/ventas/'.$venta->id)) {
+                //Creamos la ruta pública primero
+                File::makeDirectory(public_path('storage/ventas/'.$venta->id));
+            }
 
             /* Guardamos la imagen
             if($request->hasFile('cotizacion_venta'))

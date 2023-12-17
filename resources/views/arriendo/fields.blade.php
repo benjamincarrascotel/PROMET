@@ -27,7 +27,7 @@
         <div class="row ">
             <div class="col">
                 <label class="form-control-label">Monto Mensual: <span class="tx-danger">*</span></label>
-                <input type="number" id="monto" name="monto" min="0" class="form-control" required="">
+                <input type="number" id="monto" name="monto" min="0" class="form-control" value="{{ old('monto') }}" required>
             </div>
             <div class="col">
                 <label class="form-control-label">Tipo de moneda: </label>
@@ -65,17 +65,17 @@
         <div class="row mt-4">
             <div class="col">
                 <label class="form-control-label">Fecha Inicio Arriendo: <span class="tx-danger">*</span></label>
-                <input class="form-control" id="fecha_inicio" name="fecha_inicio" placeholder="Ingrese la fecha de inicio" required="" type="date">
+                <input class="form-control" id="fecha_inicio" name="fecha_inicio" placeholder="Ingrese la fecha de inicio" required="" type="date" value="{{ old('fecha_inicio') }}">
             </div>
             
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-control-label">Fecha Término Arriendo: </label>
-                <input class="form-control" id="fecha_termino" name="fecha_termino" placeholder="Ingrese la fecha de término" type="date">
+                <input class="form-control" id="fecha_termino" name="fecha_termino" placeholder="Ingrese la fecha de término" type="date" value="{{ old('fecha_termino') }}">
             </div>
 
             <div class="col-md-6 col-lg-6 mb-4">
                 <label class="form-label">Encargado: <span class="tx-danger">*</span></label>
-                <input type="text" id="encargado" name="encargado"  class="form-control" required="">
+                <input type="text" id="encargado" name="encargado"  class="form-control" required="" value="{{ old('encargado') }}">
             </div>
 
         </div>
@@ -83,7 +83,7 @@
         <div class="row mt-4">
             <div class="col">
                 <label class="form-control-label">Observaciones: </label>
-                <textarea class="form-control mb-4 " name='observaciones' id="observaciones" placeholder="Observaciones" rows="3" maxlength="249" ></textarea>
+                <textarea class="form-control mb-4 " name='observaciones' id="observaciones" placeholder="Observaciones" rows="3" maxlength="249" >{{ old('observaciones') }}</textarea>
             </div>
         </div>
 
@@ -120,7 +120,7 @@
     
                 // Agregar la opción predeterminada
                 var defaultOption = document.createElement("option");
-                defaultOption.value = {{!! null !!}};
+                defaultOption.value = "";
                 defaultOption.text = "Seleccione alguno de los proyectos";
                 proyectoSelect.appendChild(defaultOption);
     

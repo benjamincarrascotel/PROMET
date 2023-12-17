@@ -6,7 +6,7 @@
 <div class="mb-3 row">
     <label for="precio_venta" class="col-sm-2 col-form-label">Precio de venta: <span class="tx-danger">*</span></label>
     <div class="col">
-        <input name="precio_venta" id='precio_venta' type="number" min="0" oninput="validity.valid||(value='');" class="form-control"  required>
+        <input name="precio_venta" id='precio_venta' type="number" min="0" oninput="validity.valid||(value='');" class="form-control" value="{{ old('precio_venta')}}" required>
     </div>
     <div class="col">
         <div class="dropdown">
@@ -22,7 +22,7 @@
 <!-- Datos del cliente -->
 
 <div class="mb-3 row">
-    <label for="precio_venta" class="col-sm-2 col-form-label">Proyecto: <span class="tx-danger">*</span></label>
+    <label for="empresa" class="col-sm-2 col-form-label">Proyecto: <span class="tx-danger">*</span></label>
     <div class="col">
         <select id="empresa" class="form-control block mt-1 w-full" name="empresa" required>
             <option value={{null}}>Seleccione la empresa</option>
@@ -44,7 +44,7 @@
 <div class="mb-3 row">
     <label for="fecha_inicio" class="col-sm-2 col-form-label">Fecha de Inicio Venta: <span class="tx-danger">*</span></label>
     <div class="col-sm-10">
-        <input name="fecha_inicio" id='fecha_inicio' type="date" class="form-control" style="width:20vw" required>
+        <input name="fecha_inicio" id='fecha_inicio' type="date" class="form-control" style="width:20vw" value="{{ old('fecha_inicio') }}" required>
     </div>
 </div>
 
@@ -52,20 +52,20 @@
 <div class="mb-3 row">
     <label for="fecha_termino" class="col-sm-2 col-form-label">Fecha de Término Venta: </label>
     <div class="col-sm-10">
-        <input name="fecha_termino" id='fecha_termino' type="date" class="form-control" style="width:20vw">
+        <input name="fecha_termino" id='fecha_termino' type="date" class="form-control" style="width:20vw" value="{{ old('fecha_termino') }}">
     </div>
 </div>
 
 <div class="mb-3 row">
     <label for="encargado" class="col-sm-2 col-form-label">Encargado: <span class="tx-danger">*</span></label>
     <div class="col-sm-10">
-        <input name="encargado" id='encargado' type="text" class="form-control"  required>
+        <input name="encargado" id='encargado' type="text" class="form-control" value="{{ old('encargado') }}" required>
     </div>
 </div>
 
 <div class="mb-3 row">
     <label class="form-control-label">Observaciones: </label>
-    <textarea class="form-control mb-4 " name='observaciones' id="observaciones" placeholder="Observaciones" rows="3" maxlength="249" ></textarea>
+    <textarea class="form-control mb-4 " name='observaciones' id="observaciones" placeholder="Observaciones" rows="3" maxlength="249">{{ old('observaciones') }}</textarea>
 </div>
 
 <script type="text/javascript">
@@ -84,7 +84,7 @@
 
             // Agregar la opción predeterminada
             var defaultOption = document.createElement("option");
-            defaultOption.value = {{!! null !!}};
+            defaultOption.value = "";
             defaultOption.text = "Seleccione alguno de los proyectos";
             proyectoSelect.appendChild(defaultOption);
 

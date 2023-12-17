@@ -26,7 +26,6 @@ Route::post('/proveedor/store2', 'ProveedorController@store2')->name('proveedor.
 //INVENTARIO
 Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('transporte.cambio_fase_create');
 
-
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/', 'HomeController@index')->name('index');

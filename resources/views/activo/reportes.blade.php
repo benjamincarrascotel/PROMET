@@ -118,6 +118,21 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="form-group row">
+                                    <label for="familia" class="col-md-3 form-label mt-2">Familia: </label>
+
+                                    <div class="col-md-9">
+                                        <div class="dropdown">
+                                            <select class="form-control block mt-1 w-full" id="familia" name="familia">
+                                                <option value="{{null}}" selected>Seleccione alguna de las opciones</option>
+                                                @foreach ($familias as $value)
+                                                    <option value="{{ $value->id }}">{{ "[ ".$value->id." ] - ".$value->acronimo." - ".$value->nombre }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 
                             </form>
                         </div>
@@ -151,6 +166,20 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="form-group row">
+                                    <label for="sub_familia" class="col-md-3 form-label mt-2" >Sub Familia: </label>
+
+                                    <div class="col-md-9">
+                                        <div class="dropdown">
+                                            <select id="sub_familia" class="form-control block mt-1 w-full selectpicker" multiple name="sub_familia">
+                                                <option value="{{null}}" selected>Todas las sub-familias</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </form>
                         </div>
 
@@ -245,21 +274,21 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-md-3 form-label mt-2">Empresa:</label>
-                                
-                                <div class="col-md-9 mt-2">
-                                    <input type="text" class="form-control" id="empresa_modal" name="empresa" hidden>
-                                    <input type="text" class="form-control" id="empresa_text" name="empresa_text" disabled>
-
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
                                 <label class="col-md-3 form-label mt-2">Estado del proceso:</label>
                                 
                                 <div class="col-md-9 mt-2">
                                     <input type="text" class="form-control" id="estado_modal" name="estado" hidden>
                                     <input type="text" class="form-control" id="estado_text" name="estado_text" disabled>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 form-label mt-2">Empresa:</label>
+                                
+                                <div class="col-md-9 mt-2">
+                                    <input type="text" class="form-control" id="empresa_modal" name="empresa" hidden>
+                                    <input type="text" class="form-control" id="empresa_text" name="empresa_text" disabled>
 
                                 </div>
                             </div>
@@ -273,6 +302,27 @@
 
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 form-label mt-2">Familia:</label>
+                                
+                                <div class="col-md-9 mt-2">
+                                    <input type="text" class="form-control" id="familia_modal" name="familia" hidden >
+                                    <input type="text" class="form-control" id="familia_text" name="familia_text" disabled>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 form-label mt-2">Sub-Familia:</label>
+                                
+                                <div class="col-md-9 mt-2">
+                                    <input type="text" class="form-control" id="sub_familia_modal" name="sub_familia" hidden >
+                                    <input type="text" class="form-control" id="sub_familia_text" name="sub_familia_text" disabled>
+
+                                </div>
+                            </div>
+
                             <button type="submit" class="btn btn-primary">Exportar</button>
                         </form>
                     </div>
@@ -292,50 +342,96 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
     
-
+    <!-- SUB FAMILIAS -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-        var empresaSelect = document.getElementById("empresa");
-        var proyectoSelect = document.getElementById("proyecto");
-        var proyectos = {!! $proyectos->toJson() !!};
+            var familiaSelect = document.getElementById("familia");
+            var sub_familiaSelect = document.getElementById("sub_familia");
+            var sub_familias = {!! $sub_familias->toJson() !!};
 
-        // Function to update the options of the proyecto selectpicker
-        function actualizarProyectos() {
-            var selectedEmpresaId = empresaSelect.value;
+            // Function to update the options of the sub_familia selectpicker
+            function actualizarSubFamilias() {
+                var selectedFamiliaId = familiaSelect.value;
 
-            // Destroy and reinitialize the selectpicker on the proyecto dropdown
-            $('#proyecto').selectpicker('destroy');
-            proyectoSelect.innerHTML = '';
+                // Destroy and reinitialize the selectpicker on the sub_familia dropdown
+                $('#sub_familia').selectpicker('destroy');
+                sub_familiaSelect.innerHTML = '';
 
-            // Add the default option
-            var defaultOption = document.createElement("option");
-            defaultOption.value = "null";
-            defaultOption.text = "Todos los proyectos";
-            defaultOption.selected = true;
-            proyectoSelect.appendChild(defaultOption);
+                // Add the default option
+                var defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.text = "Todas las sub-familias";
+                defaultOption.selected = true;
+                sub_familiaSelect.appendChild(defaultOption);
 
-            if(proyectos[selectedEmpresaId]){
-                // Add the projects corresponding to the selected empresa
-                proyectos[selectedEmpresaId].forEach(function (proyecto) {
-                    var option = document.createElement("option");
-                    option.value = proyecto.id;
-                    option.text = "[ " + proyecto.codigo_sap + " ] " + proyecto.nombre_sap;
-                    proyectoSelect.appendChild(option);
-                });
+                if(sub_familias[selectedFamiliaId]){
+                    // Add the projects corresponding to the selected familia
+                    sub_familias[selectedFamiliaId].forEach(function (sub_familia) {
+                        var option = document.createElement("option");
+                        option.value = sub_familia.id;
+                        option.text = "[ "+sub_familia.id+" ] - "+sub_familia.acronimo+" - "+sub_familia.nombre ;
+                        sub_familiaSelect.appendChild(option);
+                    });
+                }
+                
+                // Reinitialize the selectpicker on the sub_familia dropdown
+                $('#sub_familia').selectpicker('refresh');
             }
-            
-            // Reinitialize the selectpicker on the proyecto dropdown
-            $('#proyecto').selectpicker('refresh');
-        }
 
-        // Assign the change event to the empresa selectpicker
-        $('#empresa').on('changed.bs.select', function () {
-            actualizarProyectos();
+            // Assign the change event to the familia selectpicker
+            $('#familia').on('changed.bs.select', function () {
+                actualizarSubFamilias();
+            });
+
+            // Initialize the selectpickers
+            $('#familia, #sub_familia').selectpicker();
         });
+    </script>
 
-        // Initialize the selectpickers
-        $('#empresa, #proyecto').selectpicker();
-    });
+    <!-- PROYECTO -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var empresaSelect = document.getElementById("empresa");
+            var proyectoSelect = document.getElementById("proyecto");
+            var proyectos = {!! $proyectos->toJson() !!};
+
+            // Function to update the options of the proyecto selectpicker
+            function actualizarProyectos() {
+                var selectedEmpresaId = empresaSelect.value;
+
+                // Destroy and reinitialize the selectpicker on the proyecto dropdown
+                $('#proyecto').selectpicker('destroy');
+                proyectoSelect.innerHTML = '';
+
+                // Add the default option
+                var defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.text = "Todos los proyectos";
+                defaultOption.selected = true;
+                proyectoSelect.appendChild(defaultOption);
+
+                if(proyectos[selectedEmpresaId]){
+                    // Add the projects corresponding to the selected empresa
+                    proyectos[selectedEmpresaId].forEach(function (proyecto) {
+                        var option = document.createElement("option");
+                        option.value = proyecto.id;
+                        option.text = "[ " + proyecto.codigo_sap + " ] " + proyecto.nombre_sap;
+                        proyectoSelect.appendChild(option);
+                    });
+                }
+                
+                // Reinitialize the selectpicker on the proyecto dropdown
+                $('#proyecto').selectpicker('refresh');
+            }
+
+            // Assign the change event to the empresa selectpicker
+            $('#empresa').on('changed.bs.select', function () {
+                actualizarProyectos();
+            });
+
+            // Initialize the selectpickers
+            $('#empresa, #proyecto').selectpicker();
+        });
     </script>
 
     <script type="text/javascript">
@@ -376,6 +472,22 @@
                     return $(this).text();
                 }).get();
                 $('#exportModal #proyecto_text').val(proyecto_text);
+
+                var familia = $('#familia').val();
+                $('#exportModal #familia_modal').val(familia);
+                var selectedOptions = $('#familia').find(':selected');
+                var familia_text = selectedOptions.map(function () {
+                    return $(this).text();
+                }).get();
+                $('#exportModal #familia_text').val(familia_text);
+
+                var sub_familia = $('#sub_familia').val();
+                $('#exportModal #sub_familia_modal').val(sub_familia);
+                var selectedOptions = $('#sub_familia').find(':selected');
+                var sub_familia_text = selectedOptions.map(function () {
+                    return $(this).text();
+                }).get();
+                $('#exportModal #sub_familia_text').val(sub_familia_text);
 
             });
 
@@ -418,6 +530,8 @@
                                 d.estado = $('#estado').val(),
                                 d.empresa = $('#empresa').val(),
                                 d.proyecto = $('#proyecto').val(),
+                                d.familia = $('#familia').val(),
+                                d.sub_familia = $('#sub_familia').val(),
                                 d.search = $('input[type="search"]').val()
                             }
                     },
@@ -431,7 +545,32 @@
                         {data: 'codigo_interno', name: 'codigo_interno'},
                         {data: 'fecha_inicio', name: 'fecha_inicio'},
                         {data: 'fecha_termino', name: 'fecha_termino'},
-                    ]
+                    ],
+
+                    "language": {
+                        "sProcessing":     "Procesando...",
+                        "sLengthMenu":     "Mostrar _MENU_ registros",
+                        "sZeroRecords":    "No se encontraron resultados",
+                        "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                        "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix":    "",
+                        "sSearch":         "Buscar:",
+                        "sUrl":            "",
+                        "sInfoThousands":  ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst":    "Primero",
+                            "sLast":     "Último",
+                            "sNext":     "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    },
                 });
 
                 /* // Función a ejecutar cuando se cambia el valor del select de tipo de proceso

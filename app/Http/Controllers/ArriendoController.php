@@ -65,6 +65,11 @@ class ArriendoController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+
+        $validated = $request->validate([
+            'proyecto_id' => 'required|integer',
+        ]);
+
         $activo = Activo::where('id', $input['activo_id'])->first();
         $observaciones = null;
         if(isset($input['observaciones'])){
@@ -86,8 +91,10 @@ class ArriendoController extends Controller
                 "observaciones" => $observaciones,
             ]);
 
-            //Creamos la ruta pública primero
-            File::makeDirectory(public_path('storage/arriendos/'.$arriendo->id));
+            if(!File::exists('storage/arriendos/'.$arriendo->id)) {
+                //Creamos la ruta pública primero
+                File::makeDirectory(public_path('storage/arriendos/'.$arriendo->id));
+            }
 
             $activo->estado = 'PARA RETIRO';
             $activo->arriendo_flag = true;
