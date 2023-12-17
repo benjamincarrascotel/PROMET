@@ -63,15 +63,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/usuarios/{id}', 'UserController@create')->name('usuarios.create');
         Route::post('/usuarios/store', 'UserController@store')->name('usuarios.store');
 
+        //INVENTARIO
+        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('inventario.cambio_fase_create');  
+        
         //ACTIVOS
         Route::get('/activo/trazabilidad', 'ActivoController@trazabilidad')->name('activo.trazabilidad');
         Route::get('/activo/baja_activo/{id}', 'ActivoController@baja_activo_create')->name('activo.baja_activo_create');
         Route::post('/activo/baja_activo_store', 'ActivoController@baja_activo_store')->name('activo.baja_activo_store');
         Route::get('/activo/reportes', 'ActivoController@reportes')->name('activo.reportes');
         Route::post('/activo/carga_masiva', 'ActivoController@carga_masiva')->name('activo.carga_masiva');
-
-        //INVENTARIO
-        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('inventario.cambio_fase_create');  
 
         Route::get('/trazabilidad/datatable', 'ActivoController@trazabilidad_datatable')->name('trazabilidad.datatable');
         Route::get('/reportes/datatable', 'ActivoController@reportes_datatable')->name('reportes.datatable');
