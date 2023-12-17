@@ -23,8 +23,7 @@ Route::get('/proveedor/create', 'ProveedorController@create')->name('proveedor.c
 Route::post('/proveedor/store', 'ProveedorController@store')->name('proveedor.store');
 Route::post('/proveedor/store2', 'ProveedorController@store2')->name('proveedor.store2');
 
-//INVENTARIO
-Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create_view')->name('inventario.cambio_fase_create');
+
 
 Route::group(['middleware' => ['auth']], function () {
 
@@ -70,6 +69,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/activo/baja_activo_store', 'ActivoController@baja_activo_store')->name('activo.baja_activo_store');
         Route::get('/activo/reportes', 'ActivoController@reportes')->name('activo.reportes');
         Route::post('/activo/carga_masiva', 'ActivoController@carga_masiva')->name('activo.carga_masiva');
+
+        //INVENTARIO
+        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create_view')->name('inventario.cambio_fase_create');  
 
         Route::get('/trazabilidad/datatable', 'ActivoController@trazabilidad_datatable')->name('trazabilidad.datatable');
         Route::get('/reportes/datatable', 'ActivoController@reportes_datatable')->name('reportes.datatable');
@@ -118,6 +120,7 @@ Route::group(['middleware' => ['auth']], function () {
     
 
     Route::group(['middleware' => ['bodega']], function () {
+
 
         //TRANSPORTE
         Route::get('/transporte', 'TransporteController@transporte')->name('arriendo.transporte');
