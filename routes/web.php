@@ -24,7 +24,7 @@ Route::post('/proveedor/store', 'ProveedorController@store')->name('proveedor.st
 Route::post('/proveedor/store2', 'ProveedorController@store2')->name('proveedor.store2');
 
 //INVENTARIO
-Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->middleware(['auth'])->name('inventario.cambio_fase_create');  
+Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->middleware(['superadmin', 'bodega'])->name('inventario.cambio_fase_create');  
 
 Route::group(['middleware' => ['auth']], function () {
 
