@@ -36,9 +36,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/proveedor/index', 'ProveedorController@index')->name('proveedor.index');
     Route::get('/proveedor/{id}', 'ProveedorController@show')->name('proveedor.show');
 
-    //INVENTARIO
-    Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('inventario.cambio_fase_create')->where('id', '[0-9]+');  
-
     Route::group(['middleware' => ['superadmin']], function () {
 
         //DASHBOARD
@@ -65,6 +62,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/usuarios/destroy/{id}', 'UserController@destroy')->name('usuarios.destroy');
         Route::get('/usuarios/{id}', 'UserController@create')->name('usuarios.create');
         Route::post('/usuarios/store', 'UserController@store')->name('usuarios.store');
+
+        //INVENTARIO
+        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('inventario.cambio_fase_create')->where('id', '[0-9]+');  
 
         //ACTIVOS
         Route::get('/activo/trazabilidad', 'ActivoController@trazabilidad')->name('activo.trazabilidad');
@@ -116,7 +116,6 @@ Route::group(['middleware' => ['auth']], function () {
 
         
     });
-
     
 
     Route::group(['middleware' => ['bodega']], function () {
