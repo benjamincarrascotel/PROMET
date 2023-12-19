@@ -38,6 +38,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['superadmin']], function () {
 
+        //INVENTARIO
+        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create'); 
+
         //DASHBOARD
         Route::get('/contrato/detalles', 'ContratoController@detalles')->name('contrato.detalles');
         Route::get('/contrato/plan', 'ContratoController@plan')->name('contrato.plan');
@@ -110,11 +113,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('usuarios', 'UserController')->only([
             'create', 'store', 'edit','update','index',
         ]);
-
-        //INVENTARIO
-        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('inventario.cambio_fase_create'); 
-
-
         
     });
     
