@@ -61,11 +61,9 @@ Route::group(['middleware' => ['auth']], function () {
         //USERS
         Route::get('/usuarios/destroy/{id}', 'UserController@destroy')->name('usuarios.destroy');
         Route::get('/usuarios/{id}', 'UserController@create')->name('usuarios.create');
-        Route::post('/usuarios/store', 'UserController@store')->name('usuarios.store');
+        Route::post('/usuarios/store', 'UserController@store')->name('usuarios.store'); 
 
-        //INVENTARIO
-        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('inventario.cambio_fase_create')->where('id', '[0-9]+');  
-
+        
         //ACTIVOS
         Route::get('/activo/trazabilidad', 'ActivoController@trazabilidad')->name('activo.trazabilidad');
         Route::get('/activo/baja_activo/{id}', 'ActivoController@baja_activo_create')->name('activo.baja_activo_create');
@@ -120,6 +118,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['middleware' => ['bodega']], function () {
 
+        //INVENTARIO
+        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('inventario.cambio_fase_create')->where('id', '[0-9]+'); 
 
         //TRANSPORTE
         Route::get('/transporte', 'TransporteController@transporte')->name('arriendo.transporte');
