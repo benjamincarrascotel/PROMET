@@ -111,6 +111,9 @@ Route::group(['middleware' => ['auth']], function () {
             'create', 'store', 'edit','update','index',
         ]);
 
+        //INVENTARIO
+        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('inventario.cambio_fase_create'); 
+
 
         
     });
@@ -120,8 +123,6 @@ Route::group(['middleware' => ['auth']], function () {
 
         //TRANSPORTE
         Route::get('/transporte/index', 'TransporteController@transporte')->name('transporte.transporte');
-        //INVENTARIO
-        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create')->name('inventario.cambio_fase_create'); 
         Route::post('/transporte/cambio_fase', 'TransporteController@cambio_fase')->name('transporte.cambio_fase');
         Route::get('/transporte/qr_reader/{id}', 'TransporteController@qr_reader')->name('transporte.qr_reader');
         Route::get('/transporte/datatable', 'TransporteController@transporte_datatable')->name('transporte.datatable');
