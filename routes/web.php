@@ -39,7 +39,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['superadmin']], function () {
 
         //INVENTARIO
-        Route::get('/inventario/{id}', 'ActivoController@cambio_fase_create'); 
+        Route::get('/inventarioo/{id}', 'ActivoController@cambio_fase_create'); 
 
         //DASHBOARD
         Route::get('/contrato/detalles', 'ContratoController@detalles')->name('contrato.detalles');
