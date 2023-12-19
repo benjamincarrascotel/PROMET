@@ -6,7 +6,7 @@
 		@elseif(auth()->user()->admin)
 			<a class="header-brand" href="{{route('admin.index')}}">
 		@elseif(auth()->user()->bodega)
-			<a class="header-brand" href="{{route('arriendo.transporte')}}">
+			<a class="header-brand" href="{{route('transporte.transporte')}}">
 		@endif
 			<img src="{{asset('assets/images/brand/LogoMOS.png')}}" class="header-brand-img desktop-lgo" alt="CEMIN logo">
 			<img src="{{asset('assets/images/brand/LogoMOS.png')}}" class="header-brand-img dark-logo" alt="Azea logo">
@@ -114,7 +114,7 @@
 			<li class="side-item side-item-category">Bodega</li>
 			<!-- Transporte -->
 			<li class="slide">
-				<a class="side-menu__item"  href="{{route('arriendo.transporte')}}">
+				<a class="side-menu__item"  href="{{route('transporte.transporte')}}">
 					<svg height="24" width="24" class="side-menu__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" xml:space="preserve"><path d="M32 17c0-.1 0-.2-.1-.3v-.1l-3-6c-.2-.4-.5-.6-.9-.6h-7c-.6 0-1 .4-1 1v5h-2V9c0-.6-.4-1-1-1H2c-.6 0-1 .4-1 1v7c-.6 0-1 .4-1 1v6c0 .6.4 1 1 1h2c0 2.2 1.8 4 4 4s4-1.8 4-4h11c0 2.2 1.8 4 4 4s4-1.8 4-4h1c.6 0 1-.4 1-1v-6zm-10-5h5.4l2 4H22v-4zM8 16v-2h3v2H8zm5-2h3v2h-3v-2zm3-2h-3v-2h3v2zm-5 0H8v-2h3v2zm-8-2h3v2H3v-2zm0 4h3v2H3v-2zm4 12c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm19 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
 				<span class="side-menu__label">Transporte</span></a>
 			</li>

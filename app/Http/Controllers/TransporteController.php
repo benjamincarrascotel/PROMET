@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Schema;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 
 use App\Models\Activo;
 use App\Models\ArriendoActivo;
@@ -24,10 +23,6 @@ use App\Models\Mantencion;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-
-use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\ImportExcel;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 use DataTables;
 
@@ -193,7 +188,7 @@ class TransporteController extends Controller
             return redirect()->route('activo.trazabilidad');
         }else{
             //CASO BODEGA O ADMIN
-            return redirect()->route('arriendo.transporte');
+            return redirect()->route('transporte.transporte');
         }
 
         
