@@ -58,7 +58,7 @@ class ArriendoController extends Controller
             return view('bodega.cambio_fase')
                 ->with('proceso',  $proceso);
         }else{
-            flash("Error: Los registros de trazabilidad no coinciden.", "danger");
+            flash("Error: Asegúrese de haber disponibilizado el proceso para su retiro (EN CLIENTE).", "danger");
             $empresas = Empresa::get();
             $proyectos = Proyecto::get()->groupBy('empresa_id');
             $selectedID = 0;
