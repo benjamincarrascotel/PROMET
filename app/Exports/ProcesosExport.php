@@ -22,6 +22,6 @@ class ProcesosExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         // Define your column names here
-        return ['id', 'activo_id', 'proyecto_id', 'monto', 'tipo_moneda', 'fecha_inicio', 'fecha_termino', 'encargado', 'estado', 'observaciones', 'tipo_proceso'];
+        return ['proceso_id', 'activo_id', 'proyecto_id', 'monto', 'tipo_moneda', 'fecha_inicio', 'fecha_termino', 'encargado', 'estado', 'observaciones', 'tipo_proceso', 'proyecto_nombre', 'activo_nombre', 'activo_codigo_interno'];
     }
 }

@@ -1001,11 +1001,17 @@ class ActivoController extends Controller
             if($tipo_proceso[0] == "Arriendos"){
                 $data = $data->map(function ($item) {
                     $item['tipo_proceso'] = 'ARRIENDO';
+                    $item['proyecto_nombre'] = $item->proyecto->nombre_sap;
+                    $item['activo_nombre'] = $item->activo->marca." - ".$item->activo->modelo." - ".$item->activo->año;
+                    $item['activo_codigo_interno'] = $item->activo->codigo_interno;
                 return $item;
                 });
             }elseif($tipo_proceso[0] == "Ventas"){
                 $data = $data->map(function ($item) {
                     $item['tipo_proceso'] = 'VENTA';
+                    $item['proyecto_nombre'] = $item->proyecto->nombre_sap;
+                    $item['activo_nombre'] = $item->activo->marca." - ".$item->activo->modelo." - ".$item->activo->año;
+                    $item['activo_codigo_interno'] = $item->activo->codigo_interno;
                 return $item;
                 });
             }
@@ -1058,6 +1064,9 @@ class ActivoController extends Controller
 
             $arriendos = $arriendos->map(function ($item) {
                 $item['tipo_proceso'] = 'ARRIENDO';
+                $item['proyecto_nombre'] = $item->proyecto->nombre_sap;
+                $item['activo_nombre'] = $item->activo->marca." - ".$item->activo->modelo." - ".$item->activo->año;
+                $item['activo_codigo_interno'] = $item->activo->codigo_interno;
                 return $item;
             });
 
@@ -1108,6 +1117,9 @@ class ActivoController extends Controller
 
             $ventas = $ventas->map(function ($item) {
                     $item['tipo_proceso'] = 'VENTA';
+                    $item['proyecto_nombre'] = $item->proyecto->nombre_sap;
+                    $item['activo_nombre'] = $item->activo->marca." - ".$item->activo->modelo." - ".$item->activo->año;
+                    $item['activo_codigo_interno'] = $item->activo->codigo_interno;
                 return $item;
             });
 
@@ -1126,7 +1138,7 @@ class ActivoController extends Controller
             return redirect()->back();
         }else{
             // Eliminamos las columnas que no queremos exportar
-            $columns_to_delete = ['created_at', 'updated_at', 'deleted_at'];
+            $columns_to_delete = ['created_at', 'updated_at', 'deleted_at', 'proyecto', 'activo'];
             $data = $data->map(function ($item) use ($columns_to_delete) {
                 // Use the except method to exclude specified columns
                 return collect($item)->except($columns_to_delete)->all();
