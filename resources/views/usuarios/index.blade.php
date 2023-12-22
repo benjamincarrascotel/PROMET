@@ -22,10 +22,20 @@
                 <td>{{$usuario->email}}</td>
                 @if($usuario->superadmin)
                     <td>
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-primary" href="{{ route('usuarios.show', [$usuario->id]) }}">
+                                <i class='fa fa-ban'></i>  
+                                Ver
+                            </a>                    
+                        </div>
                     </td>
                 @else
                     <td>
                         <div class="btn-group" role="group">
+                            <a class="btn btn-primary" href="{{ route('usuarios.show', [$usuario->id]) }}">
+                                <i class='fa fa-ban'></i>  
+                                Ver
+                            </a>    
                             <a class="btn btn-danger" onclick="confirmDelete('{{ route('usuarios.destroy', [$usuario->id]) }}')">
                                 <i class='fa fa-ban'></i>  
                                 Eliminar

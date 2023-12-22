@@ -108,8 +108,13 @@ Route::group(['middleware' => ['auth']], function () {
 
 
         Route::resource('usuarios', 'UserController')->only([
-            'create', 'store', 'edit','update','index',
+            'create', 'store','update','index',
         ]);
+
+        Route::get('/usuarios/show/{id}', 'UserController@show')->name('usuarios.show');
+        Route::post('/usuarios/update/{id}', 'UserController@update')->name('usuarios.update');
+
+
         
     });
     

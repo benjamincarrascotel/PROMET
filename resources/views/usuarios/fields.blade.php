@@ -62,13 +62,6 @@
 </div>
 
 <div class="mb-3 row">
-    <label for="admin" class="col-sm-2 col-form-label">Es Admin?</label>
-    <div class="col-sm-10 mt-2">
-        <input name="admin" type="checkbox" value="1">
-    </div>
-</div>
-
-<div class="mb-3 row">
     <label for="admin" class="col-sm-2 col-form-label">Es Bodega?</label>
     <div class="col-sm-10 mt-2">
         <input name="bodega" type="checkbox" value="1">

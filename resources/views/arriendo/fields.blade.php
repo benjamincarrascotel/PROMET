@@ -27,7 +27,7 @@
         <div class="row ">
             <div class="col">
                 <label class="form-control-label">Monto Mensual: <span class="tx-danger">*</span></label>
-                <input type="number" id="monto" name="monto" min="0" class="form-control" value="{{ old('monto') }}" required>
+                <input type="number" id="monto" name="monto" min="0" step="any" class="form-control" value="{{ old('monto') }}" required>
             </div>
             <div class="col">
                 <label class="form-control-label">Tipo de moneda: </label>

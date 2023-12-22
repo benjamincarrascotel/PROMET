@@ -95,8 +95,18 @@
                     <div class="row">
                         <div class="text-center">
                             <div class="description-block p-4">
-                                <h5 class="description-header mb-1 font-weight-bold  number-font">{{$n_arriendos}}</h5>
-                                <span class="text-muted">Total de Arriendos del Activo</span>
+                                @if($proceso)
+                                    @if($proceso->arriendo_venta_flag == 1)
+                                        <span class="text-muted">Proceso:</span>
+                                        <h5 class="description-header mb-1 font-weight-bold  number-font">{{'[ARRIENDO ID : '.$proceso->id.' ]'}}<br>{{'[PROYECTO: '.$proceso->proyecto->nombre_sap.' ]'}}</h5>
+                                    @elseif($proceso->arriendo_venta_flag == 0)
+                                    <span class="text-muted">Proceso:</span>
+                                    <h5 class="description-header mb-1 font-weight-bold  number-font">{{'[VENTA ID : '.$proceso->id.' ]'}}<br>{{'[PROYECTO: '.$proceso->proyecto->nombre_sap.' ]'}}</h5>
+                                    @endif
+                                @else
+                                    <span class="text-muted">Cantidad de procesos totales:</span>
+                                    <h5 class="description-header mb-1 font-weight-bold  number-font">{{$n_procesos}}</h5>
+                                @endif
                             </div>
                         </div>
                         

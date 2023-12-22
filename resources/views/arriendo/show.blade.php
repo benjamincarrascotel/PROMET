@@ -75,7 +75,7 @@
                                 <div class="row">
                                     <label class="form-label">Monto:</label>
                                     <div class="col form-group">
-                                        <input type="number" id="monto" name="monto" min="0" class="form-control" required="" value="{{$arriendo->monto}}">
+                                        <input type="number" id="monto" name="monto" min="0" step="any" class="form-control" required="" value="{{$arriendo->monto}}">
                                     </div>
                                     <div class="col form-group">
                                         <div class="dropdown">

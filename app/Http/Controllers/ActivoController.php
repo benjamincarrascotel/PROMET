@@ -394,12 +394,29 @@ class ActivoController extends Controller
             $cont += 1;
         }
 
+        if($activo->arriendo_flag == 1 || $activo->venta_flag == 1){
+            if($activo->arriendo_flag && !$activo->venta_flag){
+                $proceso = ArriendoActivo::where('activo_id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
+                $proceso->arriendo_venta_flag = 1;
+            }elseif($activo->venta_flag && !$activo->arriendo_flag){
+                $proceso = Venta::where('activo_id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
+                $proceso->arriendo_venta_flag = 0;
+            }else{
+                flash("Error: Existe una inconsistencia en nuestros registros.", "danger");
+            }
+        }else{
+            $proceso = null;
+        }
+
         $n_arriendos = ArriendoActivo::where('activo_id', $id)->get()->count();
+        $n_ventas = Venta::where('activo_id', $id)->get()->count();
+        $n_procesos = $n_arriendos + $n_ventas;
         return view('activo.show')
+                ->with('proceso', $proceso)
                 ->with('familias', $familias)
                 ->with('mantenciones', $mantenciones)
                 ->with('sub_familias', $sub_familias)
-                ->with('n_arriendos', $n_arriendos)
+                ->with('n_procesos', $n_procesos)
                 ->with('activo', $activo);
     }
 

@@ -87,7 +87,7 @@
                                 <div class="row">
                                     <label class="form-label">Precio Venta:</label>
                                     <div class="col form-group">
-                                        <input type="number" id="precio_venta" name="precio_venta" min="0" class="form-control" required="" value="{{$venta->precio_venta}}">
+                                        <input type="number" id="precio_venta" name="precio_venta" min="0" step="any" class="form-control" required="" value="{{$venta->precio_venta}}">
                                     </div>
                                     <div class="col form-group">
                                         <div class="dropdown">

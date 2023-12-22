@@ -92,7 +92,7 @@ class UserController extends Controller
                 $superadmin->apellido2 = $input['apellido2'];
                 $superadmin->save();
             }
-            else if(isset($input['admin']))
+            elseif(isset($input['admin']) || isset($input['bodega']))
             {
                 $admin = new Admin();
                 $admin->email = $input['email'];
@@ -125,9 +125,19 @@ class UserController extends Controller
      * @param  \App\User $User
      * @return \Illuminate\Http\Response
      */
-    public function show(User $usuario)
+    public function show($id)
     {
-        return view('usuarios.show', compact('usuario'));
+        $user = User::where('id', $id)->first();
+        if($user->superadmin)
+            $usuario = SuperAdmin::where('email', $user->email)->first();
+        elseif($user->admin || $user->bodega)
+            $usuario = Admin::where('email', $user->email)->first();
+        else{
+            flash("El usuario no tiene un rol asignado")->error();
+            return redirect()->back();
+        }
+
+        return view('usuarios.show', compact('usuario', 'user'));
     }
 
     /**
@@ -150,101 +160,56 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     /*TODO POR BORRAR
-    public function update(Request $request, User $usuario)
+    public function update(Request $request, $id)
     {
+        if($request->get('cambiarContraseña'))
+        {
+            $request->validate([
+                'nombre' => 'required|string|max:255',
+                'apellido1' => 'required|string|max:255',
+                'apellido2' => 'required|string|max:255',
+                'rut' => 'required|string|max:255',
+                'rut_dv' => 'required|string|max:255',
+                'password' => 'required|string|confirmed|min:8',
+            ]);
+            $request->request->remove('cambiarContraseña');
+            $request->request->remove('password_confirmation');
+        }else{
+            $request->validate([
+                'nombre' => 'required|string|max:255',
+                'apellido1' => 'required|string|max:255',
+                'apellido2' => 'required|string|max:255',
+                'rut' => 'required|string|max:255',
+                'rut_dv' => 'required|string|max:255',
+            ]);
+        }
+        $request->request->remove('_token');
         $input = $request->all();
 
-        if((!empty($input['password']) || !empty($input['password2'])) && $input['password2'] != $input['password'])
-        {
-            flash('Las claves no coinciden, trate nuevamente')->error();
+        $user = User::where('id', $id)->first();
+        if(isset($input['password'])){
+            $input['password'] = hash_pbkdf2('haval256,5', $input['password'], $user->salt, 5, false, false);
+            $user->password = $input['password'];
+        }
+        
+        if($user->superadmin){
+            $superadmin = SuperAdmin::where('email', $user->email)->update($input);
+        }elseif($user->admin || $user->bodega){
+            $bodega = Admin::where('email', $user->email)->update($input);
+        }else{
+            flash("El usuario no tiene un rol asignado")->error();
             return redirect()->back();
         }
-        elseif(!empty($input['password']) && !empty($input['password2']))
-        {
-            $usuario->salt = md5(sprintf("%d%d%d%dAMPLIFICA%s", random_int(1,9), random_int(1,9), random_int(1,9), random_int(1,9), strtotime(date("Y-m-d H:i:s"))));
-            $usuario->password = hash_pbkdf2('haval256,5', $input['password'], $usuario->salt, 5, false, false);
-        }
 
-        $usuario->name = $input['name'];
-        $usuario->email = $input['email'];
+        $user->name = $input['nombre'];
 
-        $car = 0;
+        $user->save();
 
-        if(isset($request->flags))
-        {
-            foreach($request->flags as $carD)
-                $car += $carD;
-        }
+        $usuarios = User::get();
 
-        $usuario->flags = $car;
-
-        if(intval($input['proveedor']))
-        {
-            $usuario->proveedor = true;
-            if(!array_key_exists('cliente_rol_id', $input))
-                $usuario->rol_id = null;
-            else
-            {
-                $rol = Rol::find($input['cliente_rol_id']);
-                if($rol->rol_cliente)
-                {
-                    $usuario->rol_id = $input['cliente_rol_id'];
-                }
-            }
-        }
-        else
-        {
-            $usuario->proveedor = false;
-            if(!array_key_exists('rol_id', $input))
-                $usuario->rol_id = null;
-            else
-                $usuario->rol_id = $input['rol_id'];
-        }
-
-        $usuario->save();
-
-        UserCliente::where('user_id', $usuario->id)->delete();
-        UserSucursal::where('user_id', $usuario->id)->delete();
-
-        if(intval($input['proveedor']))
-        {
-            if(array_key_exists('tienda_id', $input))
-            {
-                foreach($input['tienda_id'] as $tienda_id)
-                {
-                    $uc = new UserCliente();
-                    $uc->tienda_id = $tienda_id;
-                    $uc->user_id = $usuario->id;
-                    $uc->save();
-                }
-            }
-        }
-        else
-        {
-            if(array_key_exists('sucursal_id', $input))
-            {
-                foreach($input['sucursal_id'] as $sucursal_id)
-                {
-                    $us = new UserSucursal();
-                    $us->sucursal_id = $sucursal_id;
-                    $us->user_id = $usuario->id;
-                    $us->save();
-                }
-            }
-        }
-
-        // $redis = LRedis::connection();
-        // $redis->publish(CANAL_SOCKET_USUARIO, json_encode([
-        //                                 'tipo'=>'UsuarioCreado',
-        //                                 'motivo'=>'success',
-        //                                 'mensaje'=>'Se ha editado un Usuario con éxito.'
-        //                                 ]));
-
-        flash('Usuario actualizado correctamente')->success();
-        return view('usuarios.show', compact('usuario'));
+        flash('Usuario [ ID : '.$id.'] actualizado correctamente')->success();
+        return view('usuarios.index', compact('usuarios', 'user'));
     }
-    */
 
     /**
      * Remove the specified resource from storage.
