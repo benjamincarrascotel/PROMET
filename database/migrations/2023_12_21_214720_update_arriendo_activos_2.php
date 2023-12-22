@@ -15,7 +15,7 @@ class UpdateArriendoActivos2 extends Migration
     {
         Schema::table('arriendo_activos', function(Blueprint $table){
 
-            $table->decimal('monto', 10, 4)->nullable()->change();
+            $table->decimal('monto', 20, 4)->nullable()->change();
 
         });
     }

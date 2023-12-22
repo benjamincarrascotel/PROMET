@@ -15,7 +15,7 @@ class UpdateVentas4 extends Migration
     {
         Schema::table('ventas', function(Blueprint $table){
 
-            $table->decimal('precio_venta', 10, 4)->nullable()->change();
+            $table->decimal('precio_venta', 20, 4)->nullable()->change();
 
         });
     }
