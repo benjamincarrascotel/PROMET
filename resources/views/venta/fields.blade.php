@@ -6,7 +6,7 @@
 <div class="mb-3 row">
     <label for="precio_venta" class="col-sm-2 col-form-label">Precio de venta: <span class="tx-danger">*</span></label>
     <div class="col">
-        <input name="precio_venta" id='precio_venta' type="number" min="0" step="any" oninput="validity.valid||(value='');" class="form-control" value="{{ old('precio_venta')}}" required>
+        <input name="precio_venta" id='precio_venta' type="number" min="0" step="any" class="form-control" value="{{ old('precio_venta')}}" required>
     </div>
     <div class="col">
         <div class="dropdown">

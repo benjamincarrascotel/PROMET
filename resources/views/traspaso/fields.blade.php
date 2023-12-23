@@ -42,7 +42,7 @@
     <div class="row ">
         <label for="monto" class="col-sm-2 col-form-label">Nuevo Monto Mensual: </label>
         <div class="col">
-            <input name="monto" id='monto' type="number" min="0" oninput="validity.valid||(value='');" class="form-control"  required>
+            <input name="monto" id='monto' type="number" min="0" step="any" oninput="validity.valid||(value='');" class="form-control"  required>
         </div>
         <div class="col">
             <div class="dropdown">
@@ -58,7 +58,7 @@
     <div class="row ">
         <label for="precio_venta" class="col-sm-2 col-form-label">Nuevo Precio de venta: </label>
         <div class="col">
-            <input name="precio_venta" id='precio_venta' type="number" min="0" oninput="validity.valid||(value='');" class="form-control"  required>
+            <input name="precio_venta" id='precio_venta' type="number" min="0" step="any" class="form-control"  required>
         </div>
         <div class="col">
             <div class="dropdown">
@@ -104,6 +104,31 @@
     </div>
     
 </div>
+
+<script>
+    $(document).ready(function () {
+        // Cuando se cambia el estado del checkbox
+        $(".estado-checkbox_traspaso").change(function () {
+            // Obtén el estado actual del checkbox
+            var isChecked = $(this).prop("checked");
+
+            var proceso_flag = {{$proceso->proceso_flag}};
+
+            if(!proceso_flag){
+                // Obtén la etiqueta correspondiente
+                var label = isChecked ? "Nuevo Precio de venta:" : "Nuevo Monto Mensual:";
+                // Actualiza el texto de la etiqueta
+                $("label[for='monto']").text(label);
+            }else{
+                // Obtén la etiqueta correspondiente
+                var label = isChecked ? "Nuevo Monto Mensual:" : "Nuevo Precio de venta:";
+                // Actualiza el texto de la etiqueta
+                $("label[for='precio_venta']").text(label);
+            }
+        });
+    });
+</script>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

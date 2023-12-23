@@ -136,7 +136,7 @@
         <div class="row ">
             <div class="col">
                 <label class="form-control-label">Precio de compra: <span class="tx-danger">*</span></label>
-                <input type="number" id="precio_compra" name="precio_compra" min="0" class="form-control" required="" value="{{ old('precio_compra') }}">
+                <input name="precio_compra" id='precio_compra' type="number" min="0" step="any" class="form-control" required value="{{ old('precio_compra') }}">
             </div>
             <div class="col">
                 <label class="form-control-label">Tipo de moneda: </label>
