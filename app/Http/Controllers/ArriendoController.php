@@ -35,45 +35,6 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class ArriendoController extends Controller
 {
 
-    public function cambio_fase_create($id){
-        //EN TODOS LOS CASOS "TRANSPORTE" DEBE INGRESAR DATOS PARA EL CAMBIO DE FASE
-        //[FIRMA EL QUE PASA y RECIBE] (BODEGA), (EN CAMINO IDA) (FIRMA BODEGA Y CLIENTE)
-        //[FIRMA EL QUE PASA y RECIBE] (EN CLIENTE y PARA RETIRO), (EN CAMINO VUELTA) (FIRMA CLIENTE Y BODEGA)
-        //Verificación de proceso actual
-        $activo = Activo::where('id', $id)->first();
-        if($activo->arriendo_flag && !$activo->venta_flag)
-            $proceso = ArriendoActivo::where('activo_id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
-        elseif($activo->venta_flag && !$activo->arriendo_flag)
-            $proceso = Venta::where('activo_id', $id)->whereNotIn('estado', ["TERMINADO"])->first();
-        else{
-            flash("Error: Los registros de trazabilidad no coinciden.", "danger");
-            return redirect()->back();
-        }
-            
-
-        if(  $proceso->estado == "BODEGA" || $proceso->estado == "EN CAMINO IDA" || 
-            ($proceso->estado == "EN CLIENTE" && $proceso->activo->estado == "PARA RETIRO") ||
-             $proceso->estado == "EN CAMINO VUELTA"){
-
-            return view('bodega.cambio_fase')
-                ->with('proceso',  $proceso);
-        }else{
-            flash("Error: Asegúrese de haber disponibilizado el proceso para su retiro (EN CLIENTE).", "danger");
-            $empresas = Empresa::get();
-            $proyectos = Proyecto::get()->groupBy('empresa_id');
-            $selectedID = 0;
-
-            $arriendos = ArriendoActivo::whereNotIn('estado', ["TERMINADO"])->get()->reverse();
-            $ventas = Venta::whereNotIn('estado', ["TERMINADO"])->get()->reverse();
-            return view('bodega.transporte')
-                ->with('empresas', $empresas)
-                ->with('proyectos', $proyectos)
-                ->with('selectedID', $selectedID)
-                ->with('ventas', $ventas)
-                ->with('arriendos', $arriendos);
-            }
-    }
-
     public function show($id)
     {
         $arriendo = ArriendoActivo::where('id', $id)->first();

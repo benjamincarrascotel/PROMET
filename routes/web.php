@@ -139,7 +139,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/mantencion/store', 'MantencionController@store')->name('mantencion.store');
 
         //INVENTARIO
-        Route::get('/inventario/{id}', 'ArriendoController@cambio_fase_create'); 
+        Route::get('/inventario/{id}', 'TransporteController@cambio_fase_create'); 
 
 
     });
