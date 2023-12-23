@@ -64,7 +64,7 @@ class TransporteController extends Controller
         //Verificación de proceso actual
         $activo = Activo::where('id', $input['activo_id'])->first();
         if($activo->arriendo_flag && !$activo->venta_flag){
-            $proceso = ArriendoActivo::where('activo_id', $input['activo_id'])->whereNotIn('estado', ["TERMINADO"])->first();
+            $proceso = ArriendoActivo::where('activo_id', $input['activo_id'])->whereNotIn('estado', ["TERMINADO", "CAMBIO DE PROCESO"])->first();
             $cambio_fase = CambioFaseArriendo::create([
                 "arriendo_id" => $proceso->id,
                 "fecha" => Carbon::now(),
@@ -72,7 +72,7 @@ class TransporteController extends Controller
             $arriendo_venta_flag = 1;
         }
         elseif($activo->venta_flag && !$activo->arriendo_flag){
-            $proceso = Venta::where('activo_id', $input['activo_id'])->whereNotIn('estado', ["TERMINADO"])->first();
+            $proceso = Venta::where('activo_id', $input['activo_id'])->whereNotIn('estado', ["TERMINADO", "CAMBIO DE PROCESO"])->first();
             $cambio_fase = CambioFaseVenta::create([
                 "venta_id" => $proceso->id,
                 "fecha" => Carbon::now(),
