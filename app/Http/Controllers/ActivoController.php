@@ -305,14 +305,20 @@ class ActivoController extends Controller
             "tipo_moneda" => $input['tipo_moneda'],
         ]);
 
-        //Creamos la ruta pública del activo
-        File::makeDirectory(public_path('storage/activos/'.$activo->id));
-        //Creamos la ruta pública para mantenciones
-        File::makeDirectory(public_path('storage/mantenciones/'.$activo->id));
 
-        //Generamos QR
-        QrCode::generate($_ENV['APP_URL'].'/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE_'.$activo->id.'.svg'));
+        if(!File::exists('storage/activos/'.$activo->id)) {
+            //Creamos la ruta pública del activo
+            File::makeDirectory(public_path('storage/activos/'.$activo->id));
+            //Generamos QR
+            QrCode::generate($_ENV['APP_URL'].'/inventario/'.$activo->id, public_path("storage/activos/".$activo->id.'/QR_CODE_'.$activo->id.'.svg'));
+        }
+
         $activo->codigo_qr = 'QR_CODE_'.$activo->id.'.svg';
+
+        if(!File::exists('storage/mantenciones/'.$activo->id)) {
+            //Creamos la ruta pública del activo
+            File::makeDirectory(public_path('storage/mantenciones/'.$activo->id));
+        }
 
         // Guardamos la imagen
         if($request->hasFile('foto'))
