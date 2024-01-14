@@ -205,7 +205,7 @@ class UserController extends Controller
         }elseif($user->admin){
             $admin = Admin::where('email', $user->email)->update($input);
         }elseif($user->bodega){
-            $bodega = Bodega::where('email', $user->email)->update($input);
+            $bodega = BodegaUser::where('email', $user->email)->update($input);
         }else{
             flash("El usuario no tiene un rol asignado")->error();
             return redirect()->back();

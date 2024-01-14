@@ -112,11 +112,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::group(['middleware' => ['superadmin']], function () {
 
             //USERS
-            Route::resource('usuarios', 'UserController')->only([
-                'create', 'store','update','index',
-            ]);
-            Route::get('/usuarios/show/{id}', 'UserController@show')->name('usuarios.show');
             Route::post('/usuarios/update/{id}', 'UserController@update')->name('usuarios.update');
+            Route::get('/usuarios/show/{id}', 'UserController@show')->name('usuarios.show');
+
+            Route::resource('usuarios', 'UserController')->only([
+                'create', 'store', 'index',
+            ]);
             
         });
     });
