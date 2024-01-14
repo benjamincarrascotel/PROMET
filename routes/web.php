@@ -58,11 +58,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/contrato/excel', 'ContratoController@excel')->name('contrato.excel');
         Route::post('/contrato/axis_update', 'ContratoController@axis_update')->name('contrato.axis_update');
 
-        //USERS
-        Route::get('/usuarios/destroy/{id}', 'UserController@destroy')->name('usuarios.destroy');
-        Route::get('/usuarios/{id}', 'UserController@create')->name('usuarios.create');
-        Route::post('/usuarios/store', 'UserController@store')->name('usuarios.store'); 
-
         
         //ACTIVOS
         Route::get('/activo/trazabilidad', 'ActivoController@trazabilidad')->name('activo.trazabilidad');
@@ -112,11 +107,16 @@ Route::group(['middleware' => ['auth']], function () {
         Route::group(['middleware' => ['superadmin']], function () {
 
             //USERS
+            //USERS
+            Route::get('/usuarios/destroy/{id}', 'UserController@destroy')->name('usuarios.destroy');
+            Route::get('/usuarios/{id}', 'UserController@create')->name('usuarios.create');
+            Route::post('/usuarios/store', 'UserController@store')->name('usuarios.store'); 
+            
             Route::post('/usuarios/update/{id}', 'UserController@update')->name('usuarios.update');
             Route::get('/usuarios/show/{id}', 'UserController@show')->name('usuarios.show');
 
             Route::resource('usuarios', 'UserController')->only([
-                'create', 'store', 'index',
+                'create', 'index',
             ]);
             
         });
