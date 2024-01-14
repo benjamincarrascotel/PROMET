@@ -24,7 +24,7 @@
                     <td>
                         <div class="btn-group" role="group">
                             <a class="btn btn-primary" href="{{ route('usuarios.show', [$usuario->id]) }}">
-                                <i class='fa fa-ban'></i>  
+                                <i class='fa fa-eye'></i>  
                                 Ver
                             </a>                    
                         </div>
@@ -33,7 +33,7 @@
                     <td>
                         <div class="btn-group" role="group">
                             <a class="btn btn-primary" href="{{ route('usuarios.show', [$usuario->id]) }}">
-                                <i class='fa fa-ban'></i>  
+                                <i class='fa fa-eye'></i>  
                                 Ver
                             </a>    
                             <a class="btn btn-danger" onclick="confirmDelete('{{ route('usuarios.destroy', [$usuario->id]) }}')">
