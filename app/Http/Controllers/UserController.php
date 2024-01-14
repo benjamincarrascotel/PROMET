@@ -136,8 +136,10 @@ class UserController extends Controller
         $user = User::where('id', $id)->first();
         if($user->superadmin)
             $usuario = SuperAdmin::where('email', $user->email)->first();
-        elseif($user->admin || $user->bodega)
+        elseif($user->admin)
             $usuario = Admin::where('email', $user->email)->first();
+        elseif($user->bodega)
+            $usuario = BodegaUser::where('email', $user->email)->first();
         else{
             flash("El usuario no tiene un rol asignado")->error();
             return redirect()->back();
