@@ -29,14 +29,14 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/', 'HomeController@index')->name('index');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/admin', 'AdminController@index')->name('admin.index');
-    Route::get('/superadmin/{flag}', 'SuperAdminController@index')->middleware(['superadmin'])->name('superadmin.index');
+    //Route::get('/admin', 'AdminController@index')->name('admin.index');
+    //Route::get('/superadmin/{flag}', 'SuperAdminController@index')->middleware(['superadmin'])->name('superadmin.index');
 
     //PROVEEDOR
     Route::get('/proveedor/index', 'ProveedorController@index')->name('proveedor.index');
     Route::get('/proveedor/{id}', 'ProveedorController@show')->name('proveedor.show');
 
-    Route::group(['middleware' => ['superadmin']], function () {
+    Route::group(['middleware' => ['admin']], function () {
 
         //DASHBOARD
         Route::get('/contrato/detalles', 'ContratoController@detalles')->name('contrato.detalles');
@@ -106,16 +106,19 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/proyecto/cambio_estado', 'ProyectoController@cambio_estado')->name('proyecto.cambio_estado');
         Route::get('/proyecto/destroy', 'ProyectoController@destroy')->name('proyecto.destroy');
 
-
-        Route::resource('usuarios', 'UserController')->only([
-            'create', 'store','update','index',
-        ]);
-
-        Route::get('/usuarios/show/{id}', 'UserController@show')->name('usuarios.show');
-        Route::post('/usuarios/update/{id}', 'UserController@update')->name('usuarios.update');
-
-
         
+        
+
+        Route::group(['middleware' => ['superadmin']], function () {
+
+            //USERS
+            Route::resource('usuarios', 'UserController')->only([
+                'create', 'store','update','index',
+            ]);
+            Route::get('/usuarios/show/{id}', 'UserController@show')->name('usuarios.show');
+            Route::post('/usuarios/update/{id}', 'UserController@update')->name('usuarios.update');
+            
+        });
     });
     
 

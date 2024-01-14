@@ -17,6 +17,9 @@
         @if($user->superadmin)
             <span class="badge bg-primary">SUPERADMIN</span>
         @endif
+        @if($user->admin)
+            <span class="badge bg-primary">ADMIN</span>
+        @endif
         @if($user->bodega)
             <span class="badge bg-primary">BODEGA</span>
         @endif

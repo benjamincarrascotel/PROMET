@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class SuperAdmin
+class Admin
 {
     /**
      * Handle an incoming request.
@@ -18,11 +18,11 @@ class SuperAdmin
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
-        if ($user->superadmin) {
+        if ($user->admin) {
             return $next($request);      
         }
         else{
-            flash("Requieres permisos de Super Administrador para acceder a este recurso.", "danger");
+            flash("Requieres permisos de Administrador para acceder a este recurso.", "danger");
             return redirect()->back();
         }
     }

@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Admin;
 use App\Models\SuperAdmin;
+use App\Models\Admin;
+use App\Models\BodegaUser;
 
 
 
@@ -42,7 +43,7 @@ class UserController extends Controller
             'apellido2' => 'required|string|max:255',
             'rut' => 'required|string|max:255',
             'rut_dv' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users|unique:superadmins|unique:admins|unique:bodega_users',
             'password' => 'required|string|confirmed|min:8',
         ]);
 
@@ -63,20 +64,13 @@ class UserController extends Controller
                 $usuario->superadmin = true;
                 $usuario->admin = true;
                 $usuario->bodega = true;
-            } else {
-                $usuario->superadmin = false;
             }
-
-            if(isset($input['admin'])){
+            elseif(isset($input['admin'])){
                 $usuario->admin = true;
-            } else {
-                $usuario->admin = false;
-            }
-
-            if(isset($input['bodega'])){
                 $usuario->bodega = true;
-            } else {
-                $usuario->bodega = false;
+            }
+            elseif(isset($input['bodega'])){
+                $usuario->bodega = true;
             }
             $usuario->save();
 
@@ -92,7 +86,7 @@ class UserController extends Controller
                 $superadmin->apellido2 = $input['apellido2'];
                 $superadmin->save();
             }
-            elseif(isset($input['admin']) || isset($input['bodega']))
+            elseif(isset($input['admin']) && intval($input['admin']))
             {
                 $admin = new Admin();
                 $admin->email = $input['email'];
@@ -103,6 +97,18 @@ class UserController extends Controller
                 $admin->apellido1 = $input['apellido1'];
                 $admin->apellido2 = $input['apellido2'];
                 $admin->save();
+            }
+            elseif(isset($input['bodega']) && intval($input['bodega']))
+            {
+                $bodega = new BodegaUser();
+                $bodega->email = $input['email'];
+                $bodega->password = $usuario->password;
+                $bodega->rut = $input['rut'];
+                $bodega->rut_dv = $input['rut_dv'];
+                $bodega->nombre = $input['nombre'];
+                $bodega->apellido1 = $input['apellido1'];
+                $bodega->apellido2 = $input['apellido2'];
+                $bodega->save();
             }
             
 
@@ -194,8 +200,10 @@ class UserController extends Controller
         
         if($user->superadmin){
             $superadmin = SuperAdmin::where('email', $user->email)->update($input);
-        }elseif($user->admin || $user->bodega){
-            $bodega = Admin::where('email', $user->email)->update($input);
+        }elseif($user->admin){
+            $admin = Admin::where('email', $user->email)->update($input);
+        }elseif($user->bodega){
+            $bodega = Bodega::where('email', $user->email)->update($input);
         }else{
             flash("El usuario no tiene un rol asignado")->error();
             return redirect()->back();
@@ -219,15 +227,24 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        
         $usuario = User::where('id', $id)->first();
+        
+        if($usuario->superadmin)
+            $datos_usuario = SuperAdmin::where('email', $usuario->email)->first();
+        elseif($usuario->admin)
+            $datos_usuario = Admin::where('email', $usuario->email)->first();
+        elseif($usuario->bodega)
+            $datos_usuario = BodegaUser::where('email', $usuario->email)->first();
+        else{
+            flash("El usuario no tiene un rol asignado")->error();
+            return redirect()->back();
+        }
+
+        $datos_usuario->delete();
+
         $usuario->delete();
 
-        // $redis = LRedis::connection();
-        // $redis->publish(CANAL_SOCKET_USUARIO, json_encode([
-        //                                 'tipo'=>'UsuarioCreado',
-        //                                 'motivo'=>'warn',
-        //                                 'mensaje'=>'Se ha eliminado un Usuario con éxito.'
-        //                                 ]));
-        return back()->with('message', 'User deleted successfully');
+        return back()->with('message', 'Usuario eliminado exitosamente');
     }
 }

@@ -6,21 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Admin extends Model
+class BodegaUser extends Model
 {
     use HasFactory;
 
-    public $table = 'admins';
-
-    /*
-    public function sucursal(){
-        return $this->belongsTo('App\Models\Sucursales','id_sucursal','id');
-    }
-
-    public function solicitud(){
-        return $this->hasMany('App\Models\Solicitud','jefe_local_id','id');
-    }
-    */
+    public $table = 'bodega_users';
 
     /**
      * The attributes that are mass assignable.
