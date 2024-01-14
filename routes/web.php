@@ -30,7 +30,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('index');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     //Route::get('/admin', 'AdminController@index')->name('admin.index');
-    //Route::get('/superadmin/{flag}', 'SuperAdminController@index')->middleware(['superadmin'])->name('superadmin.index');
+    Route::get('/superadmin/{flag}', 'SuperAdminController@index')->middleware(['superadmin'])->name('superadmin.index');
 
     //PROVEEDOR
     Route::get('/proveedor/index', 'ProveedorController@index')->name('proveedor.index');
