@@ -135,9 +135,9 @@
 					<span class="side-menu__label">Proyectos</span>
 				</a>
 			</li>
-		@endif
 
-		@if(auth()->user()->admin)
+		@elseif(auth()->user()->admin)
+
 			<li class="side-item side-item-category">Administracion</li>
 			<!-- PROYECTOS -->
 			<li class="slide">
@@ -146,6 +146,7 @@
 					<span class="side-menu__label">Proyectos</span>
 				</a>
 			</li>
+			
 		@endif
 
 		@if(auth()->user()->superadmin)

@@ -119,7 +119,22 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>                                
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label for="familia" class="col-md-3 form-label mt-2">Familia: </label>
+
+                                    <div class="col-md-9">
+                                        <div class="dropdown">
+                                            <select class="form-control" id="familia" name="familia">
+                                                <option value="{{null}}" selected>Seleccione alguna de las opciones</option>
+                                                @foreach ($familias as $value)
+                                                    <option value="{{ $value->id }}">{{ "[ ".$value->id." ] - ".$value->acronimo." - ".$value->nombre }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 
                             </form>
                         </div>
@@ -149,6 +164,18 @@
                                         <div class="dropdown">
                                             <select class="form-control " id="proyecto" name="proyecto" >
                                                 <option value="{{null}}">Todos los proyectos</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="sub_familia" class="col-md-3 form-label mt-2" >Sub Familia: </label>
+
+                                    <div class="col-md-9">
+                                        <div class="dropdown">
+                                            <select id="sub_familia" class="form-control" name="sub_familia">
+                                                <option value="{{null}}" selected>Todas las sub-familias</option>
                                             </select>
                                         </div>
                                     </div>
@@ -191,6 +218,7 @@
                                                     <th >PROCESO ID</th>
                                                     <th >Activo</th>
                                                     <th >Código Interno</th>
+                                                    <th >Proyecto</th>
                                                     <th style="width: 40%">Estado Arriendo</th>
                                                     <th >Fecha Inicio</th>
                                                     <th >Fecha Término</th>
@@ -269,9 +297,8 @@
         document.addEventListener("DOMContentLoaded", function () {
             var empresaSelect = document.getElementById("empresa");
             var proyectoSelect = document.getElementById("proyecto");
-            var proyectos = {!! $proyectos->toJson() !!}; // Convierte la colección de sub_familias a un array JavaScript
+            var proyectos = {!! $proyectos->toJson() !!};
             
-            // Función para actualizar las opciones del input de sub_familias
             function actualizarProyectos() {
                 var selectedEmpresaId = empresaSelect.value;
     
@@ -284,7 +311,6 @@
                 defaultOption.text = "Seleccione alguno de los proyectos";
                 proyectoSelect.appendChild(defaultOption);
     
-                // Agregar las sub_familias correspondientes a la familia seleccionada
                 proyectos[selectedEmpresaId].forEach(function (proyecto) {
                     var option = document.createElement("option");
                     option.value = proyecto.id;
@@ -298,6 +324,40 @@
                 actualizarProyectos();
             });
     
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var familiaSelect = document.getElementById("familia");
+            var subFamiliaSelect = document.getElementById("sub_familia");
+            var subFamilias = {!! $sub_familias->toJson() !!}; // Convierte la colección de sub_familias a un array JavaScript
+            
+            // Función para actualizar las opciones del input de sub_familias
+            function actualizarSubFamilias() {
+                var selectedFamiliaId = familiaSelect.value;
+
+                // Limpiar las opciones actuales
+                subFamiliaSelect.innerHTML = '';
+
+                // Agregar la opción predeterminada
+                var defaultOption = document.createElement("option");
+                defaultOption.value = "null";
+                defaultOption.text = "Seleccione alguna de las opciones";
+                subFamiliaSelect.appendChild(defaultOption);
+
+                // Agregar las sub_familias correspondientes a la familia seleccionada
+                subFamilias[selectedFamiliaId].forEach(function (subFamilia) {
+                    var option = document.createElement("option");
+                    option.value = subFamilia.id;
+                    option.text = "[ "+subFamilia.id+" ] - "+subFamilia.acronimo+" - "+subFamilia.nombre ;
+                    subFamiliaSelect.appendChild(option);
+                });
+            }
+
+            // Asignar el evento change al input de familias
+            familiaSelect.addEventListener("change", function () {
+                actualizarSubFamilias();
+            });
+
         });
     </script>
 
@@ -342,6 +402,8 @@
                                 d.estado = $('#estado').val(),
                                 d.empresa = $('#empresa').val(),
                                 d.proyecto = $('#proyecto').val(),
+                                d.familia = $('#familia').val(),
+                                d.sub_familia = $('#sub_familia').val(),
                                 d.search = $('input[type="search"]').val()
                             }
                     },
@@ -349,6 +411,7 @@
                         {data: 'id', name: 'id'},
                         {data: 'activo', name: 'activo'},
                         {data: 'codigo_interno', name: 'codigo_interno'},
+                        {data: 'proyecto', name: 'proyecto'},
                         {data: 'imagen', name: 'imagen'},
                         {data: 'fecha_inicio', name: 'fecha_inicio'},
                         {data: 'fecha_termino', name: 'fecha_termino'},
@@ -409,6 +472,14 @@
                 });
 
                 $('#proyecto').change(function(){
+                    table.draw();
+                });
+
+                $('#familia').change(function(){
+                    table.draw();
+                });
+
+                $('#sub_familia').change(function(){
                     table.draw();
                 });
 

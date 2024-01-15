@@ -530,11 +530,15 @@ class ActivoController extends Controller
         $ventas = Venta::get()->reverse();
         $empresas = Empresa::get();
         $proyectos = Proyecto::get()->groupBy('empresa_id');
+        $familias = FamiliaProducto::get();
+        $sub_familias = SubFamiliaProducto::get()->groupBy('familia_id');
         $selectedID = 0;
         return view('activo.trazabilidad')
             ->with('selectedID', $selectedID)
             ->with('empresas', $empresas)
             ->with("proyectos", $proyectos)
+            ->with("familias", $familias)
+            ->with("sub_familias", $sub_familias)
             ->with("ventas", $ventas)
             ->with('arriendos', $arriendos);
     }
@@ -558,6 +562,10 @@ class ActivoController extends Controller
 
                 ->addColumn('codigo_interno', function($row){
                     return $row->activo->codigo_interno;
+                })
+
+                ->addColumn('proyecto', function($row){
+                    return $row->proyecto->nombre_sap;
                 })
 
                 ->addColumn('imagen', function($row){
@@ -684,6 +692,26 @@ class ActivoController extends Controller
                     if ($request->get('proyecto') && $request->get('proyecto') != "null") {
                         $instance->where('proyecto_id', $request->get('proyecto'));
                     }
+
+                    if ($request->get('familia') && $request->get('familia') != "null") {
+                        // Obtén el ID de la familia desde la solicitud
+                        $familiaId = $request->get('familia');
+                        // Consulta Eloquent para obtener los proyectos de la familia
+                        $sub_familias = SubFamiliaProducto::where('familia_id', $familiaId)->pluck('id')->toArray();
+                        // Filtra los registros de activos que pertenecen a las sub_familias de la familia
+                        $instance->whereHas('activo', function($q) use ($sub_familias) {
+                            $q->whereIn('sub_familia_id', $sub_familias);
+                        });
+                    }
+
+                    if ($request->get('sub_familia') && $request->get('sub_familia') != "null") {
+                        // Filtra los registros de activos que pertenecen a las sub_familias de la familia
+                        $sub_familia = $request->get('sub_familia');
+                        $instance->whereHas('activo', function($q) use ($sub_familia) {
+                            $q->where('sub_familia_id', $sub_familia);
+                        });
+                    }
+
                     if (!empty($request->get('search'))) {
                         $instance->where(function($w) use($request){
                             $search = $request->get('search');
@@ -698,7 +726,7 @@ class ActivoController extends Controller
                         });
                     }
                 })
-                ->rawColumns(['id', 'activo', 'codigo_interno', 'imagen', 'fecha_inicio', 'fecha_termino', 'acciones'])
+                ->rawColumns(['id', 'activo', 'codigo_interno', 'proyecto', 'imagen', 'fecha_inicio', 'fecha_termino', 'acciones'])
                 ->escapeColumns([])
                 ->make(true)
             ;
